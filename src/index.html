@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Statistics IO Parser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/jquery.dataTables_themeroller.css" rel="stylesheet" />
+    <link href="assets/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="assets/css/DT_bootstrap.css" rel="stylesheet" />
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="#">Statistics IO Parser</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li><a href="http://jorriss.net">Jorriss.net</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <h1>Statistics IO Parser</h1>
+        <p>
+            Sometimes reading the ouput from Statistics IO can be a total drag.
+            <br />
+            This page will help with that. Just paste in the output of of Statistics IO
+            <br />
+            and press Parse. Your output will be formatted and totaled. Enjoy.
+        </p>
+
+        <form>
+            <p>
+                <textarea id='statiotext' rows="10">
+Table 'sysobjrdb'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysobjrdb'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'spt_values'. Scan count 1, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysidxstats'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 8, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysidxstats'. Scan count 1, logical reads 12, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spindtab___________________________________________________________________________________________________________000000001259'. Scan count 0, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spindtab___________________________________________________________________________________________________________000000001259'. Scan count 0, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spindtab___________________________________________________________________________________________________________000000001259'. Scan count 0, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spindtab___________________________________________________________________________________________________________000000001259'. Scan count 0, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spindtab___________________________________________________________________________________________________________000000001259'. Scan count 1, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysschobjs'. Scan count 1, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysidxstats'. Scan count 0, logical reads 4, physical reads 1, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spcnsttab__________________________________________________________________________________________________________00000000125A'. Scan count 0, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spcnsttab__________________________________________________________________________________________________________00000000125A'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 1, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysobjvalues'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 2, logical reads 14, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysschobjs'. Scan count 1, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spcnsttab__________________________________________________________________________________________________________00000000125A'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 1, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spcnsttab__________________________________________________________________________________________________________00000000125A'. Scan count 1, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table '#spcnsttab__________________________________________________________________________________________________________00000000125A'. Scan count 1, logical reads 1, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'syssingleobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+No foreign keys reference table 'Person', or you do not have permissions on referencing tables.
+Table 'sysobjvalues'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+Table 'sysmultiobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
+No views with schema binding reference table 'Person'.
+</textarea>
+            </p>
+            <button type="button" onclick="parseText();">Parse</button>
+
+        </form>
+
+        <p></p>
+        <div id="resultTotal"></div>
+        <div id='result'></div>
+
+        <script>
+
+            function Info(table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+                this.table = table;
+                this.nostats = false;
+                this.scan = infoReplace(scan, 'Scan count ', '');
+                this.logical = infoReplace(logical, 'logical reads ', '');
+                this.physical = infoReplace(physical, 'physical reads ', '');
+                this.readahead = infoReplace(readahead, 'read-ahead reads ', '');
+                this.loblogical = infoReplace(loblogical, 'lob logical reads ', '');
+                this.lobphysical = infoReplace(lobphysical, 'lob physical reads ', '');
+                this.lobreadahead = infoReplace(lobreadahead, 'lob read-ahead reads ', '');
+                this.percentread = 0.0;
+            }
+
+            function InfoTotal() {
+                this.table = '';
+                this.scan = 0;
+                this.logical = 0;
+                this.physical = 0;
+                this.readahead = 0;
+                this.loblogical = 0;
+                this.lobphysical = 0;
+                this.lobreadahead = 0;
+                this.percentread = 0.0;
+            }
+
+            function infoReplace(strValue, searchValue, newvValue) {
+                var returnValue = 0;
+                if (strValue != undefined) {
+                    returnValue = parseInt(strValue.replace(searchValue, newvValue));
+                    if (isNaN(returnValue)) {
+                        returnValue = 0;
+                    }
+                }
+                return returnValue;
+            }
+
+            function parseText() {
+                var txt = document.getElementById("statiotext").value;
+                var lines = txt.split('\n');
+                var result = new Array();
+
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+                    var section = line.split('\.');
+
+                    var tableName = getSubStr(section[0], '\'')
+
+                    var tableData = section[1];
+
+                    if (tableData != undefined) {
+                        if (tableData == '') {
+                            var statLineInfo = new Info(line);
+                            statLineInfo.nostats = true;
+                            result.push(statLineInfo);
+                        }
+                        var stat = tableData.split(/[,]+/);
+                        var statInfo = new Info(tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
+                        result.push(statInfo);
+                    } else {
+                        if (line.length > 0) {
+                            var statLineInfo = new Info(line);
+                            statLineInfo.nostats = true;
+                            result.push(statLineInfo);
+                        }
+                    }
+                }
+                output(result, calcTotals(result));
+
+                /* Set the defaults for DataTables initialisation */
+                $.extend(true, $.fn.dataTable.defaults, {
+                    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+                    "sPaginationType": "bootstrap",
+                    "oLanguage": {
+                        "sLengthMenu": "_MENU_ records per page"
+                    }
+                });
+
+
+                /* Default class modification */
+                $.extend($.fn.dataTableExt.oStdClasses, {
+                    "sWrapper": "dataTables_wrapper form-inline"
+                });
+
+
+                /* API method to get paging information */
+                $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {
+                    return {
+                        "iStart": oSettings._iDisplayStart,
+                        "iEnd": oSettings.fnDisplayEnd(),
+                        "iLength": oSettings._iDisplayLength,
+                        "iTotal": oSettings.fnRecordsTotal(),
+                        "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                        "iPage": oSettings._iDisplayLength === -1 ?
+                            0 : Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+                        "iTotalPages": oSettings._iDisplayLength === -1 ?
+                            0 : Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+                    };
+                };
+
+
+                /* Bootstrap style pagination control */
+                $.extend($.fn.dataTableExt.oPagination, {
+                    "bootstrap": {
+                        "fnInit": function (oSettings, nPaging, fnDraw) {
+                            var oLang = oSettings.oLanguage.oPaginate;
+                            var fnClickHandler = function (e) {
+                                e.preventDefault();
+                                if (oSettings.oApi._fnPageChange(oSettings, e.data.action)) {
+                                    fnDraw(oSettings);
+                                }
+                            };
+
+                            $(nPaging).addClass('pagination').append(
+                                '<ul>' +
+                                    '<li class="prev disabled"><a href="#">&larr; ' + oLang.sPrevious + '</a></li>' +
+                                    '<li class="next disabled"><a href="#">' + oLang.sNext + ' &rarr; </a></li>' +
+                                '</ul>'
+                            );
+                            var els = $('a', nPaging);
+                            $(els[0]).bind('click.DT', { action: "previous" }, fnClickHandler);
+                            $(els[1]).bind('click.DT', { action: "next" }, fnClickHandler);
+                        },
+
+                        "fnUpdate": function (oSettings, fnDraw) {
+                            var iListLength = 5;
+                            var oPaging = oSettings.oInstance.fnPagingInfo();
+                            var an = oSettings.aanFeatures.p;
+                            var i, ien, j, sClass, iStart, iEnd, iHalf = Math.floor(iListLength / 2);
+
+                            if (oPaging.iTotalPages < iListLength) {
+                                iStart = 1;
+                                iEnd = oPaging.iTotalPages;
+                            }
+                            else if (oPaging.iPage <= iHalf) {
+                                iStart = 1;
+                                iEnd = iListLength;
+                            } else if (oPaging.iPage >= (oPaging.iTotalPages - iHalf)) {
+                                iStart = oPaging.iTotalPages - iListLength + 1;
+                                iEnd = oPaging.iTotalPages;
+                            } else {
+                                iStart = oPaging.iPage - iHalf + 1;
+                                iEnd = iStart + iListLength - 1;
+                            }
+
+                            for (i = 0, ien = an.length ; i < ien ; i++) {
+                                // Remove the middle elements
+                                $('li:gt(0)', an[i]).filter(':not(:last)').remove();
+
+                                // Add the new list items and their event handlers
+                                for (j = iStart ; j <= iEnd ; j++) {
+                                    sClass = (j == oPaging.iPage + 1) ? 'class="active"' : '';
+                                    $('<li ' + sClass + '><a href="#">' + j + '</a></li>')
+                                        .insertBefore($('li:last', an[i])[0])
+                                        .bind('click', function (e) {
+                                            e.preventDefault();
+                                            oSettings._iDisplayStart = (parseInt($('a', this).text(), 10) - 1) * oPaging.iLength;
+                                            fnDraw(oSettings);
+                                        });
+                                }
+
+                                // Add / remove disabled classes from the static elements
+                                if (oPaging.iPage === 0) {
+                                    $('li:first', an[i]).addClass('disabled');
+                                } else {
+                                    $('li:first', an[i]).removeClass('disabled');
+                                }
+
+                                if (oPaging.iPage === oPaging.iTotalPages - 1 || oPaging.iTotalPages === 0) {
+                                    $('li:last', an[i]).addClass('disabled');
+                                } else {
+                                    $('li:last', an[i]).removeClass('disabled');
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+                /*
+                 * TableTools Bootstrap compatibility
+                 * Required TableTools 2.1+
+                 */
+                if ($.fn.DataTable.TableTools) {
+                    // Set the classes that TableTools uses to something suitable for Bootstrap
+                    $.extend(true, $.fn.DataTable.TableTools.classes, {
+                        "container": "DTTT btn-group",
+                        "buttons": {
+                            "normal": "btn",
+                            "disabled": "disabled"
+                        },
+                        "collection": {
+                            "container": "DTTT_dropdown dropdown-menu",
+                            "buttons": {
+                                "normal": "",
+                                "disabled": "disabled"
+                            }
+                        },
+                        "print": {
+                            "info": "DTTT_print_info modal"
+                        },
+                        "select": {
+                            "row": "active"
+                        }
+                    });
+
+                    // Have the collection use a bootstrap compatible dropdown
+                    $.extend(true, $.fn.DataTable.TableTools.DEFAULTS.oTags, {
+                        "collection": {
+                            "container": "ul",
+                            "button": "li",
+                            "liner": "a"
+                        }
+                    });
+                }
+
+
+                /* Table initialisation */
+                $(document).ready(function () {
+                    $('#resultTable').dataTable({
+                        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+                        "sPaginationType": "bootstrap",
+                        "oLanguage": {
+                            "sLengthMenu": "_MENU_ records per page"
+                        }
+                    });
+                });
+            }
+
+            function calcTotals(statInfos) {
+                var statTotal = new InfoTotal();
+
+                for (var i = 0; i < statInfos.length; i++) {
+                    statTotal.scan += statInfos[i].scan;
+                    statTotal.logical += statInfos[i].logical;
+                    statTotal.physical += statInfos[i].physical;
+                    statTotal.readahead += statInfos[i].readahead;
+                    statTotal.loblogical += statInfos[i].loblogical;
+                    statTotal.lobphysical += statInfos[i].lobphysical;
+                    statTotal.lobreadahead += statInfos[i].lobreadahead;
+                }
+                calcPercent(statInfos, statTotal);
+                return statTotal;
+            }
+
+            function calcPercent(statInfos, statTotal) {
+                for (var i = 0; i < statInfos.length; i++) {
+                    statInfos[i].percentread = ((statInfos[i].logical / statTotal.logical) * 100).toFixed(3);
+                    //statInfos[i].percentread += statInfos[i].percentread.toString() + '%';
+                }
+            }
+
+            function output(statInfo, statTotal) {
+                var result = '<table id="resultTable" class="table table-striped table-condensed" style="table-layout:fixed">';
+                result += '<thead><tr>';
+                result += '<th>Table</th>';
+                result += '<th width="50">Scan Count</th>';
+                result += '<th width="50">Logical Reads</th>';
+                result += '<th width="50">Physical Reads</th>';
+                result += '<th width="50">Read-Ahead Reads</th>';
+                result += '<th width="50">LOB Logical Reads</th>';
+                result += '<th width="50">LOB Physical Reads</th>';
+                result += '<th width="50">LOB Read-Ahead Reads</th>';
+                result += '<th width="75">% Logical Reads of Total Reads</th>';
+                result += '</tr></thead>';
+
+                for (var i = 0; i < statInfo.length; i++) {
+                    result += '<tr>';
+
+                    result += '<td>' + statInfo[i].table + '</td>';
+                    if (statInfo[i].nostats) {
+                        result += '<td colspan="8">&nbsp;</td>';
+                    } else {
+                        result += '<td>' + statInfo[i].scan + '</td>';
+                        result += '<td>' + statInfo[i].logical + '</td>';
+                        result += '<td>' + statInfo[i].physical + '</td>';
+                        result += '<td>' + statInfo[i].readahead + '</td>';
+                        result += '<td>' + statInfo[i].loblogical + '</td>';
+                        result += '<td>' + statInfo[i].lobphysical + '</td>';
+                        result += '<td>' + statInfo[i].lobreadahead + '</td>';
+                        result += '<td>' + statInfo[i].percentread + '%</td>';
+                    }
+                    result += '</tr>';
+                }
+
+                result += '<tfoot><tr>';
+                result += '<td>' + statTotal.table + '</td>';
+                result += '<td>' + statTotal.scan + '</td>';
+                result += '<td>' + statTotal.logical + '</td>';
+                result += '<td>' + statTotal.physical + '</td>';
+                result += '<td>' + statTotal.readahead + '</td>';
+                result += '<td>' + statTotal.loblogical + '</td>';
+                result += '<td>' + statTotal.lobphysical + '</td>';
+                result += '<td>' + statTotal.lobreadahead + '</td>';
+                result += '<td>&nbsp;</td>';
+                result += '</tr></thead>';
+
+                result += '</table>'
+                document.getElementById("result").innerHTML = result;
+            }
+
+            function getSubStr(str, delim) {
+                var a = str.indexOf(delim);
+
+                if (a == -1)
+                    return '';
+
+                var b = str.indexOf(delim, a + 1);
+
+                if (b == -1)
+                    return '';
+
+                return str.substr(a + 1, b - a - 1);
+            }
+        </script>
+    </div>
+    <!-- /container -->
+    
+    <footer class="footer">
+        <div class="container">
+            <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="http://twitter.com/jorriss">twitter</a>) and the fine folks at Jorriss LLC.</p>
+        </div>
+    </footer>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+    <script src="../assets/js/bootstrap-transition.js"></script>
+    <script src="../assets/js/bootstrap-alert.js"></script>
+    <script src="../assets/js/bootstrap-modal.js"></script>
+    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../assets/js/bootstrap-tab.js"></script>
+    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap-popover.js"></script>
+    <script src="../assets/js/bootstrap-button.js"></script>
+    <script src="../assets/js/bootstrap-collapse.js"></script>
+    <script src="../assets/js/bootstrap-carousel.js"></script>
+    -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery.dataTables.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/DT_bootstrap.js"></script>
+</body>
+</html>
