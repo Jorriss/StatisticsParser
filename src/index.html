@@ -195,15 +195,15 @@
             function output(statInfo, statTotal) {
                 var result = '<table id="resultTable" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
                 result += '<thead><tr>';
-                result += '<th class="th_column">Table</th>';
-                result += '<th width="50" class="th_column">Scan Count</th>';
-                result += '<th width="50" class="th_column">Logical Reads</th>';
-                result += '<th width="50" class="th_column">Physical Reads</th>';
-                result += '<th width="50" class="th_column">Read-Ahead Reads</th>';
-                result += '<th width="50" class="th_column">LOB Logical Reads</th>';
-                result += '<th width="50" class="th_column">LOB Physical Reads</th>';
-                result += '<th width="50" class="th_column">LOB Read-Ahead Reads</th>';
-                result += '<th width="75" class="th_column">% Logical Reads of Total Reads</th>';
+                result += '<th class="th-column">Table</th>';
+                result += '<th width="50" class="th-column">Scan Count</th>';
+                result += '<th width="50" class="th-column">Logical Reads</th>';
+                result += '<th width="50" class="th-column">Physical Reads</th>';
+                result += '<th width="50" class="th-column">Read-Ahead Reads</th>';
+                result += '<th width="50" class="th-column">LOB Logical Reads</th>';
+                result += '<th width="50" class="th-column">LOB Physical Reads</th>';
+                result += '<th width="50" class="th-column">LOB Read-Ahead Reads</th>';
+                result += '<th width="75" class="th-column">% Logical Reads of Total Reads</th>';
                 result += '</tr></thead>';
                 result += '<tbody>';
                 for (var i = 0; i < statInfo.length; i++) {
@@ -233,15 +233,15 @@
                 }
                 result += '</tbody>';
                 result += '<tfoot><tr>';
-                result += '<td>' + statTotal.table + '</td>';
-                result += '<td>' + statTotal.scan + '</td>';
-                result += '<td>' + statTotal.logical + '</td>';
-                result += '<td>' + statTotal.physical + '</td>';
-                result += '<td>' + statTotal.readahead + '</td>';
-                result += '<td>' + statTotal.loblogical + '</td>';
-                result += '<td>' + statTotal.lobphysical + '</td>';
-                result += '<td>' + statTotal.lobreadahead + '</td>';
-                result += '<td>&nbsp;</td>';
+                result += '<td class="footer-column">Total</td>';
+                result += '<td class="footer-column">' + statTotal.scan + '</td>';
+                result += '<td class="footer-column">' + statTotal.logical + '</td>';
+                result += '<td class="footer-column">' + statTotal.physical + '</td>';
+                result += '<td class="footer-column">' + statTotal.readahead + '</td>';
+                result += '<td class="footer-column">' + statTotal.loblogical + '</td>';
+                result += '<td class="footer-column">' + statTotal.lobphysical + '</td>';
+                result += '<td class="footer-column">' + statTotal.lobreadahead + '</td>';
+                result += '<td class="footer-column">&nbsp;</td>';
                 result += '</tr></tfoot>';
 
                 result += '</table>'

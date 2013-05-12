@@ -27,10 +27,6 @@ table.table {
 	max-width: none !important;
 }
 
-.th_column {
-    padding: 4px 20px 4px 5px !important; 
-}
-
 table.table thead .sorting,
 table.table thead .sorting_asc,
 table.table thead .sorting_desc,
