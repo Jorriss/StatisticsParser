@@ -3,7 +3,7 @@
 
 textarea {
     border: 1px solid #999999;
-    width: 95%;
+    width: 100%;
     padding: 7px 0 7px 7px;
     position: relative;
     left: -8px; /* 1px border, too */
