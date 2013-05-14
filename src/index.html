@@ -158,14 +158,10 @@
                 output(result, calcTotals(result));
 
                 //Apply datatables plugin
-                $('#resultTable').dataTable({
-                    "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                    "bPaginate": false,
-                    "oSearch": false,
-                    "bSort": true,
-                    "oLanguage": {
-                        "sLengthMenu": "_MENU_ records per page"
-                    }
+               $('#resultTable').dataTable({
+                    "sDom": "t",
+                    "bFilter": false,
+                    "bPaginate": false
                 });
             }
 
@@ -232,7 +228,7 @@
                     result += '</tr>';
                 }
                 result += '</tbody>';
-                result += '<tfoot><tr>';
+               /* result += '<tfoot><tr>';
                 result += '<td class="footer-column">Total</td>';
                 result += '<td class="footer-column">' + statTotal.scan + '</td>';
                 result += '<td class="footer-column">' + statTotal.logical + '</td>';
@@ -242,7 +238,7 @@
                 result += '<td class="footer-column">' + statTotal.lobphysical + '</td>';
                 result += '<td class="footer-column">' + statTotal.lobreadahead + '</td>';
                 result += '<td class="footer-column">&nbsp;</td>';
-                result += '</tr></tfoot>';
+                result += '</tr></tfoot>';*/
 
                 result += '</table>'
                 document.getElementById("result").innerHTML = result;
@@ -292,6 +288,5 @@
     <script src="assets/js/DT_bootstrap.js"></script>
 </body>
 </html>
-
 
 
