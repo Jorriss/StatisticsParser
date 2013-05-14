@@ -39,6 +39,7 @@
                     <ul class="nav">
                         <li class="active"><a href="#">Home</a></li>
                         <li><a href="about.html">About</a></li>
+                        <li><a href="https://github.com/Jorriss/StatisticsIOParser">GitHub Source</a></li>
                     </ul>
                     <ul class="nav pull-right">
                         <li><a href="http://jorriss.net">Jorriss.net</a></li>
@@ -89,7 +90,8 @@
                 }
             }
 
-            function Info(table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+            function Info(rownumber, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+                this.rownumber = rownumber;
                 this.table = table;
                 this.nostats = false;
                 this.scan = infoReplace(scan, 'Scan count ', '');
@@ -103,6 +105,7 @@
             }
 
             function InfoTotal() {
+                this.rownumber = 0;
                 this.table = '';
                 this.scan = 0;
                 this.logical = 0;
@@ -140,16 +143,16 @@
 
                     if (tableData != undefined) {
                         if (tableData == '') {
-                            var statLineInfo = new Info(line);
+                            var statLineInfo = new Info(i + 1, line);
                             statLineInfo.nostats = true;
                             result.push(statLineInfo);
                         }
                         var stat = tableData.split(/[,]+/);
-                        var statInfo = new Info(tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
+                        var statInfo = new Info(i + 1, tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
                         result.push(statInfo);
                     } else {
                         if (line.length > 0) {
-                            var statLineInfo = new Info(line);
+                            var statLineInfo = new Info(i + 1, line);
                             statLineInfo.nostats = true;
                             result.push(statLineInfo);
                         }
@@ -191,6 +194,7 @@
             function output(statInfo, statTotal) {
                 var result = '<table id="resultTable" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
                 result += '<thead><tr>';
+                result += '<th width="30" class="th-column">Row Num</th>';
                 result += '<th class="th-column">Table</th>';
                 result += '<th width="50" class="th-column">Scan Count</th>';
                 result += '<th width="50" class="th-column">Logical Reads</th>';
@@ -205,6 +209,7 @@
                 for (var i = 0; i < statInfo.length; i++) {
                     result += '<tr>';
 
+                    result += '<td>' + statInfo[i].rownumber + '</td>';
                     result += '<td>' + statInfo[i].table + '</td>';
                     if (statInfo[i].nostats) {
                         result += '<td></td>';
@@ -229,6 +234,7 @@
                 }
                 result += '</tbody>';
                 result += '<tfoot><tr>';
+                result += '<td class="footer-column"></td>';
                 result += '<td class="footer-column">Total</td>';
                 result += '<td class="footer-column">' + statTotal.scan + '</td>';
                 result += '<td class="footer-column">' + statTotal.logical + '</td>';
@@ -264,6 +270,7 @@
     <footer class="footer">
         <div class="container">
             <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="http://twitter.com/jorriss">twitter</a>) and the fine folks at Jorriss LLC.</p>
+            <p>version 0.1.0</p>
         </div>
     </footer>
     <!-- Le javascript
@@ -288,6 +295,5 @@
     <script src="assets/js/DT_bootstrap.js"></script>
 </body>
 </html>
-
 
 
