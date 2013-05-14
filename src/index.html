@@ -159,13 +159,9 @@
 
                 //Apply datatables plugin
                 $('#resultTable').dataTable({
-                    "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                    "bPaginate": false,
-                    "oSearch": false,
-                    "bSort": true,
-                    "oLanguage": {
-                        "sLengthMenu": "_MENU_ records per page"
-                    }
+                    "sDom": "t",
+                    "bFilter": false,
+                    "bPaginate": false
                 });
             }
 
@@ -211,14 +207,14 @@
 
                     result += '<td>' + statInfo[i].table + '</td>';
                     if (statInfo[i].nostats) {
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
-                        result += '<td>N/A</td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
+                        result += '<td></td>';
                     } else {
                         result += '<td>' + statInfo[i].scan + '</td>';
                         result += '<td>' + statInfo[i].logical + '</td>';
@@ -227,7 +223,7 @@
                         result += '<td>' + statInfo[i].loblogical + '</td>';
                         result += '<td>' + statInfo[i].lobphysical + '</td>';
                         result += '<td>' + statInfo[i].lobreadahead + '</td>';
-                        result += '<td>' + statInfo[i].percentread + '%</td>';
+                        result += '<td>' + statInfo[i].percentread + '</td>';
                     }
                     result += '</tr>';
                 }
