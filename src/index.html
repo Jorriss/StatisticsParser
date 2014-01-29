@@ -139,6 +139,16 @@
                         langObj.loblogical = 'lob logical reads ';
                         langObj.lobphysical = 'lob physical reads ';
                         langObj.lobreadahead = 'lob read-ahead reads ';
+                        langObj.headerrownum = 'Row Num';
+                        langObj.headertable = 'Table';
+                        langObj.headerscan = 'Scan Count';
+                        langObj.headerlogical = 'Logical Reads';
+                        langObj.headerphysical = 'Physical Reads';
+                        langObj.headerreadahead = 'Read-Ahead Reads';
+                        langObj.headerloblogical = 'LOB Logical Reads';
+                        langObj.headerlobphysical = 'LOB Physical Reads';
+                        langObj.headerlobreadahead = 'LOB Read-Ahead Reads';
+                        langObj.headerperlogicalread = '% Logical Reads of Total Reads';
                         break;
                     case 2: // Spanish
                         langObj.langValue =  2;
@@ -149,6 +159,16 @@
                         langObj.readahead = 'lecturas anticipadas ';
                         langObj.loblogical = 'lecturas lógicas de LOB ';
                         langObj.lobphysical = 'lecturas físicas de LOB ';
+                        langObj.headerrownum = 'Fila Número';
+                        langObj.headertable = 'Tabla';
+                        langObj.headerscan = 'Recuento de exámenes';
+                        langObj.headerlogical = 'Lecturas lógicas';
+                        langObj.headerphysical = 'Lecturas físicas';
+                        langObj.headerreadahead = 'Lecturas anticipadas';
+                        langObj.headerloblogical = 'Lecturas lógicas de LOB';
+                        langObj.headerlobphysical = 'Lecturas físicas de LOB';
+                        langObj.headerlobreadahead = 'Lecturas anticipadas de LOB';
+                        langObj.headerperlogicalread = '% Lecturas lógicas del Total de Lecturas';
                         langObj.lobreadahead = 'lecturas anticipadas de LOB ';
                         break;
                 }
@@ -229,7 +249,7 @@
                     } else {
                         if (inTable == true) {
                             inTable = false;
-                            formattedOutput += outputTable(tableResult, statsIOCalcTotals(tableResult), tableCount);
+                            formattedOutput += outputTable(tableResult, statsIOCalcTotals(tableResult), tableCount, langText);
                             tableResult = new Array();
                         } 
                         formattedOutput += '<span>' + line + '<br /></span>';
@@ -239,7 +259,7 @@
 
                 // if last row a table then call formatOutput
                 if (inTable == true) {
-                    formattedOutput += outputTable(tableResult, statsIOCalcTotals(tableResult), tableCount);
+                    formattedOutput += outputTable(tableResult, statsIOCalcTotals(tableResult), tableCount, langText);
                 }
 
                 document.getElementById("result").innerHTML = formattedOutput;
@@ -276,20 +296,20 @@
                     //statInfos[i].percentread += statInfos[i].percentread.toString() + '%';
                 }
             }
-
-            function outputTable(statInfo, statTotal, tableNumber) {
+ 
+             function outputTable(statInfo, statTotal, tableNumber, langObj) {
                 var result = '<table id="resultTable' + tableNumber +'" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
                 result += '<thead><tr>';
-                result += '<th width="30" class="th-column">Row Num</th>';
-                result += '<th class="th-column">Table</th>';
-                result += '<th width="50" class="th-column">Scan Count</th>';
-                result += '<th width="50" class="th-column">Logical Reads</th>';
-                result += '<th width="50" class="th-column">Physical Reads</th>';
-                result += '<th width="50" class="th-column">Read-Ahead Reads</th>';
-                result += '<th width="50" class="th-column">LOB Logical Reads</th>';
-                result += '<th width="50" class="th-column">LOB Physical Reads</th>';
-                result += '<th width="50" class="th-column">LOB Read-Ahead Reads</th>';
-                result += '<th width="75" class="th-column">% Logical Reads of Total Reads</th>';
+                result += '<th width="30" class="th-column">' + langObj.headerrownum + '</th>';
+                result += '<th class="th-column">' + langObj.headertable + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerscan + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerlogical + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerphysical + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerreadahead + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerloblogical + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerlobphysical + '</th>';
+                result += '<th width="50" class="th-column">' + langObj.headerlobreadahead + '</th>';
+                result += '<th width="75" class="th-column">' + langObj.headerperlogicalread + '</th>';
                 result += '</tr></thead>';
                 result += '<tbody>';
                 for (var i = 0; i < statInfo.length; i++) {
@@ -357,7 +377,7 @@
     <footer class="footer">
         <div class="container">
             <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="http://twitter.com/jorriss">twitter</a>) and the fine folks at Jorriss LLC.</p>
-            <p>version 0.2.1</p>
+            <p>version 0.2.2</p>
         </div>
     </footer>
     <!-- Le javascript
