@@ -1,5 +1,15 @@
 # StatisticsIOParser Version History #
 
+## Version 0.2.2 ##
+January 28, 2013
+
+- Corrected the table headers for Spanish Statistics IO output. 
+
+## Version 0.2.1 ##
+January 27, 2013
+
+- Statistics IO output in Spanish will be parsed. 
+
 ## Version 0.2.0 ##
 January 26, 2013
 
