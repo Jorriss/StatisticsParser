@@ -71,11 +71,16 @@
                 </div>
                 <textarea id='statiotext' rows="10"></textarea>
             </p>
-            <button type="button" onclick="parseText();">Parse</button>
-
+            <div>
+                <div style="float: left">
+                    <button id="parseButton" type="button" onclick="parseText();" class="btn btn-primary">Parse</button>
+                </div>
+                <div style="float: right">
+                    <button id="clearButton" type="button" onclick="clearResult();" class="btn">Clear Text</button>
+                </div>
         </form>
 
-        <p></p>
+        <p>&nbsp;</p>
         <div id="resultTotal"></div>
         <div id='result'></div>
 
@@ -263,6 +268,7 @@
                 }
 
                 document.getElementById("result").innerHTML = formattedOutput;
+                document.getElementById("clearButton").innerHTML  = 'Clear Results';
 
                 //Apply datatables plugin
                 for (var counter = 1; counter <= tableCount; counter++) {
@@ -370,6 +376,17 @@
 
                 return str.substr(a + 1, b - a - 1);
             }
+
+            function clearResult() {
+                if (document.getElementById("result").innerHTML != '') {
+                    document.getElementById("result").innerHTML = '';
+                } else {
+                   document.getElementById("statiotext").value = '';
+                   document.getElementById("exampleCheck").checked = false;
+                }
+                document.getElementById("clearButton").innerHTML = 'Clear Text';
+
+            }
         </script>
     </div>
     <!-- /container -->
@@ -377,7 +394,7 @@
     <footer class="footer">
         <div class="container">
             <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="http://twitter.com/jorriss">twitter</a>) and the fine folks at Jorriss LLC.</p>
-            <p>version 0.2.2</p>
+            <p>version 0.2.3</p>
         </div>
     </footer>
     <!-- Le javascript
