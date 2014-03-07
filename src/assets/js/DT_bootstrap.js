@@ -1,3 +1,17 @@
+/* Set the formatted-num sort so formatted numbers sort properly */
+$.extend($.fn.dataTableExt.oSort, {
+    "formatted-num-pre": function ( a ) {
+        a = (a === "-" || a === "") ? 0 : a.replace( /[^\d\-\.]/g, "" );
+        return parseFloat( a );
+    }, 
+    "formatted-num-asc": function ( a, b ) {
+        return a - b;
+    }, 
+    "formatted-num-desc": function ( a, b ) {
+        return b - a;
+    }
+} );
+
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
