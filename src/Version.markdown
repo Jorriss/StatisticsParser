@@ -1,5 +1,10 @@
 # StatisticsIOParser Version History #
 
+## Version 0.3.0 ##
+April 9, 2014
+
+- Output from Statistics Time are now formatted and totaled.
+
 ## Version 0.2.4 ##
 March 7, 2014
 

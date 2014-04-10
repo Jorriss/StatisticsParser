@@ -24,6 +24,17 @@ td {
     word-wrap: break-word; /* IE 5+ */
 }
 
+.table-nonfluid {
+   width: 550px;
+}
+
+.td-column-timetype {
+    width: 300px;
+}
+
+.td-total {
+    font-weight:bold;
+}
 
 .th-column {
     padding: 4px 20px 4px 5px !important;
