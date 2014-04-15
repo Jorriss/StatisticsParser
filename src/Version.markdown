@@ -1,5 +1,11 @@
 # StatisticsIOParser Version History #
 
+## Version 0.3.1 ##
+April 14, 2014
+
+- Output from Statistics Time are now formatted in hh:mm:ss.000 format.
+- Version number now a js funciton.
+
 ## Version 0.3.0 ##
 April 9, 2014
 
