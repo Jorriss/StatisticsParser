@@ -315,18 +315,26 @@ function calcPercent(statInfos, statTotal) {
     }
 }
 
+function formatms (milliseconds) {
+    return moment.utc(milliseconds).format("HH:mm:ss.SSS")
+}
+
 function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuLabel) {
-    var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid" width="500px">';
+    var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid"">';
     result += '<thead><tr>';
-    result += '<th class="th-column td-column-timetype"></th>';;
-    result += '<th class="th-column td-column-right"> ' + cpuLabel + ' (' + langDuration + ')</th>';
-    result += '<th class="th-column td-column-right"> ' + elapsedLabel + ' (' + langDuration + ')</th>';
+    result += '<th class="th-column td-column-timetype"></th>';
+    //result += '<th class="th-column td-column-right"> ' + cpuLabel + ' (' + langDuration + ')</th>';
+    //result += '<th class="th-column td-column-right"> ' + elapsedLabel + ' (' + langDuration + ')</th>';
+    result += '<th class="th-column td-column-right"> ' + cpuLabel + '</th>';
+    result += '<th class="th-column td-column-right"> ' + elapsedLabel + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     result += '<tr>';
     result += '<td class="td-column-timetype">' + langTitle + '</td>';;
-    result += '<td class="td-column-right">' + numeral(timeValues.cpu).format('0,0') + '</td>';
-    result += '<td class="td-column-right">' + numeral(timeValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(timeValues.cpu).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(timeValues.elapsed).format('0,0') + '</td>';
+    result += '<td class="td-column-right">' + formatms(timeValues.cpu) + '</td>';
+    result += '<td class="td-column-right">' + formatms(timeValues.elapsed) + '</td>';
     result += '</tr></tbody></table><div>';
 
     return result;
@@ -336,26 +344,34 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     var cpuTotal = parseInt(executionValues.cpu) + parseInt(compileValues.cpu)
     var elapsedTotal = parseInt(executionValues.elapsed) + parseInt(compileValues.elapsed)
 
-    var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid" width="500px">';
+    var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid">';
     result += '<thead><tr>';
     result += '<th class="th-column td-column-timetype"></th>';
-    result += '<th class="th-column td-column-right"> ' + cpuLabel + ' (' + langDuration + ')</th>';
-    result += '<th class="th-column td-column-right"> ' + elapsedLabel + ' (' + langDuration + ')</th>';
+    //result += '<th class="th-column td-column-right"> ' + cpuLabel + ' (' + langDuration + ')</th>';
+    //result += '<th class="th-column td-column-right"> ' + elapsedLabel + ' (' + langDuration + ')</th>';
+    result += '<th class="th-column td-column-right"> ' + cpuLabel + '</th>';
+    result += '<th class="th-column td-column-right"> ' + elapsedLabel + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     result += '<tr>';
     result += '<td class="td-column-timetype">' + langCompileTitle + '</td>';
-    result += '<td class="td-column-right">' + numeral(compileValues.cpu).format('0,0') + '</td>';
-    result += '<td class="td-column-right">' + numeral(compileValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(compileValues.cpu).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(compileValues.elapsed).format('0,0') + '</td>';
+    result += '<td class="td-column-right">' + formatms(compileValues.cpu) + '</td>';
+    result += '<td class="td-column-right">' + formatms(compileValues.elapsed) + '</td>';
     result += '</tr><tr>';
     result += '<td class="td-column-timetype">' + langExecutionTitle + '</td>';
-    result += '<td class="td-column-right">' + numeral(executionValues.cpu).format('0,0') + '</td>';
-    result += '<td class="td-column-right">' + numeral(executionValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(executionValues.cpu).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + numeral(executionValues.elapsed).format('0,0') + '</td>';
+    result += '<td class="td-column-right">' + formatms(executionValues.cpu) + '</td>';
+    result += '<td class="td-column-right">' + formatms(executionValues.elapsed) + '</td>';
     result += '</tr></tbody>';
     result += '<tfoot><tr>';
     result += '<td class="td-total td-column-timetype">Total</td>';
-    result += '<td class="td-total td-column-right">' + numeral(cpuTotal).format('0,0') + '</td>';
-    result += '<td class="td-total td-column-right">' + numeral(elapsedTotal).format('0,0') + '</td>';
+    //result += '<td class="td-total td-column-right">' + numeral(cpuTotal).format('0,0') + '</td>';
+    //result += '<td class="td-total td-column-right">' + numeral(elapsedTotal).format('0,0') + '</td>';
+    result += '<td class="td-total td-column-right">' + formatms(cpuTotal) + '</td>';
+    result += '<td class="td-total td-column-right">' + formatms(elapsedTotal) + '</td>';
     result += '</tr></tfoot></table><div>';
 
     return result;
@@ -443,5 +459,9 @@ function clearResult() {
        document.getElementById("exampleCheck").checked = false;
     }
     document.getElementById("clearButton").innerHTML = 'Clear Text';
+}
+
+function versionNumber() {
+    document.getElementById("versionNumber").innerHTML = '0.3.1';
 }
 
