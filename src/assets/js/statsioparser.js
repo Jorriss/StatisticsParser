@@ -1,7 +1,6 @@
 function includeExample(value, lang) {
     var txt = document.getElementById("statiotext");
     if (value == true) {
-        txt.value = "SQL Server parse and compile time: \nCPU time = 0 ms, elapsed time = 2 ms.\nTable 'sysobjrdb'. Scan count 0, logical reads 200, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2000, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysobjrdb'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'spt_values'. Scan count 1, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysidxstats'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 8, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysidxstats'. Scan count 1, logical reads 12, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syssingleobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nNo foreign keys reference table 'Person', or you do not have permissions on referencing tables.\nSQL Server Execution Times:\n CPU time = 109 ms,  elapsed time = 335 ms.\nTable 'sysobjvalues'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysmultiobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nNo views with schema binding reference table 'Person'.";
         txt.value = lang.sampleoutput;
     } else {
         txt.value = "";
@@ -58,8 +57,8 @@ function determineLang(strRow){
 
     if (strRow.substring(0,7) == 'Table \'') { lang = 1; } // English
     else if (strRow.substring(0, 7) == 'Tabla \'') { lang = 2; } // Spanish
-    else if (strRow.substring(0, 6).trim() == 'Tiempo') { lang = 2; } // Spanish
-    else if (strRow.substring(0, 7).trim() == 'Tiempos') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 6)) == 'Tiempo') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 7)) == 'Tiempos') { lang = 2; } // Spanish
 
     return lang;
 }
@@ -96,9 +95,9 @@ function determineRowType(strRow, langText) {
 
     if (strRow.substring(0, 7) == langText.table) {
         rowType = rowEnum.IO;
-    } else if (strRow.trim() == langText.executiontime) {
+    } else if ($.trim(strRow) == langText.executiontime) {
         rowType = rowEnum.ExectuionTime;
-    } else if (strRow.trim() == langText.compiletime) {
+    } else if ($.trim(strRow) == langText.compiletime) {
         rowType = rowEnum.CompileTime;
     } else if (strRow.indexOf(langText.rowsaffected) > -1) {
         rowType = rowEnum.RowsAffected;
@@ -424,6 +423,6 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.3.1';
+    document.getElementById("versionNumber").innerHTML = '0.3.2';
 }
 

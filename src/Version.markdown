@@ -1,5 +1,13 @@
 # StatisticsIOParser Version History #
 
+## Version 0.3.2 ##
+April 25, 2014
+- Fixed an error that bootstrap was throwing upon load.
+- Fixed an issue where site wouldn't parse in IE 8.
+- Moved language data into JSON files.
+- Applied formatting to Rows Affected text.
+- Created new sample query based on StackOverflow database.
+
 ## Version 0.3.1 ##
 April 14, 2014
 
