@@ -66,7 +66,7 @@
             <p>
                 <div>
                     <label class="checkbox pull-right">
-                        <input type="checkbox" id="exampleCheck" value="" onclick="includeExample(exampleCheck.checked)">
+                        <input type="checkbox" id="exampleCheck" value="" onclick="includeExample(exampleCheck.checked, langText)">
                         Show Example Statistics IO Output
                     </label>
                 </div>
@@ -74,7 +74,7 @@
             </p>
             <div>
                 <div style="float: left">
-                    <button id="parseButton" type="button" onclick="parseText();" class="btn btn-primary">Parse</button>
+                    <button id="parseButton" type="button" onclick="parseText(langText);" class="btn btn-primary">Parse</button>
                 </div>
                 <div style="float: right">
                     <button id="clearButton" type="button" onclick="clearResult();" class="btn">Clear Text</button>
@@ -96,34 +96,25 @@
     </footer>
 
     <script src="assets/js/statsioparser.js"></script>
-
-    <script>
-        versionNumber();
-    </script>
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!--
-    <script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    -->
     <script src="assets/js/numeral/numeral.min.js"></script>   
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/purl.js"></script>
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/jquery.dataTables.js"></script>
     <script src="assets/js/DT_bootstrap.js"></script>
-    <script src="assets/js/moment.min.js"></script>     
-    
+
+    <script type="text/javascript">
+        versionNumber();
+ 
+        $(document).ready(function () {
+            var languageType = purl().param('lang');
+            var filename = determineLangFilename(languageType);
+            $.getJSON(filename, function (data) {
+                langText = data;
+            });
+        });
+    </script>    
 
     <script>
         (function (i, s, o, g, r, a, m) {

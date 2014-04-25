@@ -1,7 +1,8 @@
-function includeExample(value) {
+function includeExample(value, lang) {
     var txt = document.getElementById("statiotext");
     if (value == true) {
         txt.value = "SQL Server parse and compile time: \nCPU time = 0 ms, elapsed time = 2 ms.\nTable 'sysobjrdb'. Scan count 0, logical reads 200, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2000, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysobjrdb'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'spt_values'. Scan count 1, logical reads 3, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolrdb'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syscolpars'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysschobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysidxstats'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 8, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysidxstats'. Scan count 1, logical reads 12, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysclsobjs'. Scan count 0, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'syssingleobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nNo foreign keys reference table 'Person', or you do not have permissions on referencing tables.\nSQL Server Execution Times:\n CPU time = 109 ms,  elapsed time = 335 ms.\nTable 'sysobjvalues'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nTable 'sysmultiobjrefs'. Scan count 1, logical reads 2, physical reads 0, read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.\nNo views with schema binding reference table 'Person'.";
+        txt.value = lang.sampleoutput;
     } else {
         txt.value = "";
     }
@@ -11,7 +12,8 @@ var rowEnum = {
     None: 0 ,
     IO: 1 ,
     ExectuionTime: 2 ,
-    CompileTime: 3
+    CompileTime: 3,
+    RowsAffected: 4
 }
 
 function statsIOInfo(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
@@ -62,67 +64,20 @@ function determineLang(strRow){
     return lang;
 }
 
-function createLangText(langValue, langObj) {
-
-    switch(langValue) {
-        case 1: // English
-            langObj.langValue = 1;
-            langObj.table = 'Table \'';
-            langObj.scan = 'Scan count ';
-            langObj.logical = 'logical reads ';
-            langObj.physical = 'physical reads ';
-            langObj.readahead = 'read-ahead reads ';
-            langObj.loblogical = 'lob logical reads ';
-            langObj.lobphysical = 'lob physical reads ';
-            langObj.lobreadahead = 'lob read-ahead reads ';
-            langObj.headerrownum = 'Row Num';
-            langObj.headertable = 'Table';
-            langObj.headerscan = 'Scan Count';
-            langObj.headerlogical = 'Logical Reads';
-            langObj.headerphysical = 'Physical Reads';
-            langObj.headerreadahead = 'Read-Ahead Reads';
-            langObj.headerloblogical = 'LOB Logical Reads';
-            langObj.headerlobphysical = 'LOB Physical Reads';
-            langObj.headerlobreadahead = 'LOB Read-Ahead Reads';
-            langObj.headerperlogicalread = '% Logical Reads of Total Reads';
-            langObj.executiontime = 'SQL Server Execution Times:';
-            langObj.compiletime = 'SQL Server parse and compile time:';
-            langObj.cputime = 'CPU time = ';
-            langObj.elapsedtime = 'elapsed time = ';
-            langObj.elapsedlabel = 'Elapsed';
-            langObj.cpulabel = 'CPU';
-            langObj.milliseconds = 'ms';
+function determineLangFilename (langType) {
+    var filename;
+    switch(langType) {
+        case 'en': // English
+            filename = 'assets/data/languagetext-en.json'
             break;
-        case 2: // Spanish
-            langObj.langValue =  2;
-            langObj.table = 'Tabla \'';
-            langObj.scan = 'Recuento de exámenes ';
-            langObj.logical = 'lecturas lógicas ';
-            langObj.physical = 'lecturas físicas ';
-            langObj.readahead = 'lecturas anticipadas ';
-            langObj.loblogical = 'lecturas lógicas de LOB ';
-            langObj.lobphysical = 'lecturas físicas de LOB ';
-            langObj.headerrownum = 'Fila Número';
-            langObj.headertable = 'Tabla';
-            langObj.headerscan = 'Recuento de exámenes';
-            langObj.headerlogical = 'Lecturas lógicas';
-            langObj.headerphysical = 'Lecturas físicas';
-            langObj.headerreadahead = 'Lecturas anticipadas';
-            langObj.headerloblogical = 'Lecturas lógicas de LOB';
-            langObj.headerlobphysical = 'Lecturas físicas de LOB';
-            langObj.headerlobreadahead = 'Lecturas anticipadas de LOB';
-            langObj.headerperlogicalread = '% Lecturas lógicas del Total de Lecturas';
-            langObj.lobreadahead = 'lecturas anticipadas de LOB ';
-            langObj.compiletime = 'Tiempo de análisis y compilación de SQL Server:';
-            langObj.executiontime = 'Tiempos de ejecución de SQL Server:';
-            langObj.cputime = 'Tiempo de CPU = ';
-            langObj.elapsedtime = 'tiempo transcurrido = ';
-            langObj.elapsedlabel = 'Transcurrido';
-            langObj.cpulabel = 'CPU';
-            langObj.milliseconds = 'ms';
+        case 'es': // Spanish
+            filename = 'assets/data/languagetext-es.json'
+            break;
+        default :
+            filename = 'assets/data/languagetext-en.json'
             break;
     }
-    //return langObj;
+    return filename;
 }
 
 function infoReplace(strValue, searchValue, newvValue) {
@@ -139,17 +94,14 @@ function infoReplace(strValue, searchValue, newvValue) {
 function determineRowType(strRow, langText) {
     var rowType = rowEnum.None;
 
-    if (langText.cpulabel == undefined) { 
-        lang = determineLang(strRow); 
-        createLangText(lang, langText);
-    }
-
     if (strRow.substring(0, 7) == langText.table) {
         rowType = rowEnum.IO;
     } else if (strRow.trim() == langText.executiontime) {
         rowType = rowEnum.ExectuionTime;
     } else if (strRow.trim() == langText.compiletime) {
         rowType = rowEnum.CompileTime;
+    } else if (strRow.indexOf(langText.rowsaffected) > -1) {
+        rowType = rowEnum.RowsAffected;
     }
 
     return rowType;
@@ -169,7 +121,6 @@ function processTime(line, cputime, elapsedtime, milliseconds) {
 
     return new statsTimeInfo(section[0].replace(re, "$2"), section[1].replace(re2, "$2"))
 }
-
 
 function processIOTableRow(line, tableResult, langText) {
     var section = line.split('\.');
@@ -196,7 +147,7 @@ function processIOTableRow(line, tableResult, langText) {
     }
 }
 
-function parseText() {
+function parseText(lang) {
     var txt = document.getElementById("statiotext").value;
     var lines = txt.split('\n');
     var tableIOResult = new Array();
@@ -207,29 +158,28 @@ function parseText() {
     var isExecution = false;
     var isCompile = false;
     var formattedOutput = '';
-    var langText = new Object();
 
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
 
         if (isExecution == false && isCompile == false) {
-            var rowType = determineRowType(line, langText);
+            var rowType = determineRowType(line, lang);
         }
 
         switch (rowType) {
             case rowEnum.IO:
                 if (inTable == true) {
-                    processIOTableRow(line, tableIOResult, langText);
+                    processIOTableRow(line, tableIOResult, lang);
                 } else {
                     tableCount += 1;
                     inTable = true;
-                    processIOTableRow(line, tableIOResult, langText);
+                    processIOTableRow(line, tableIOResult, lang);
                 }
                 break;
             case rowEnum.ExectuionTime:
                 if (isExecution == true) {
-                    var et = processTime(line, langText.cputime, langText.elapsedtime, langText.milliseconds);
-                    formattedOutput += outputTimeTable(et, langText.executiontime, langText.milliseconds, langText.elapsedlabel, langText.cpulabel)
+                    var et = processTime(line, lang.cputime, lang.elapsedtime, lang.milliseconds);
+                    formattedOutput += outputTimeTable(et, lang.executiontime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel)
                     executionTotal.cpu += et.cpu;
                     executionTotal.elapsed += et.elapsed
                 } else {
@@ -239,8 +189,8 @@ function parseText() {
                 break;
             case rowEnum.CompileTime:
                 if (isCompile == true) {
-                    var ct = processTime(line, langText.cputime, langText.elapsedtime, langText.milliseconds);
-                    formattedOutput += outputTimeTable(ct, langText.compiletime, langText.milliseconds, langText.elapsedlabel, langText.cpulabel)
+                    var ct = processTime(line, lang.cputime, lang.elapsedtime, lang.milliseconds);
+                    formattedOutput += outputTimeTable(ct, lang.compiletime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel)
                     compileTotal.cpu += ct.cpu;
                     compileTotal.elapsed += ct.elapsed
                 } else {
@@ -248,10 +198,22 @@ function parseText() {
                 }
                 isCompile = !isCompile;
                 break;
+            case rowEnum.RowsAffected:
+                var re = new RegExp("\\d+");
+                var affectedText = lang.headerrowsaffected;
+                var numRows;
+                if ((numRows = re.exec(line)) !== null) {
+                    if (numRows[0] == 1) { 
+                        affectedText = lang.headerrowaffected;
+                    }           
+                    formattedOutput += '<div class="strong-text">' + numeral(numRows[0]).format('0,0') + affectedText + '</div>';
+                }
+
+                break;
             default:
                 if (inTable == true) {
                     inTable = false;
-                    formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, langText);
+                    formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, lang);
                     tableResult = new Array();
                 }
                 formattedOutput += '<span>' + line + '<br /></span>';
@@ -261,11 +223,11 @@ function parseText() {
 
     // if last row a table then call formatOutput
     if (inTable == true) {
-        formattedOutput += outputIOTable(tableResult, statsIOCalcTotals(tableResult), tableCount, langText);
+        formattedOutput += outputIOTable(tableResult, statsIOCalcTotals(tableResult), tableCount, lang);
     }
 
 
-    formattedOutput += outputTimeTableTotals(executionTotal, compileTotal, langText.compiletime, langText.executiontime, langText.milliseconds, langText.elapsedlabel, langText.cpulabel);
+    formattedOutput += outputTimeTableTotals(executionTotal, compileTotal, lang.compiletime, lang.executiontime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel);
 
     document.getElementById("result").innerHTML = formattedOutput;
     document.getElementById("clearButton").innerHTML  = 'Clear Results';
@@ -380,16 +342,16 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
  function outputIOTable(statInfo, statTotal, tableNumber, langObj) {
     var result = '<table id="resultTable' + tableNumber +'" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
     result += '<thead><tr>';
-    result += '<th width="30" class="th-column">' + langObj.headerrownum + '</th>';
+    result += '<th class="th-column th-column-small">' + langObj.headerrownum + '</th>';
     result += '<th class="th-column">' + langObj.headertable + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerscan + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerlogical + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerphysical + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerreadahead + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerloblogical + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerlobphysical + '</th>';
-    result += '<th width="50" class="th-column">' + langObj.headerlobreadahead + '</th>';
-    result += '<th width="75" class="th-column">' + langObj.headerperlogicalread + '</th>';
+    result += '<th class="th-column th-column-large">' + langObj.headerscan + '</th>';
+    result += '<th class="th-column th-column-large">' + langObj.headerlogical + '</th>';
+    result += '<th class="th-column th-column-large">' + langObj.headerphysical + '</th>';
+    result += '<th class="th-column th-column-large">' + langObj.headerreadahead + '</th>';
+    result += '<th class="th-column th-column-medium">' + langObj.headerloblogical + '</th>';
+    result += '<th class="th-column th-column-medium">' + langObj.headerlobphysical + '</th>';
+    result += '<th class="th-column th-column-medium">' + langObj.headerlobreadahead + '</th>';
+    result += '<th class="th-column th-column-large">' + langObj.headerperlogicalread + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     for (var i = 0; i < statInfo.length; i++) {

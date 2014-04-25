@@ -24,6 +24,9 @@ td {
     word-wrap: break-word; /* IE 5+ */
 }
 
+.strong-text {
+    font-weight: bold;
+}
 .table-nonfluid {
    width: 550px;
 }
@@ -39,6 +42,19 @@ td {
 .th-column {
     padding: 4px 20px 4px 5px !important;
 }
+
+.th-column-small {
+    width: 30px !important;
+}
+
+.th-column-medium {
+    width: 50px !important;
+}
+
+.th-column-large {
+    width: 75px !important;
+}
+
 .td-column-right {
     text-align: right !important;
     padding-right: 20px !important;
