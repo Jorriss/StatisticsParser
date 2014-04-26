@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en"><head>
     <meta charset="utf-8">
     <title>Statistics IO Parser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +7,9 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/DT_bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/DT_bootstrap.css" rel="stylesheet">
     <style>
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -27,65 +26,67 @@
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="#">Statistics IO Parser</a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="https://github.com/Jorriss/StatisticsIOParser">GitHub Source</a></li>
-                    </ul>
-                    <ul class="nav pull-right">
-                        <li><a href="http://jorriss.net">Jorriss.net</a></li>
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
+        <div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapseDiv">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button></div>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Statistics IO Parser</a>
             </div>
+            
+                
+            <div class="collapse navbar-collapse" id="navbarCollapseDiv">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="https://github.com/Jorriss/StatisticsIOParser">GitHub Source</a></li>
+                </ul>
+                <ul class="nav pull-right navbar-nav">
+                    <li><a href="http://jorriss.net">Jorriss.net</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
         </div>
     </div>
 
     <div class="container"> 
-        <div class="alert alert-warn">We've been featured on <a href="http://dbareactions.com/post/80969348869/as-a-sql-server-tuner-when-i-saw" target="_blank">DBA Reactions</a>! Thanks guys!</div>
+        <div class="alert alert-warning">We've been featured on <a href="http://dbareactions.com/post/80969348869/as-a-sql-server-tuner-when-i-saw" target="_blank">DBA Reactions</a>! Thanks guys!</div>
 
         <h1>Statistics IO Parser</h1>
         <p>
             Sometimes reading the ouput from Statistics IO can be a total drag.
-            <br />
+            <br>
             This page will help with that. Just paste in the output of Statistics IO
-            <br />
+            <br>
             and press Parse. Your output will be formatted and totaled. Enjoy.
         </p>
 
         <form>
             <p>
-                <div>
-                    <label class="checkbox pull-right">
+                </p><div>
+                    <div class="checkbox"><label class="pull-right">
                         <input type="checkbox" id="exampleCheck" value="" onclick="includeExample(exampleCheck.checked, langText)">
                         Show Example Statistics IO Output
-                    </label>
+                    </label></div>
                 </div>
-                <textarea id='statiotext' rows="10"></textarea>
-            </p>
+                <textarea id="statiotext" rows="10"></textarea>
+            <p></p>
             <div>
                 <div style="float: left">
                     <button id="parseButton" type="button" onclick="parseText(langText);" class="btn btn-primary">Parse</button>
                 </div>
                 <div style="float: right">
-                    <button id="clearButton" type="button" onclick="clearResult();" class="btn">Clear Text</button>
+                    <button id="clearButton" type="button" onclick="clearResult();" class="btn btn-default">Clear Text</button>
                 </div>
+            </div>
         </form>
 
         <p>&nbsp;</p>
         <div id="resultTotal"></div>
-        <div id='result'></div>
+        <div id="result"></div>
     </div>
-</div>
+
 
     <!-- /container -->
     <footer class="footer">
@@ -128,7 +129,5 @@
         ga('send', 'pageview');
 
 </script>
-</body>
-</html>
 
-
+</body></html>

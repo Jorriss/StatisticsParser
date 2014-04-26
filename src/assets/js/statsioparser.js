@@ -225,7 +225,7 @@ function parseText(lang) {
         formattedOutput += outputIOTable(tableResult, statsIOCalcTotals(tableResult), tableCount, lang);
     }
 
-
+    formattedOutput += '<h4>Totals:</h4>'
     formattedOutput += outputTimeTableTotals(executionTotal, compileTotal, lang.compiletime, lang.executiontime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel);
 
     document.getElementById("result").innerHTML = formattedOutput;
@@ -350,7 +350,7 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     result += '<th class="th-column th-column-medium">' + langObj.headerloblogical + '</th>';
     result += '<th class="th-column th-column-medium">' + langObj.headerlobphysical + '</th>';
     result += '<th class="th-column th-column-medium">' + langObj.headerlobreadahead + '</th>';
-    result += '<th class="th-column th-column-large">' + langObj.headerperlogicalread + '</th>';
+    result += '<th class="th-column th-column-xlarge">' + langObj.headerperlogicalread + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     for (var i = 0; i < statInfo.length; i++) {

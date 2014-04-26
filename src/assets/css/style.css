@@ -9,8 +9,16 @@ textarea {
     left: -8px; /* 1px border, too */
 }
 
+label {
+    font-weight: normal;
+}
+
 table {
     font-size: 12px;
+}
+
+h1 {
+    font-weight: bold;
 }
 
 td {
@@ -22,6 +30,19 @@ td {
     white-space: -moz-pre-wrap; /* Mozilla */
     white-space: -hp-pre-wrap; /* HP Printers */
     word-wrap: break-word; /* IE 5+ */
+}
+
+.container {
+    width: 940px;
+}
+
+.remove-margin {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.navbar-brand {
+    font-size: 20px;
 }
 
 .strong-text {
@@ -48,11 +69,15 @@ td {
 }
 
 .th-column-medium {
-    width: 50px !important;
+    width: 70px !important;
 }
 
 .th-column-large {
-    width: 75px !important;
+    width: 85px !important;
+}
+
+.th-column-xlarge {
+    width: 100px !important;
 }
 
 .td-column-right {
