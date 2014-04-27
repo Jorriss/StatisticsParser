@@ -7,6 +7,16 @@ function includeExample(value, lang) {
     }
 }
 
+function toggleCheckmark(checkmarkSpan, cookieKey) {
+    if($.cookies.get(cookieKey) == true) {
+        $.cookies.set(cookieKey, "false");
+        checkmarkSpan.style.display = 'none';
+    } else {
+        $.cookies.set(cookieKey, "true");
+        checkmarkSpan.style.display = '';
+    }
+}
+
 var rowEnum = {
     None: 0 ,
     IO: 1 ,
@@ -233,6 +243,27 @@ function parseText(lang) {
 
     //Apply datatables plugin
     for (var counter = 1; counter <= tableCount; counter++) {
+        if($.cookies.get("tableScrollbar") == true) {
+        $('#resultTable' + counter).dataTable({
+            "sDom": "t",
+            "bFilter": false,
+            "bPaginate": false,
+            "sScrollY": "200px",
+            "bScrollCollapse": false,
+            "aoColumns": [
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                null,
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" },
+                { "sType": "formatted-num", "sClass": "td-column-right" }
+            ]
+        });
+        } else {
         $('#resultTable' + counter).dataTable({
             "sDom": "t",
             "bFilter": false,
@@ -249,7 +280,8 @@ function parseText(lang) {
                 { "sType": "formatted-num", "sClass": "td-column-right" },
                 { "sType": "formatted-num", "sClass": "td-column-right" }
             ]
-        });
+        });            
+        }
     }
 }
 
@@ -341,16 +373,16 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
  function outputIOTable(statInfo, statTotal, tableNumber, langObj) {
     var result = '<table id="resultTable' + tableNumber +'" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
     result += '<thead><tr>';
-    result += '<th class="th-column th-column-small">' + langObj.headerrownum + '</th>';
+    result += '<th class="th-column column-small">' + langObj.headerrownum + '</th>';
     result += '<th class="th-column">' + langObj.headertable + '</th>';
-    result += '<th class="th-column th-column-large">' + langObj.headerscan + '</th>';
-    result += '<th class="th-column th-column-large">' + langObj.headerlogical + '</th>';
-    result += '<th class="th-column th-column-large">' + langObj.headerphysical + '</th>';
-    result += '<th class="th-column th-column-large">' + langObj.headerreadahead + '</th>';
-    result += '<th class="th-column th-column-medium">' + langObj.headerloblogical + '</th>';
-    result += '<th class="th-column th-column-medium">' + langObj.headerlobphysical + '</th>';
-    result += '<th class="th-column th-column-medium">' + langObj.headerlobreadahead + '</th>';
-    result += '<th class="th-column th-column-xlarge">' + langObj.headerperlogicalread + '</th>';
+    result += '<th class="th-column column-large">' + langObj.headerscan + '</th>';
+    result += '<th class="th-column column-large">' + langObj.headerlogical + '</th>';
+    result += '<th class="th-column column-large">' + langObj.headerphysical + '</th>';
+    result += '<th class="th-column column-large">' + langObj.headerreadahead + '</th>';
+    result += '<th class="th-column column-medium">' + langObj.headerloblogical + '</th>';
+    result += '<th class="th-column column-medium">' + langObj.headerlobphysical + '</th>';
+    result += '<th class="th-column column-medium">' + langObj.headerlobreadahead + '</th>';
+    result += '<th class="th-column column-xlarge">' + langObj.headerperlogicalread + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     for (var i = 0; i < statInfo.length; i++) {
@@ -381,16 +413,16 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     }
     result += '</tbody>';
     result += '<tfoot><tr>';
-    result += '<td class="footer-column"></td>';
+    result += '<td class="footer-column column-small"></td>';
     result += '<td class="footer-column">Total</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.scan).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.logical).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.physical).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.readahead).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.loblogical).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.lobphysical).format('0,0') + '</td>';
-    result += '<td class="footer-column">' + numeral(statTotal.lobreadahead).format('0,0') + '</td>';
-    result += '<td class="footer-column">&nbsp;</td>';
+    result += '<td class="footer-column column-large">' + numeral(statTotal.scan).format('0,0') + '</td>';
+    result += '<td class="footer-column column-large">' + numeral(statTotal.logical).format('0,0') + '</td>';
+    result += '<td class="footer-column column-large">' + numeral(statTotal.physical).format('0,0') + '</td>';
+    result += '<td class="footer-column column-large">' + numeral(statTotal.readahead).format('0,0') + '</td>';
+    result += '<td class="footer-column column-medium">' + numeral(statTotal.loblogical).format('0,0') + '</td>';
+    result += '<td class="footer-column column-medium">' + numeral(statTotal.lobphysical).format('0,0') + '</td>';
+    result += '<td class="footer-column column-medium">' + numeral(statTotal.lobreadahead).format('0,0') + '</td>';
+    result += '<td class="footer-column column-xlarge">&nbsp;</td>';
     result += '</tr></tfoot>';
 
     result += '</table>'
@@ -423,6 +455,6 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.3.2';
+    document.getElementById("versionNumber").innerHTML = '0.3.3';
 }
 

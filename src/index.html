@@ -33,9 +33,7 @@
             </button></div>
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Statistics IO Parser</a>
-            </div>
-            
-                
+            </div>                
             <div class="collapse navbar-collapse" id="navbarCollapseDiv">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
@@ -72,9 +70,19 @@
                 </div>
                 <textarea id="statiotext" rows="10"></textarea>
             <p></p>
-            <div>
+            <div class="button-padding">
                 <div style="float: left">
                     <button id="parseButton" type="button" onclick="parseText(langText);" class="btn btn-primary">Parse</button>
+                </div>
+
+                <div class="btn-group button-inner-margin" style="float: right">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-cog"</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li role="menu"><a href="#" onclick="toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');"> <span id="scrollbarOptionCheck" style="display:none" class="glyphicon glyphicon-ok"></span> Tables have scrollbars</a></li>
+                    </ul>
                 </div>
                 <div style="float: right">
                     <button id="clearButton" type="button" onclick="clearResult();" class="btn btn-default">Clear Text</button>
@@ -100,6 +108,7 @@
     <script src="assets/js/jquery.dataTables.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/DT_bootstrap.js"></script>
+    <script src="assets/js/jquery.cookies.2.2.0.min.js"></script>
     <script src="assets/js/numeral/numeral.min.js"></script>   
     <script src="assets/js/moment.min.js"></script>
     <script src="assets/js/purl.js"></script>
@@ -114,6 +123,10 @@
             $.getJSON(filename, function (data) {
                 langText = data;
             });
+            if($.cookies.get("tableScrollbar") == true) {
+                //$("#checkmarkSpan").hide();
+                scrollbarOptionCheck.style.display = ''
+            }
         });
     </script>    
 

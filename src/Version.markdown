@@ -1,7 +1,14 @@
 # StatisticsIOParser Version History #
 
+## Version 0.3.3 ##
+April 27, 2014
+
+- Added an option to make tables scrollable.
+- Upgraded project to Bootstrap 3
+
 ## Version 0.3.2 ##
 April 25, 2014
+
 - Fixed an error that bootstrap was throwing upon load.
 - Fixed an issue where site wouldn't parse in IE 8.
 - Moved language data into JSON files.

@@ -6,7 +6,6 @@ textarea {
     width: 100%;
     padding: 7px 0 7px 7px;
     position: relative;
-    left: -8px; /* 1px border, too */
 }
 
 label {
@@ -34,6 +33,14 @@ td {
 
 .container {
     width: 940px;
+}
+
+.button-padding {
+    padding: 0px 7px 0px 7px;
+}
+
+.button-inner-margin {
+    margin-left: 10px;
 }
 
 .remove-margin {
@@ -64,19 +71,19 @@ td {
     padding: 4px 20px 4px 5px !important;
 }
 
-.th-column-small {
-    width: 30px !important;
+.column-small {
+    width: 40px !important;
 }
 
-.th-column-medium {
+.column-medium {
     width: 70px !important;
 }
 
-.th-column-large {
+.column-large {
     width: 85px !important;
 }
 
-.th-column-xlarge {
+.column-xlarge {
     width: 100px !important;
 }
 
@@ -87,6 +94,7 @@ td {
 
 .footer-column {
     font-weight: bold;
+    padding: 4px 20px 4px 5px !important;
 }
 
 .footer {
