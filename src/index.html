@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head>
     <meta charset="utf-8">
-    <title>Statistics IO Parser</title>
+    <title>Statistics Parser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -32,7 +32,7 @@
                 <span class="icon-bar"></span>
             </button></div>
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Statistics IO Parser</a>
+                <a class="navbar-brand" href="#">Statistics Parser</a>
             </div>                
             <div class="collapse navbar-collapse" id="navbarCollapseDiv">
                 <ul class="nav navbar-nav">
@@ -49,16 +49,14 @@
     </div>
 
     <div class="container"> 
-        <div class="alert alert-warning">We've been featured on <a href="http://dbareactions.com/post/80969348869/as-a-sql-server-tuner-when-i-saw" target="_blank">DBA Reactions</a>! Thanks guys!</div>
+        <div class="alert alert-warning" id="alertDiv">We've been featured on <a href="http://dbareactions.com/post/80969348869/as-a-sql-server-tuner-when-i-saw" target="_blank">DBA Reactions</a>! Thanks guys!</div>
 
-        <h1>Statistics IO Parser</h1>
-        <p>
-            Sometimes reading the ouput from Statistics IO can be a total drag.
-            <br>
-            This page will help with that. Just paste in the output of Statistics IO
-            <br>
-            and press Parse. Your output will be formatted and totaled. Enjoy.
-        </p>
+        <h1>Statistics Parser</h1>
+        <div style="width:520px" id="introText">
+            Sometimes reading SQL Server ouput from Statistics IO and Statistics Time can be 
+            a total drag. This page will help with that. Just paste in the output of Statistics 
+            IO and/or Statistics Time and press Parse. Your output will be formatted and totaled. Enjoy.
+        </div>
 
         <form>
             <p>
@@ -127,6 +125,7 @@
                 //$("#checkmarkSpan").hide();
                 scrollbarOptionCheck.style.display = ''
             }
+            console.log(document.referrer);
         });
     </script>    
 
