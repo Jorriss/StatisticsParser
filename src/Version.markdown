@@ -1,5 +1,11 @@
 # StatisticsIOParser Version History #
 
+## Version 0.4.0 ##
+April 27, 2014
+
+-- Rebranded site to StatisticsParser.com
+-- Created a favion.
+
 ## Version 0.3.3 ##
 April 27, 2014
 

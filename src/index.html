@@ -7,6 +7,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
+    <link href="favicon.png" rel="icon" type="image/png" />
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/DT_bootstrap.css" rel="stylesheet">
@@ -26,19 +27,20 @@
 <body>
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapseDiv">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button></div>
+        <div class="container">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapseDiv">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="navbar-brand" href="#">Statistics Parser</a>
-            </div>                
+            </div>
             <div class="collapse navbar-collapse" id="navbarCollapseDiv">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="about.html">About</a></li>
-                    <li><a href="https://github.com/Jorriss/StatisticsIOParser">GitHub Source</a></li>
+                    <li><a href="https://github.com/Jorriss/StatisticsParser">GitHub Source</a></li>
                 </ul>
                 <ul class="nav pull-right navbar-nav">
                     <li><a href="http://jorriss.net">Jorriss.net</a></li>
@@ -49,7 +51,7 @@
     </div>
 
     <div class="container"> 
-        <div class="alert alert-warning" id="alertDiv">We've been featured on <a href="http://dbareactions.com/post/80969348869/as-a-sql-server-tuner-when-i-saw" target="_blank">DBA Reactions</a>! Thanks guys!</div>
+        <div class="alert alert-warning"  id="alertDiv">StatisticsIOParser.com is now StatisticsParser.com! New name, same great taste! <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>
 
         <h1>Statistics Parser</h1>
         <div style="width:520px" id="introText">
@@ -75,8 +77,8 @@
 
                 <div class="btn-group button-inner-margin" style="float: right">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-cog"</span>
-                        <span class="caret"></span>
+                        <span class="glyphicon glyphicon-cog"> </span>
+                        <span class="caret"> </span>
                     </button>
                     <ul class="dropdown-menu">
                         <li role="menu"><a href="#" onclick="toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');"> <span id="scrollbarOptionCheck" style="display:none" class="glyphicon glyphicon-ok"></span> Tables have scrollbars</a></li>
@@ -125,7 +127,6 @@
                 //$("#checkmarkSpan").hide();
                 scrollbarOptionCheck.style.display = ''
             }
-            console.log(document.referrer);
         });
     </script>    
 
