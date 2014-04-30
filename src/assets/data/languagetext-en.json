@@ -1,5 +1,6 @@
 {
-        "langValue" : "en",
+        "langvalue" : "en",
+        "langname" : "English" ,
         "table" : "Table '",
         "scan" : "Scan count ",
         "logical" : "logical reads ",

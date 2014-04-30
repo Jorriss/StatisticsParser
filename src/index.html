@@ -43,7 +43,13 @@
                     <li><a href="https://github.com/Jorriss/StatisticsParser">GitHub Source</a></li>
                 </ul>
                 <ul class="nav pull-right navbar-nav">
-                    <li><a href="http://jorriss.net">Jorriss.net</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="languageDropdownText">Language</span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="?lang=en">English</a></li>
+            <li><a href="?lang=es">Español</a></li>
+          </ul>
+        </li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -122,11 +128,23 @@
             var filename = determineLangFilename(languageType);
             $.getJSON(filename, function (data) {
                 langText = data;
+                $("#languageDropdownText").text(langText.langname);
             });
             if($.cookies.get("tableScrollbar") == true) {
                 //$("#checkmarkSpan").hide();
                 scrollbarOptionCheck.style.display = ''
             }
+
+            $(function(){
+                $(".dropdown-menu li a").click(function(){
+                    $.getJSON(filename, function (data) {
+                        langText = data;
+                        $("#languageDropdownText").text(langText.langname);
+                    });
+                });
+            });
+            
+         
         });
     </script>    
 
