@@ -1,5 +1,10 @@
 # StatisticsIOParser Version History #
 
+## Version 0.4.1 ##
+April 29, 2014
+
+- Now parses SQL Server errors and displays them in red.
+
 ## Version 0.4.0 ##
 April 27, 2014
 
