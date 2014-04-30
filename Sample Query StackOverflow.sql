@@ -26,10 +26,18 @@ JOIN   PostTypes ptype ON p.PostTypeId = ptype.Id
 JOIN   Users     u     ON p.OwnerUserId = u.Id
 JOIN   Comments  c     ON p.Id = c.PostId
 WHERE  p.CreationDate > '2013-01-01'
+;
+GO
 
 SELECT *
 FROM   Posts p
 JOIN   Users u on p.OwnerUserId = u.Id
 JOIN   Votes v ON p.Id = v.PostId
 WHERE  u.DisplayName = 'Jon Skeet'
+;
+GO
 
+SELECT Id, scores
+FROM   Posts
+;
+GO

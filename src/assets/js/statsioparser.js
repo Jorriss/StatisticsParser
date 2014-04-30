@@ -8,7 +8,7 @@ function includeExample(value, lang) {
 }
 
 function toggleCheckmark(checkmarkSpan, cookieKey) {
-    if($.cookies.get(cookieKey) == true) {
+    if($.cookies.get(cookieKey) === true) {
         $.cookies.set(cookieKey, "false");
         checkmarkSpan.style.display = 'none';
     } else {
@@ -18,11 +18,12 @@ function toggleCheckmark(checkmarkSpan, cookieKey) {
 }
 
 var rowEnum = {
-    None: 0 ,
-    IO: 1 ,
-    ExectuionTime: 2 ,
+    None: 0,
+    IO: 1,
+    ExectuionTime: 2,
     CompileTime: 3,
-    RowsAffected: 4
+    RowsAffected: 4,
+    Error: 5
 }
 
 function statsIOInfo(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
@@ -65,10 +66,10 @@ function statsTimeInfoTotal() {
 function determineLang(strRow){
     var lang = 1;
 
-    if (strRow.substring(0,7) == 'Table \'') { lang = 1; } // English
-    else if (strRow.substring(0, 7) == 'Tabla \'') { lang = 2; } // Spanish
-    else if ($.trim(strRow.substring(0, 6)) == 'Tiempo') { lang = 2; } // Spanish
-    else if ($.trim(strRow.substring(0, 7)) == 'Tiempos') { lang = 2; } // Spanish
+    if (strRow.substring(0,7) === 'Table \'') { lang = 1; } // English
+    else if (strRow.substring(0, 7) === 'Tabla \'') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 6)) === 'Tiempo') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 7)) === 'Tiempos') { lang = 2; } // Spanish
 
     return lang;
 }
@@ -103,14 +104,16 @@ function infoReplace(strValue, searchValue, newvValue) {
 function determineRowType(strRow, langText) {
     var rowType = rowEnum.None;
 
-    if (strRow.substring(0, 7) == langText.table) {
+    if (strRow.substring(0, 7) === langText.table) {
         rowType = rowEnum.IO;
-    } else if ($.trim(strRow) == langText.executiontime) {
+    } else if ($.trim(strRow) === langText.executiontime) {
         rowType = rowEnum.ExectuionTime;
-    } else if ($.trim(strRow) == langText.compiletime) {
+    } else if ($.trim(strRow) === langText.compiletime) {
         rowType = rowEnum.CompileTime;
     } else if (strRow.indexOf(langText.rowsaffected) > -1) {
         rowType = rowEnum.RowsAffected;
+    } else if (strRow.substring(0,3) === langText.errormsg) {
+        rowType = rowEnum.Error;
     }
 
     return rowType;
@@ -166,18 +169,19 @@ function parseText(lang) {
     var inTable = false;
     var isExecution = false;
     var isCompile = false;
+    var isError = false;
     var formattedOutput = '';
 
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
 
-        if (isExecution == false && isCompile == false) {
+        if (isExecution === false && isCompile === false && isError === false) {
             var rowType = determineRowType(line, lang);
         }
 
         switch (rowType) {
             case rowEnum.IO:
-                if (inTable == true) {
+                if (inTable === true) {
                     processIOTableRow(line, tableIOResult, lang);
                 } else {
                     tableCount += 1;
@@ -186,7 +190,7 @@ function parseText(lang) {
                 }
                 break;
             case rowEnum.ExectuionTime:
-                if (isExecution == true) {
+                if (isExecution === true) {
                     var et = processTime(line, lang.cputime, lang.elapsedtime, lang.milliseconds);
                     formattedOutput += outputTimeTable(et, lang.executiontime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel)
                     executionTotal.cpu += et.cpu;
@@ -197,7 +201,7 @@ function parseText(lang) {
                 isExecution = !isExecution;
                 break;
             case rowEnum.CompileTime:
-                if (isCompile == true) {
+                if (isCompile === true) {
                     var ct = processTime(line, lang.cputime, lang.elapsedtime, lang.milliseconds);
                     formattedOutput += outputTimeTable(ct, lang.compiletime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel)
                     compileTotal.cpu += ct.cpu;
@@ -212,15 +216,18 @@ function parseText(lang) {
                 var affectedText = lang.headerrowsaffected;
                 var numRows;
                 if ((numRows = re.exec(line)) !== null) {
-                    if (numRows[0] == 1) { 
+                    if (numRows[0] === 1) { 
                         affectedText = lang.headerrowaffected;
                     }           
                     formattedOutput += '<div class="strong-text">' + numeral(numRows[0]).format('0,0') + affectedText + '</div>';
                 }
-
+                break;
+            case rowEnum.Error:
+                isError = (isError === false ? true : false);
+                formattedOutput += '<div class="error-text">' + line + '</div>'
                 break;
             default:
-                if (inTable == true) {
+                if (inTable === true) {
                     inTable = false;
                     formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, lang);
                     tableResult = new Array();

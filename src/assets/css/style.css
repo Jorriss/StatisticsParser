@@ -51,6 +51,10 @@ td {
 .navbar-brand {
     font-size: 20px;
 }
+.error-text {
+    color: red;
+    font-weight: bold;
+}
 
 .strong-text {
     font-weight: bold;
