@@ -239,7 +239,7 @@ function parseText(lang) {
 
     // if last row a table then call formatOutput
     if (inTable == true) {
-        formattedOutput += outputIOTable(tableResult, statsIOCalcTotals(tableResult), tableCount, lang);
+        formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, lang);
     }
 
     formattedOutput += '<h4>Totals:</h4>'
