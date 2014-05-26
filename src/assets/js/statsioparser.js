@@ -249,7 +249,7 @@ function parseText(lang) {
 
     // if last row a table then call formatOutput
     if (inTable == true) {
-        formattedOutput += outputIOTable(tableResult, statsIOCalcTotals(tableResult), tableCount, lang);
+        formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, lang);
     }
 
     formattedOutput += '<h4>Totals:</h4>'
@@ -472,6 +472,6 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.4.1';
+    document.getElementById("versionNumber").innerHTML = '0.4.2';
 }
 

@@ -1,5 +1,10 @@
 # StatisticsIOParser Version History #
 
+## Version 0.4.2 ##
+May 26, 2014
+
+- Fixed a bug that prevented the a output table from being written.
+
 ## Version 0.4.1 ##
 April 29, 2014
 
