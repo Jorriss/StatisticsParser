@@ -1,5 +1,10 @@
 # StatisticsIOParser Version History #
 
+## Version 0.4.3 ##
+June 18, 2014
+
+- Fixed a bug that prevented the output table from being reset if there were more than one Statistics IO output.
+
 ## Version 0.4.2 ##
 May 26, 2014
 

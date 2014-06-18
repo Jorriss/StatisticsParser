@@ -240,7 +240,7 @@ function parseText(lang) {
                 if (inTable === true) {
                     inTable = false;
                     formattedOutput += outputIOTable(tableIOResult, statsIOCalcTotals(tableIOResult), tableCount, lang);
-                    tableResult = new Array();
+                    tableIOResult = new Array();
                 }
                 formattedOutput += '<span>' + line + '<br /></span>';
         }
@@ -472,6 +472,6 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.4.2';
+    document.getElementById("versionNumber").innerHTML = '0.4.3';
 }
 
