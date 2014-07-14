@@ -129,6 +129,11 @@
             var urlStatsOutput = purl().param('data');
             $.getJSON(filename, function (data) {
                 langText = data;
+                if(urlStatsOutput != '' ) {
+                    document.getElementById("statiotext").value = urlStatsOutput;
+                    document.getElementById("parseButton").click();
+                }
+            });
             if($.cookies.get("tableScrollbar") == true) {
                 //$("#checkmarkSpan").hide();
                 scrollbarOptionCheck.style.display = ''
