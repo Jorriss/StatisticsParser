@@ -462,6 +462,6 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.4.3';
+    document.getElementById("versionNumber").innerHTML = '0.4.4';
 }
 
