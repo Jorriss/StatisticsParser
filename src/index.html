@@ -126,10 +126,9 @@
         $(document).ready(function () {
             var languageType = purl().param('lang');
             var filename = determineLangFilename(languageType);
+            var urlStatsOutput = purl().param('data');
             $.getJSON(filename, function (data) {
                 langText = data;
-                $("#languageDropdownText").text(langText.langname);
-            });
             if($.cookies.get("tableScrollbar") == true) {
                 //$("#checkmarkSpan").hide();
                 scrollbarOptionCheck.style.display = ''

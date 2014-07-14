@@ -1,5 +1,10 @@
 # StatisticsIOParser Version History #
 
+## Version 0.4.4 ##
+July 13, 2014
+
+- Added the ability for a Statistics IO output be passed through a URL parameter named data.
+
 ## Version 0.4.3 ##
 June 18, 2014
 
