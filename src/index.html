@@ -129,7 +129,7 @@
             var urlStatsOutput = purl().param('data');
             $.getJSON(filename, function (data) {
                 langText = data;
-                if(urlStatsOutput != '' ) {
+                if(urlStatsOutput != undefined ) {
                     document.getElementById("statiotext").value = urlStatsOutput;
                     document.getElementById("parseButton").click();
                 }

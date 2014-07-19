@@ -169,8 +169,8 @@ function processIOTableRow(line, tableResult, langText) {
     }
 }
 
-function parseText(lang) {
-    var txt = document.getElementById("statiotext").value;
+function parseOutput(txt, lang) {
+    //var txt = document.getElementById("statiotext").value;
     var lines = txt.split('\n');
     var tableIOResult = new Array();
     var executionTotal = new statsTimeInfoTotal();
@@ -255,11 +255,18 @@ function parseText(lang) {
     formattedOutput += '<h4>Totals:</h4>'
     formattedOutput += outputTimeTableTotals(executionTotal, compileTotal, lang.compiletime, lang.executiontime, lang.milliseconds, lang.elapsedlabel, lang.cpulabel);
 
-    document.getElementById("result").innerHTML = formattedOutput;
+    return {output: formattedOutput, tableCount: tableCount}
+}
+
+function parseText(lang) {
+
+    var formattedOutput = parseOutput( document.getElementById("statiotext").value, lang);
+
+    document.getElementById("result").innerHTML = formattedOutput.output;
     document.getElementById("clearButton").innerHTML  = 'Clear Results';
 
     //Apply datatables plugin
-    for (var counter = 1; counter <= tableCount; counter++) {
+    for (var counter = 1; counter <= formattedOutput.tableCount; counter++) {
         if($.cookies.get("tableScrollbar") == true) {
         $('#resultTable' + counter).dataTable({
             "sDom": "t",
