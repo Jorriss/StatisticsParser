@@ -1,3 +1,4 @@
+
 function includeExample(value, lang) {
     var txt = document.getElementById("statiotext");
     if (value == true) {
