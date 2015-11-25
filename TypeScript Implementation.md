@@ -59,4 +59,26 @@ interface JQueryStatic {
 declare var numeral: any;
 ```
 
-It's possible to add more explicit typing info to these definitions, but this will get us compiling cleanly for now.
+It's possible to add more explicit typing info to these definitions, but this will get us compiling cleanly for now.  We should be down to 10 issues in `statsioparser.ts`.  I checked this in as "Fixed jQuery, DataTables, Numeral, and Cookies"
+
+## Wrapping up the errors
+An annoying thing about TypeScript is that it's unnecessarily cranky regarding manipulating the DOM.  Let's work through some of those errors first, and then clean up the rest of them.
+
+1. In `statsioparser.ts`, hover the mouse pointer over `txt` on line 3.  You should see that TypeScript thinks `txt` is an `HTMLElement` - this is true, but this is the base interface for any HTML element.  It should be an `HTMLTextAreaElement`, but there is currently no way for TypeScript to know that so we have this crummy experience.  The fix is to cast the result of the `getElementById` call as `HTMLTextAreaElement`.   `var txt = <HTMLTextAreaElement>document.getElementById("statiotext");`  That fixes the issue and now TypeScript thinks `txt` is an `HTMLTextAreaElement` which it knows has a `value` property.
+2. Line 264 has a slightly different problem.  Since we're getting the element and using the `value` property all on one line, we need to do our cast in parentheses which is really ugly.   `var formattedOutput = parseOutput( (<HTMLTextAreaElement>document.getElementById("statiotext")).value, lang);`
+3. Fix lines 476 and 477 using the parentheses trick.
+
+```TypeScript
+(<HTMLTextAreaElement>document.getElementById("statiotext")).value = '';
+(<HTMLInputElement>document.getElementById("exampleCheck")).checked = false;
+```
+
+4. Line 157 has two errors, though only one is valid.  Supplied parameters do not match any signature of the call target.  The issue is that this call to the `statsIOInfo` constructor has just three parameters, but `statsIOInfo` requires ten.  Click `statsIOInfo` and press F12 to go to definition.  Starting with the third parameter, mark the params as optional: `function statsIOInfo(rownumber, langText, table, scan?, logical?, physical?, readahead?, loblogical?, lobphysical?, lobreadahead?) {`.
+
+5. Now we just have one more error - cannot find name 'Moment'.  Moment is a popular library that has definitions on DefinitelyTyped.  From inside the StatisticsParser folder, run `tsd query moment` and assuming it comes back OK (it should), run `tsd query moment --action install --save`.  To get this definition working completely, it's also necessary to run `tsd query moment-node --action install --save`  (it's broken-out into two files).
+
+6. Click the refresh circle in the lower-right of the TypeScript bar to tell atom-typescript to rescan for TypeScript files, and everything should be compiling without error.
+
+There's plenty more that can be done, but this is what was required to get StatisticsParser working with TypeScript using Atom and the atom-typescript plugin as of November 25, 2015.  For example, switching TypeScript to `noImplicitAny` mode reveals 69 more issues (mostly missing type annotations on method signatures), but this is an optional, stricter mode.  Also, it would be useful to build-out the definitions for `jaaulde-jquery-cookies` and `numeral` (or migrate to similar libraries that have TypeScript definitions like `numbro` and `jquery.cookie`).
+
+I checked-in the code as "Finished conversion - all errors resolved".

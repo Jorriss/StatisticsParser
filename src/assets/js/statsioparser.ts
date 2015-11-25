@@ -1,6 +1,6 @@
 
 function includeExample(value, lang) {
-    var txt = document.getElementById("statiotext");
+    var txt = <HTMLTextAreaElement>document.getElementById("statiotext");
     if (value == true) {
         txt.value = lang.sampleoutput;
     } else {
@@ -37,7 +37,7 @@ var rowEnum = {
     Error: 5
 }
 
-function statsIOInfo(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+function statsIOInfo(rownumber, langText, table, scan?, logical?, physical?, readahead?, loblogical?, lobphysical?, lobreadahead?) {
     this.rownumber = rownumber;
     this.table = table;
     this.nostats = false;
@@ -261,7 +261,7 @@ function parseOutput(txt, lang) {
 
 function parseText(lang) {
 
-    var formattedOutput = parseOutput( document.getElementById("statiotext").value, lang);
+    var formattedOutput = parseOutput( (<HTMLTextAreaElement>document.getElementById("statiotext")).value, lang);
 
     document.getElementById("result").innerHTML = formattedOutput.output;
     document.getElementById("clearButton").innerHTML  = 'Clear Results';
@@ -473,8 +473,8 @@ function clearResult() {
     if (document.getElementById("result").innerHTML != '') {
         document.getElementById("result").innerHTML = '';
     } else {
-       document.getElementById("statiotext").value = '';
-       document.getElementById("exampleCheck").checked = false;
+       (<HTMLTextAreaElement>document.getElementById("statiotext")).value = '';
+       (<HTMLInputElement>document.getElementById("exampleCheck")).checked = false;
     }
     document.getElementById("clearButton").innerHTML = 'Clear Text';
 }

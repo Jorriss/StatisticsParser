@@ -24,6 +24,7 @@
         "typings/jaaulde-jquery-cookies/jaaulde-jquery-cookies.d.ts",
         "typings/jquery.dataTables/jquery.dataTables.d.ts",
         "typings/jquery/jquery.d.ts",
+        "typings/moment/moment.d.ts",
         "typings/numeral/numeral.d.ts",
         "typings/tsd.d.ts"
     ],
