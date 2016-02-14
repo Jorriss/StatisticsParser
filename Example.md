@@ -37,7 +37,7 @@ SQL Server parse and compile time:<br />
 
 ## Output Statement
 
-|                                    | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |------------------------------------|--------------|--------------|
 | SQL Server parse and compile time: | 00:00:00.108 | 00:00:00.108 |
 
@@ -54,11 +54,11 @@ SQL Server parse and compile time:<br />
 |         | Worktable | 999,172    | 16,247,024    | 0              | 0                | 0                 | 0                  | 0                    | 91.000                         |
 |         | Worktable | 0          | 0             | 0              | 0                | 0                 | 0                  | 0                    | 0.000                          |
 
-|                             | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |-----------------------------|--------------|--------------|
 | SQL Server Execution Times: | 00:02:36.527 | 00:04:44.906 |
 
-|                                    | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |------------------------------------|--------------|--------------|
 | SQL Server parse and compile time: | 00:00:00.016 | 00:00:00.019 |
 
@@ -72,18 +72,18 @@ SQL Server parse and compile time:<br />
 |         | Posts     | 1          | 165,586       | 18             | 49,191           | 823,463           | 42,854             | 3,272                | 36.224                         |
 |         | Users     | 1          | 41,405        | 3              | 41,401           | 0                 | 0                  | 0                    | 9.058                          |
 
-|                             | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |-----------------------------|--------------|--------------|
 | SQL Server Execution Times: | 00:00:17.207 | 00:00:38.163 |
 
 **Msg 207, Level 16, State 1, Line 1<br />
 Invalid column name 'scores'.**
 
-|                                    | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |------------------------------------|--------------|--------------|
 | SQL Server parse and compile time: | 00:00:00.000 | 00:00:00.000 |
 
-|                             | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |-----------------------------|--------------|--------------|
 | SQL Server Execution Times: | 00:00:00.000 | 00:00:00.000 |
 
@@ -100,7 +100,7 @@ Invalid column name 'scores'.**
 | Votes     | 1          | 250,128       | 10             | 250,104          | 0                 | 0                  | 0                    | 1.366                          |
 | Worktable | 999,172    | 16,247,024    | 0              | 0                | 0                 | 0                  | 0                    | 88.728                         |
 
-|                                    | CPU          | Elapsed      |
+|| CPU          | Elapsed      |
 |------------------------------------|--------------|--------------|
 | SQL Server parse and compile time: | 00:00:00.124 | 00:00:00.127 |
 | SQL Server Execution Times:        | 00:02:53.734 | 00:05:23.069 |
