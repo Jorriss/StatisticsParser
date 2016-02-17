@@ -5,4 +5,4 @@ Useful links:
  - [SET STATISTICS IO (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms184361.aspx)
  - [SET STATISTICS TIME (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms190287.aspx)
 
-## [Exapmle](/Example.md)
+## [Example](/Example.md)
