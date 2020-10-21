@@ -79,8 +79,11 @@ function determineLang(strRow){
 
     if (strRow.substring(0,7) === 'Table \'') { lang = 1; } // English
     else if (strRow.substring(0, 7) === 'Tabla \'') { lang = 2; } // Spanish
+    else if (strRow.substring(0, 7) === 'Tabella \'') { lang = 3; } // Italian
     else if ($.trim(strRow.substring(0, 6)) === 'Tiempo') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 6)) === 'Tempo') { lang = 3; } // Italian
     else if ($.trim(strRow.substring(0, 7)) === 'Tiempos') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 7)) === 'Tempo') { lang = 3; } // Italian
 
     return lang;
 }
@@ -93,6 +96,9 @@ function determineLangFilename (langType) {
             break;
         case 'es': // Spanish
             filename = 'assets/data/languagetext-es.json'
+            break;
+        case 'it': // Italian
+            filename = 'assets/data/languagetext-it.json'
             break;
         default :
             filename = 'assets/data/languagetext-en.json'
