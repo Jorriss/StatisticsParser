@@ -353,7 +353,7 @@ function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuL
     //result += '<td class="td-column-right">' + numeral(timeValues.elapsed).format('0,0') + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.cpu) + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.elapsed) + '</td>';
-    result += '</tr></tbody></table><div>';
+    result += '</tr></tbody></table></div>';
 
     return result;
 }
