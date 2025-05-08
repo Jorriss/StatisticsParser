@@ -79,8 +79,11 @@ function determineLang(strRow){
 
     if (strRow.substring(0,7) === 'Table \'') { lang = 1; } // English
     else if (strRow.substring(0, 7) === 'Tabla \'') { lang = 2; } // Spanish
+    else if (strRow.substring(0, 7) === 'Tabella \'') { lang = 3; } // Italian
     else if ($.trim(strRow.substring(0, 6)) === 'Tiempo') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 6)) === 'Tempo') { lang = 3; } // Italian
     else if ($.trim(strRow.substring(0, 7)) === 'Tiempos') { lang = 2; } // Spanish
+    else if ($.trim(strRow.substring(0, 7)) === 'Tempo') { lang = 3; } // Italian
 
     return lang;
 }
@@ -93,6 +96,9 @@ function determineLangFilename (langType) {
             break;
         case 'es': // Spanish
             filename = 'assets/data/languagetext-es.json'
+            break;
+        case 'it': // Italian
+            filename = 'assets/data/languagetext-it.json'
             break;
         default :
             filename = 'assets/data/languagetext-en.json'
@@ -353,7 +359,7 @@ function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuL
     //result += '<td class="td-column-right">' + numeral(timeValues.elapsed).format('0,0') + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.cpu) + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.elapsed) + '</td>';
-    result += '</tr></tbody></table><div>';
+    result += '</tr></tbody></table></div>';
 
     return result;
 }
@@ -390,7 +396,7 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     //result += '<td class="td-total td-column-right">' + numeral(elapsedTotal).format('0,0') + '</td>';
     result += '<td class="td-total td-column-right">' + formatms(cpuTotal) + '</td>';
     result += '<td class="td-total td-column-right">' + formatms(elapsedTotal) + '</td>';
-    result += '</tr></tfoot></table><div>';
+    result += '</tr></tfoot></table></div>';
 
     return result;
 }
