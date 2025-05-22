@@ -1,4 +1,3 @@
-
 function includeExample(value, lang) {
     var txt = document.getElementById("statiotext");
     if (value == true) {
@@ -18,12 +17,12 @@ function updateQueryStringParameter(uri, key, value) {
     }
 }
 
-function toggleCheckmark(checkmarkSpan, cookieKey) {
-    if($.cookies.get(cookieKey) === true) {
-        $.cookies.set(cookieKey, "false");
+function toggleCheckmark(checkmarkSpan, storageKey) {
+    if(localStorage.getItem(storageKey) === 'true') {
+        localStorage.setItem(storageKey, 'false');
         checkmarkSpan.style.display = 'none';
     } else {
-        $.cookies.set(cookieKey, "true");
+        localStorage.setItem(storageKey, 'true');
         checkmarkSpan.style.display = '';
     }
 }
@@ -236,7 +235,7 @@ function parseOutput(txt, lang) {
                     if (numRows[0] === 1) { 
                         affectedText = lang.headerrowaffected;
                     }           
-                    formattedOutput += '<div class="strong-text">' + numeral(numRows[0]).format('0,0') + affectedText + '</div>';
+                    formattedOutput += '<div class="strong-text">' + formatNumber(numRows[0], lang.langvalue) + affectedText + '</div>';
                 }
                 break;
             case rowEnum.Error:
@@ -274,7 +273,7 @@ function parseText(lang) {
 
     //Apply datatables plugin
     for (var counter = 1; counter <= formattedOutput.tableCount; counter++) {
-        if($.cookies.get("tableScrollbar") == true) {
+        if(localStorage.getItem("tableScrollbar") === 'true') {
         $('#resultTable' + counter).dataTable({
             "sDom": "t",
             "bFilter": false,
@@ -339,8 +338,19 @@ function calcPercent(statInfos, statTotal) {
     }
 }
 
-function formatms (milliseconds) {
-    return moment.utc(milliseconds).format("HH:mm:ss.SSS")
+function formatms(milliseconds) {
+    try {
+        return luxon.Duration.fromMillis(milliseconds)
+            .toFormat("hh:mm:ss.SSS");
+    } catch (error) {
+        console.error('Error formatting duration:', error);
+        return '00:00:00.000';
+    }
+}
+
+function formatmsWithTimezone(milliseconds, timezone = 'UTC') {
+    return luxon.Duration.fromMillis(milliseconds)
+        .toFormat("hh:mm:ss.SSS", { zone: timezone });
 }
 
 function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuLabel) {
@@ -355,8 +365,8 @@ function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuL
     result += '<tbody>';
     result += '<tr>';
     result += '<td class="td-column-timetype">' + langTitle + '</td>';;
-    //result += '<td class="td-column-right">' + numeral(timeValues.cpu).format('0,0') + '</td>';
-    //result += '<td class="td-column-right">' + numeral(timeValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(timeValues.cpu) + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(timeValues.elapsed) + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.cpu) + '</td>';
     result += '<td class="td-column-right">' + formatms(timeValues.elapsed) + '</td>';
     result += '</tr></tbody></table></div>';
@@ -365,8 +375,14 @@ function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuL
 }
 
 function outputTimeTableTotals(executionValues, compileValues, langCompileTitle, langExecutionTitle, langDuration, elapsedLabel, cpuLabel) {
-    var cpuTotal = parseInt(executionValues.cpu) + parseInt(compileValues.cpu)
-    var elapsedTotal = parseInt(executionValues.elapsed) + parseInt(compileValues.elapsed)
+    // Convert to Luxon Duration for calculations
+    const cpuTotal = luxon.Duration.fromMillis(parseInt(executionValues.cpu))
+        .plus(luxon.Duration.fromMillis(parseInt(compileValues.cpu)))
+        .toMillis();
+    
+    const elapsedTotal = luxon.Duration.fromMillis(parseInt(executionValues.elapsed))
+        .plus(luxon.Duration.fromMillis(parseInt(compileValues.elapsed)))
+        .toMillis();
 
     var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid">';
     result += '<thead><tr>';
@@ -379,21 +395,21 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     result += '<tbody>';
     result += '<tr>';
     result += '<td class="td-column-timetype">' + langCompileTitle + '</td>';
-    //result += '<td class="td-column-right">' + numeral(compileValues.cpu).format('0,0') + '</td>';
-    //result += '<td class="td-column-right">' + numeral(compileValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(compileValues.cpu) + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(compileValues.elapsed) + '</td>';
     result += '<td class="td-column-right">' + formatms(compileValues.cpu) + '</td>';
     result += '<td class="td-column-right">' + formatms(compileValues.elapsed) + '</td>';
     result += '</tr><tr>';
     result += '<td class="td-column-timetype">' + langExecutionTitle + '</td>';
-    //result += '<td class="td-column-right">' + numeral(executionValues.cpu).format('0,0') + '</td>';
-    //result += '<td class="td-column-right">' + numeral(executionValues.elapsed).format('0,0') + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(executionValues.cpu) + '</td>';
+    //result += '<td class="td-column-right">' + formatNumber(executionValues.elapsed) + '</td>';
     result += '<td class="td-column-right">' + formatms(executionValues.cpu) + '</td>';
     result += '<td class="td-column-right">' + formatms(executionValues.elapsed) + '</td>';
     result += '</tr></tbody>';
     result += '<tfoot><tr>';
     result += '<td class="td-total td-column-timetype">Total</td>';
-    //result += '<td class="td-total td-column-right">' + numeral(cpuTotal).format('0,0') + '</td>';
-    //result += '<td class="td-total td-column-right">' + numeral(elapsedTotal).format('0,0') + '</td>';
+    //result += '<td class="td-total td-column-right">' + formatNumber(cpuTotal) + '</td>';
+    //result += '<td class="td-total td-column-right">' + formatNumber(elapsedTotal) + '</td>';
     result += '<td class="td-total td-column-right">' + formatms(cpuTotal) + '</td>';
     result += '<td class="td-total td-column-right">' + formatms(elapsedTotal) + '</td>';
     result += '</tr></tfoot></table></div>';
@@ -406,14 +422,14 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     result += '<thead><tr>';
     result += '<th class="th-column column-small">' + langObj.headerrownum + '</th>';
     result += '<th class="th-column">' + langObj.headertable + '</th>';
-    result += '<th class="th-column column-large">' + langObj.headerscan + '</th>';
-    result += '<th class="th-column column-large">' + langObj.headerlogical + '</th>';
-    result += '<th class="th-column column-large">' + langObj.headerphysical + '</th>';
-    result += '<th class="th-column column-large">' + langObj.headerreadahead + '</th>';
-    result += '<th class="th-column column-medium">' + langObj.headerloblogical + '</th>';
-    result += '<th class="th-column column-medium">' + langObj.headerlobphysical + '</th>';
-    result += '<th class="th-column column-medium">' + langObj.headerlobreadahead + '</th>';
-    result += '<th class="th-column column-xlarge">' + langObj.headerperlogicalread + '</th>';
+    result += '<th class="th-column column-large td-column-right">' + langObj.headerscan + '</th>';
+    result += '<th class="th-column column-large td-column-right">' + langObj.headerlogical + '</th>';
+    result += '<th class="th-column column-large td-column-right">' + langObj.headerphysical + '</th>';
+    result += '<th class="th-column column-large td-column-right">' + langObj.headerreadahead + '</th>';
+    result += '<th class="th-column column-medium td-column-right">' + langObj.headerloblogical + '</th>';
+    result += '<th class="th-column column-medium td-column-right">' + langObj.headerlobphysical + '</th>';
+    result += '<th class="th-column column-medium td-column-right">' + langObj.headerlobreadahead + '</th>';
+    result += '<th class="th-column column-xlarge td-column-right">' + langObj.headerperlogicalread + '</th>';
     result += '</tr></thead>';
     result += '<tbody>';
     for (var i = 0; i < statInfo.length; i++) {
@@ -431,13 +447,13 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
             result += '<td></td>';
             result += '<td></td>';
         } else {
-            result += '<td>' + numeral(statInfo[i].scan).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].logical).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].physical).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].readahead).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].loblogical).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].lobphysical).format('0,0') + '</td>';
-            result += '<td>' + numeral(statInfo[i].lobreadahead).format('0,0') + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].scan, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].logical, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].physical, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].readahead, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].loblogical, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].lobphysical, langObj.langvalue) + '</td>';
+            result += '<td>' + formatNumber(statInfo[i].lobreadahead, langObj.langvalue) + '</td>';
             result += '<td>' + statInfo[i].percentread + '</td>';
         }
         result += '</tr>';
@@ -446,13 +462,13 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     result += '<tfoot><tr>';
     result += '<td class="footer-column column-small"></td>';
     result += '<td class="footer-column">Total</td>';
-    result += '<td class="footer-column column-large">' + numeral(statTotal.scan).format('0,0') + '</td>';
-    result += '<td class="footer-column column-large">' + numeral(statTotal.logical).format('0,0') + '</td>';
-    result += '<td class="footer-column column-large">' + numeral(statTotal.physical).format('0,0') + '</td>';
-    result += '<td class="footer-column column-large">' + numeral(statTotal.readahead).format('0,0') + '</td>';
-    result += '<td class="footer-column column-medium">' + numeral(statTotal.loblogical).format('0,0') + '</td>';
-    result += '<td class="footer-column column-medium">' + numeral(statTotal.lobphysical).format('0,0') + '</td>';
-    result += '<td class="footer-column column-medium">' + numeral(statTotal.lobreadahead).format('0,0') + '</td>';
+    result += '<td class="footer-column column-large td-column-right">' + formatNumber(statTotal.scan, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-large td-column-right">' + formatNumber(statTotal.logical, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-large td-column-right">' + formatNumber(statTotal.physical, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-large td-column-right">' + formatNumber(statTotal.readahead, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-medium td-column-right">' + formatNumber(statTotal.loblogical, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-medium td-column-right">' + formatNumber(statTotal.lobphysical, langObj.langvalue) + '</td>';
+    result += '<td class="footer-column column-medium td-column-right">' + formatNumber(statTotal.lobreadahead, langObj.langvalue) + '</td>';
     result += '<td class="footer-column column-xlarge">&nbsp;</td>';
     result += '</tr></tfoot>';
 
@@ -486,6 +502,59 @@ function clearResult() {
 }
 
 function versionNumber() {
-    document.getElementById("versionNumber").innerHTML = '0.4.4';
+    document.getElementById("versionNumber").innerHTML = '0.5.0';
 }
 
+function formatNumber(value, langvalue = 'en') {
+    return new Intl.NumberFormat(langvalue).format(value);
+}
+
+// Add these helper functions to make time operations more readable
+function addDurations(duration1, duration2) {
+    return luxon.Duration.fromMillis(duration1)
+        .plus(luxon.Duration.fromMillis(duration2))
+        .toMillis();
+}
+
+function formatDuration(milliseconds) {
+    return luxon.Duration.fromMillis(milliseconds)
+        .toFormat("hh:mm:ss.SSS");
+}
+
+function getLanguageText(languageType = 'en', urlStatsOutput) {
+    const filename = determineLangFilename(languageType);
+
+    // Return a Promise that resolves with the language text
+    return new Promise((resolve) => {
+        $.getJSON(filename, function (data) {
+            let langText = data;
+            
+            // Update UI elements
+            if(urlStatsOutput) {
+                document.getElementById("statiotext").value = urlStatsOutput;
+                document.getElementById("parseButton").click();
+            } else {
+                if(langText.showexample) {
+                    document.getElementById("exampleText").innerHTML = langText.showexample;
+                } 
+                if(langText.buttonclear) {
+                    document.getElementById("clearButton").innerHTML = langText.buttonclear;
+                }
+                if(langText.buttonparse) {
+                    document.getElementById("parseButton").innerHTML = langText.buttonparse;
+                }
+            }
+            
+            // Update the dropdown text
+            document.getElementById("languageDropdown").textContent = langText.langname || "Language";
+            
+            // Update URL without refresh
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', languageType);
+            window.history.pushState({}, '', url);
+            
+            // Resolve the promise with the language text
+            resolve(langText);
+        });
+    });
+}
