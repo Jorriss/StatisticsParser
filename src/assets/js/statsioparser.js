@@ -496,7 +496,6 @@ function clearResult() {
         document.getElementById("result").innerHTML = '';
     } else {
        document.getElementById("statiotext").value = '';
-       document.getElementById("exampleCheck").checked = false;
     }
     document.getElementById("clearButton").innerHTML = 'Clear Text';
 }
@@ -558,3 +557,4 @@ function getLanguageText(languageType = 'en', urlStatsOutput) {
         });
     });
 }
+

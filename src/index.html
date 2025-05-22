@@ -12,11 +12,7 @@
     <link href="//cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" >
-    <!-- 
-    <link href="assets/css/DT_bootstrap.css" rel="stylesheet">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
-    -->
     <style>
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -77,10 +73,6 @@
         <form>
             <p>
                 </p><div>
-                    <div class="checkbox"><label class="float-end">
-                        <input type="checkbox" id="exampleCheck" value="" onclick="includeExample(exampleCheck.checked, langText)">
-                        <span id="exampleText">Show Example Statistics IO Output</span>
-                    </label></div>
                 </div>
                 <textarea id="statiotext" rows="10" autofocus></textarea>
             <p></p>
@@ -96,7 +88,11 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#" onclick="toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');">
                             <span id="scrollbarOptionCheck" style="display:none" class="bi bi-check"></span>
-                            Tables have scrollbars
+                            <span id="scrollbarOptionText">Tables have scrollbars</span>
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="includeExample(true, window.langText);">
+                            <span id="exampleOptionCheck" style="display:none" class="bi bi-check"></span>
+                            <span id="exampleText">Show Example Statistics IO Output</span>
                         </a></li>
                     </ul>
                 </div>
@@ -120,16 +116,7 @@
             <p>version <span id="versionNumber"></span></p>
         </div>
     </footer>
-    <!-- 
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery.dataTables.js"></script>    
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/DT_bootstrap.js"></script>
-    <script src="assets/js/numeral/numeral.min.js"></script>
-    <script src="assets/js/jquery.cookies.2.2.0.min.js"></script>
-    <script src="assets/js/moment.min.js"></script>
-    <script src="assets/js/purl.js"></script>
-    -->
+    
     <script src="//code.jquery.com/jquery-3.7.1.js"></script>
     <script src="//cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -145,7 +132,6 @@
             const languageType = urlParams.get('lang') || 'en';
             const urlStatsOutput = urlParams.get('data');
             
-            // let langText = await getLanguageText(languageType, urlStatsOutput);
             getLanguageText(languageType, urlStatsOutput).then(langText => {
                 window.langText = langText; // Store in global scope for other functions to use
                 
@@ -157,19 +143,6 @@
             if(localStorage.getItem("tableScrollbar") === 'true') {
                 scrollbarOptionCheck.style.display = ''
             }
-
-            /*
-            $(function(){
-                $(".dropdown-menu li a").click(function(){
-
-                    langText = getLanguageText(filename, urlStatsOutput);
-                    $.getJSON(filename, function (data) {
-                        langText = data;
-                        $("#languageDropdownText").text(langText.langname);
-                    });
-                });
-            });
-            */
          
         });
     </script>    
