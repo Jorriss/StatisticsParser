@@ -170,6 +170,25 @@
                 console.error('Failed to copy text: ', e.action);
             });
 
+            // Scroll to top button functionality
+            const scrollToTopButton = document.getElementById('scrollToTop');
+            
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 100) { // Show button after scrolling 100px
+                    scrollToTopButton.classList.add('visible');
+                } else {
+                    scrollToTopButton.classList.remove('visible');
+                }
+            });
+            
+            // Smooth scroll to top when button is clicked
+            scrollToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>    
 
@@ -183,5 +202,10 @@
   ga('send', 'pageview');
 
 </script>
+
+<!-- Add this before </body> -->
+<button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">
+    <i class="bi bi-arrow-up"></i>
+</button>
 </body>
 </html>
