@@ -71,10 +71,9 @@
         </div>
 
         <form>
-            <p>
-                </p><div>
-                </div>
-                <textarea id="statiotext" rows="10" autofocus></textarea>
+            <p></p>
+            <div></div>
+            <textarea id="statiotext" rows="10" autofocus></textarea>
             <p></p>
             <div class="button-padding">
                 <div style="float: left">
@@ -97,14 +96,18 @@
                     </ul>
                 </div>
                 <div style="float: right">
-                    <button id="clearButton" type="button" onclick="clearResult();" class="btn btn-light">Clear Text</button>
+                    <button id="clearButton" type="button" onclick="clearResult(window.langText);" class="btn btn-light">Clear Text</button>
                 </div>
             </div>
         </form>
 
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <div id="resultTotal"></div>
+        <div id="resultControls" style="float: right; display: none;">
+            <button id="copyResultButton" type="button" class="btn btn-primary" data-clipboard-target="#result">
+                Copy Result
+            </button>
+        </div>
         <div id="result"></div>
     </div>
 
@@ -112,7 +115,7 @@
     <!-- /container -->
     <footer class="footer">
         <div class="container">
-            <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="https://bsky.app/profile/jorriss.bsky.social">BlueSky - @jorriss.bsky.social</a>) and the fine folks at Brent Ozar Unlimited.</p>
+            <p>Built and maintained by Richie Rump (<a href="https://bsky.app/profile/jorriss.bsky.social">BlueSky - @jorriss.bsky.social</a>) and the fine folks at Brent Ozar Unlimited.</p>
             <p>version <span id="versionNumber"></span></p>
         </div>
     </footer>
@@ -123,6 +126,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
     <script src="assets/js/statsioparser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
  
     <script type="text/javascript">
         versionNumber();
@@ -143,7 +147,29 @@
             if(localStorage.getItem("tableScrollbar") === 'true') {
                 scrollbarOptionCheck.style.display = ''
             }
-         
+            
+            // Initialize clipboard.js
+            let clipboard = new ClipboardJS('#copyResultButton');
+            
+            // Add success/error handlers
+            clipboard.on('success', function(e) {
+                // Change button text temporarily
+                const button = e.trigger;
+                const originalText = button.innerHTML;
+                button.innerHTML = window.langText.buttoncopyresultmessage;
+                
+                // Reset button text after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+                
+                e.clearSelection();
+            });
+            
+            clipboard.on('error', function(e) {
+                console.error('Failed to copy text: ', e.action);
+            });
+
         });
     </script>    
 

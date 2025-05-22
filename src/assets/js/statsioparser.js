@@ -265,13 +265,21 @@ function parseOutput(txt, lang) {
 }
 
 function parseText(lang) {
-
-    var formattedOutput = parseOutput( document.getElementById("statiotext").value, lang);
+    var formattedOutput = parseOutput(document.getElementById("statiotext").value, lang);
 
     document.getElementById("result").innerHTML = formattedOutput.output;
-    document.getElementById("clearButton").innerHTML  = 'Clear Results';
+    if (lang.buttonclearresult) {
+        document.getElementById("clearButton").innerHTML = lang.buttonclearresult;
+    }
+    
+    // Show copy button if there are results
+    if (formattedOutput.output) {
+        document.getElementById("resultControls").style.display = 'block';
+    } else {
+        document.getElementById("resultControls").style.display = 'none';
+    }
 
-    //Apply datatables plugin
+    // Apply datatables plugin
     for (var counter = 1; counter <= formattedOutput.tableCount; counter++) {
         if(localStorage.getItem("tableScrollbar") === 'true') {
         $('#resultTable' + counter).dataTable({
@@ -491,13 +499,17 @@ function getSubStr(str, delim) {
     return str.substr(a + 1, b - a - 1);
 }
 
-function clearResult() {
+function clearResult(lang) {
     if (document.getElementById("result").innerHTML != '') {
         document.getElementById("result").innerHTML = '';
+        document.getElementById("resultControls").style.display = 'none';
     } else {
-       document.getElementById("statiotext").value = '';
+        document.getElementById("statiotext").value = '';
     }
-    document.getElementById("clearButton").innerHTML = 'Clear Text';
+
+    if(lang.buttonclear) {
+        document.getElementById("clearButton").innerHTML = lang.buttonclear;
+    }
 }
 
 function versionNumber() {
@@ -532,16 +544,23 @@ function getLanguageText(languageType = 'en', urlStatsOutput) {
             if(urlStatsOutput) {
                 document.getElementById("statiotext").value = urlStatsOutput;
                 document.getElementById("parseButton").click();
-            } else {
-                if(langText.showexample) {
-                    document.getElementById("exampleText").innerHTML = langText.showexample;
-                } 
-                if(langText.buttonclear) {
+            } 
+
+            if(langText.showexample) {
+                document.getElementById("exampleText").innerHTML = langText.showexample;
+            } 
+            if(langText.buttonclear) {
+                if (document.getElementById("result").style.display == 'none') {
                     document.getElementById("clearButton").innerHTML = langText.buttonclear;
+                } else {
+                    document.getElementById("clearButton").innerHTML = langText.buttonclearresult;
                 }
-                if(langText.buttonparse) {
-                    document.getElementById("parseButton").innerHTML = langText.buttonparse;
-                }
+            }
+            if(langText.buttonparse) {
+                document.getElementById("parseButton").innerHTML = langText.buttonparse;
+            }
+            if(langText.buttoncopyresult) {
+                document.getElementById("copyResultButton").innerHTML = langText.buttoncopyresult;
             }
             
             // Update the dropdown text
