@@ -143,34 +143,17 @@
             getLanguageText 
         } from './assets/js/statsioparser.js';
 
-        // Create custom events for each action
-        const events = {
-            parse: new CustomEvent('statsParser:parse'),
-            clear: new CustomEvent('statsParser:clear'),
-            includeExample: new CustomEvent('statsParser:includeExample'),
-            toggleCheckmark: new CustomEvent('statsParser:toggleCheckmark'),
-            getLanguage: new CustomEvent('statsParser:getLanguage')
-        };
+        // Initialize version number
+        versionNumber();
 
-        // Add event listeners
-        document.addEventListener('statsParser:parse', (e) => {
-            parseText(e.detail.langText);
-        });
-
-        document.addEventListener('statsParser:clear', (e) => {
-            clearResult(e.detail.langText);
-        });
-
-        document.addEventListener('statsParser:includeExample', (e) => {
-            includeExample(true, e.detail.langText);
-        });
-
-        document.addEventListener('statsParser:toggleCheckmark', (e) => {
-            toggleCheckmark(e.detail.checkmarkSpan, e.detail.storageKey);
-        });
-
-        document.addEventListener('statsParser:getLanguage', (e) => {
-            getLanguageText(e.detail.languageType, e.detail.urlStatsOutput).then(langText => {
+        // Initialize on document ready using native JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const languageType = urlParams.get('lang') || 'en';
+            const urlStatsOutput = urlParams.get('data');
+            
+            // Initialize language
+            getLanguageText(languageType, urlStatsOutput).then(langText => {
                 window.langText = langText;
                 
                 // Update UI elements
@@ -196,7 +179,7 @@
                 
                 // Update URL without refresh
                 const url = new URL(window.location.href);
-                url.searchParams.set('lang', e.detail.languageType);
+                url.searchParams.set('lang', languageType);
                 window.history.pushState({}, '', url);
 
                 // Handle scrollbar option
@@ -204,21 +187,6 @@
                     scrollbarOptionCheck.style.display = ''
                 }
             });
-        });
-
-        // Initialize version number
-        versionNumber();
-
-        // Initialize on document ready using native JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const languageType = urlParams.get('lang') || 'en';
-            const urlStatsOutput = urlParams.get('data');
-            
-            // Dispatch getLanguage event
-            document.dispatchEvent(new CustomEvent('statsParser:getLanguage', {
-                detail: { languageType, urlStatsOutput }
-            }));
             
             if(localStorage.getItem("tableScrollbar") === 'true') {
                 scrollbarOptionCheck.style.display = ''
@@ -265,48 +233,61 @@
                     behavior: 'smooth'
                 });
             });
-        });
-    </script>    
 
-    <script>
-        // Update onclick handlers to dispatch custom events
-        document.getElementById('parseButton').onclick = function() {
-            document.dispatchEvent(new CustomEvent('statsParser:parse', {
-                detail: { langText: window.langText }
-            }));
-        };
-
-        document.getElementById('clearButton').onclick = function() {
-            document.dispatchEvent(new CustomEvent('statsParser:clear', {
-                detail: { langText: window.langText }
-            }));
-        };
-
-        document.getElementById('exampleOptionCheck').parentElement.onclick = function(e) {
-            e.preventDefault();
-            document.dispatchEvent(new CustomEvent('statsParser:includeExample', {
-                detail: { langText: window.langText }
-            }));
-        };
-
-        document.getElementById('scrollbarOptionCheck').parentElement.onclick = function(e) {
-            e.preventDefault();
-            document.dispatchEvent(new CustomEvent('statsParser:toggleCheckmark', {
-                detail: { 
-                    checkmarkSpan: scrollbarOptionCheck,
-                    storageKey: 'tableScrollbar'
-                }
-            }));
-        };
-
-        // Update language dropdown click handlers
-        document.querySelectorAll('[data-lang]').forEach(element => {
-            element.onclick = function(e) {
-                e.preventDefault();
-                document.dispatchEvent(new CustomEvent('statsParser:getLanguage', {
-                    detail: { languageType: this.dataset.lang }
-                }));
+            // Button handlers
+            document.getElementById('parseButton').onclick = function() {
+                parseText(window.langText);
             };
+
+            document.getElementById('clearButton').onclick = function() {
+                clearResult(window.langText);
+            };
+
+            document.getElementById('exampleOptionCheck').parentElement.onclick = function(e) {
+                e.preventDefault();
+                includeExample(true, window.langText);
+            };
+
+            document.getElementById('scrollbarOptionCheck').parentElement.onclick = function(e) {
+                e.preventDefault();
+                toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');
+            };
+
+            // Language dropdown click handlers
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                element.onclick = function(e) {
+                    e.preventDefault();
+                    getLanguageText(this.dataset.lang).then(langText => {
+                        window.langText = langText;
+                        
+                        // Update UI elements
+                        if(langText.showexample) {
+                            document.getElementById("exampleText").innerHTML = langText.showexample;
+                        } 
+                        if(langText.buttonclear) {
+                            if (document.getElementById("result").style.display == 'none') {
+                                document.getElementById("clearButton").innerHTML = langText.buttonclear;
+                            } else {
+                                document.getElementById("clearButton").innerHTML = langText.buttonclearresult;
+                            }
+                        }
+                        if(langText.buttonparse) {
+                            document.getElementById("parseButton").innerHTML = langText.buttonparse;
+                        }
+                        if(langText.buttoncopyresult) {
+                            document.getElementById("copyResultButton").innerHTML = langText.buttoncopyresult;
+                        }
+                        
+                        // Update the dropdown text
+                        document.getElementById("languageDropdown").textContent = langText.langname || "Language";
+                        
+                        // Update URL without refresh
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('lang', this.dataset.lang);
+                        window.history.pushState({}, '', url);
+                    });
+                };
+            });
         });
     </script>
 
