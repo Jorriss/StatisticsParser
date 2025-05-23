@@ -1,33 +1,5 @@
-function includeExample(value, lang) {
-    var txt = document.getElementById("statiotext");
-    if (value == true) {
-        txt.value = lang.sampleoutput;
-    } else {
-        txt.value = "";
-    }
-}
-
-function updateQueryStringParameter(uri, key, value) {
-    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-    if (uri.match(re)) {
-        return uri.replace(re, '$1' + key + "=" + value + '$2');
-    } else {
-        return uri + separator + key + "=" + value;
-    }
-}
-
-function toggleCheckmark(checkmarkSpan, storageKey) {
-    if(localStorage.getItem(storageKey) === 'true') {
-        localStorage.setItem(storageKey, 'false');
-        checkmarkSpan.style.display = 'none';
-    } else {
-        localStorage.setItem(storageKey, 'true');
-        checkmarkSpan.style.display = '';
-    }
-}
-
-var rowEnum = {
+// Constants
+const rowEnum = {
     None: 0,
     IO: 1,
     ExectuionTime: 2,
@@ -36,7 +8,9 @@ var rowEnum = {
     Error: 5
 }
 
-function statsIOInfo(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+// Classes
+class statsIOInfo {
+    constructor(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
     this.rownumber = rownumber;
     this.table = table;
     this.nostats = false;
@@ -48,9 +22,11 @@ function statsIOInfo(rownumber, langText, table, scan, logical, physical, readah
     this.lobphysical = infoReplace(lobphysical, langText.lobphysical, '');
     this.lobreadahead = infoReplace(lobreadahead, langText.lobreadahead, '');
     this.percentread = 0.0;
+    }
 }
 
-function statsIOInfoTotal() {
+class statsIOInfoTotal {
+    constructor() {
     this.rownumber = 0;
     this.table = '';
     this.scan = 0;
@@ -61,51 +37,24 @@ function statsIOInfoTotal() {
     this.lobphysical = 0;
     this.lobreadahead = 0;
     this.percentread = 0.0;
+    }
 }
 
-function statsTimeInfo(cpu, elapsed) {
+class statsTimeInfo {
+    constructor(cpu, elapsed) {
     this.cpu = parseInt(cpu);
     this.elapsed = parseInt(elapsed);
+    }
 }
 
-function statsTimeInfoTotal() {
+class statsTimeInfoTotal {
+    constructor() {
     this.cpu = 0;
     this.elapsed = 0;
 }
-
-function determineLang(strRow){
-    var lang = 1;
-
-    if (strRow.substring(0,7) === 'Table \'') { lang = 1; } // English
-    else if (strRow.substring(0, 7) === 'Tabla \'') { lang = 2; } // Spanish
-    else if (strRow.substring(0, 7) === 'Tabella \'') { lang = 3; } // Italian
-    else if ($.trim(strRow.substring(0, 6)) === 'Tiempo') { lang = 2; } // Spanish
-    else if ($.trim(strRow.substring(0, 6)) === 'Tempo') { lang = 3; } // Italian
-    else if ($.trim(strRow.substring(0, 7)) === 'Tiempos') { lang = 2; } // Spanish
-    else if ($.trim(strRow.substring(0, 7)) === 'Tempo') { lang = 3; } // Italian
-
-    return lang;
 }
 
-function determineLangFilename (langType) {
-    var filename;
-    switch(langType) {
-        case 'en': // English
-            filename = 'assets/data/languagetext-en.json'
-            break;
-        case 'es': // Spanish
-            filename = 'assets/data/languagetext-es.json'
-            break;
-        case 'it': // Italian
-            filename = 'assets/data/languagetext-it.json'
-            break;
-        default :
-            filename = 'assets/data/languagetext-en.json'
-            break;
-    }
-    return filename;
-}
-
+// Utility functions
 function infoReplace(strValue, searchValue, newvValue) {
     var returnValue = 0;
     if (strValue != undefined) {
@@ -117,64 +66,11 @@ function infoReplace(strValue, searchValue, newvValue) {
     return returnValue;
 }
 
-function determineRowType(strRow, langText) {
-    var rowType = rowEnum.None;
-
-    if (strRow.substring(0, 7) === langText.table) {
-        rowType = rowEnum.IO;
-    } else if ($.trim(strRow) === langText.executiontime) {
-        rowType = rowEnum.ExectuionTime;
-    } else if ($.trim(strRow) === langText.compiletime) {
-        rowType = rowEnum.CompileTime;
-    } else if (strRow.indexOf(langText.rowsaffected) > -1) {
-        rowType = rowEnum.RowsAffected;
-    } else if (strRow.substring(0,3) === langText.errormsg) {
-        rowType = rowEnum.Error;
-    }
-
-    return rowType;
+function formatNumber(value, langvalue = 'en') {
+    return new Intl.NumberFormat(langvalue).format(value);
 }
 
-function processTimeRegEx(preText, postText) {
-    var re = new RegExp("(.*" + preText + "+)(.*?)(\\s+" + postText + ".*)");
-
-    return re
-}
-
-function processTime(line, cputime, elapsedtime, milliseconds) {
-    var section = line.split(',');
-
-    var re = processTimeRegEx(cputime, milliseconds);
-    var re2 = processTimeRegEx(elapsedtime, milliseconds);
-
-    return new statsTimeInfo(section[0].replace(re, "$2"), section[1].replace(re2, "$2"))
-}
-
-function processIOTableRow(line, tableResult, langText) {
-    var section = line.split('\.');
-    var tableName = getSubStr(section[0], '\'')
-    var tableData = section[1];
-
-    // If not a statistics IO statement then end table (if necessary) and write line ending in <br />
-    // If prev line was not a statistics IO statement then start a table. 
-    if (tableData != undefined) {
-        if (tableData == '') {
-            var statLineInfo = new statsIOInfo(tableResult.length + 1, langText, line);
-            statLineInfo.nostats = true;
-            tableResult.push(statLineInfo);
-        }
-        var stat = tableData.split(/[,]+/);
-        var statInfo = new statsIOInfo(tableResult.length + 1, langText, tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
-        tableResult.push(statInfo);
-    } else {
-        if (line.length > 0) {
-            var statLineInfo = new statsIOInfo(tableResult.length + 1, langText, line);
-            statLineInfo.nostats = true;
-            tableResult.push(statLineInfo);
-        }
-    }
-}
-
+// Core functionality
 function parseOutput(txt, lang) {
     //var txt = document.getElementById("statiotext").value;
     var lines = txt.split('\n');
@@ -264,7 +160,7 @@ function parseOutput(txt, lang) {
     return {output: formattedOutput, tableCount: tableCount}
 }
 
-function parseText(lang) {
+export function parseText(lang) {
     var formattedOutput = parseOutput(document.getElementById("statiotext").value, lang);
 
     document.getElementById("result").innerHTML = formattedOutput.output;
@@ -346,21 +242,6 @@ function calcPercent(statInfos, statTotal) {
     }
 }
 
-function formatms(milliseconds) {
-    try {
-        return luxon.Duration.fromMillis(milliseconds)
-            .toFormat("hh:mm:ss.SSS");
-    } catch (error) {
-        console.error('Error formatting duration:', error);
-        return '00:00:00.000';
-    }
-}
-
-function formatmsWithTimezone(milliseconds, timezone = 'UTC') {
-    return luxon.Duration.fromMillis(milliseconds)
-        .toFormat("hh:mm:ss.SSS", { zone: timezone });
-}
-
 function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuLabel) {
     var result = '<div style="padding-top:10px"><table class="table table-striped table-hover table-condensed table-nonfluid"">';
     result += '<thead><tr>';
@@ -382,7 +263,7 @@ function outputTimeTable(timeValues, langTitle, langDuration, elapsedLabel, cpuL
     return result;
 }
 
-function outputTimeTableTotals(executionValues, compileValues, langCompileTitle, langExecutionTitle, langDuration, elapsedLabel, cpuLabel) {
+export function outputTimeTableTotals(executionValues, compileValues, langCompileTitle, langExecutionTitle, langDuration, elapsedLabel, cpuLabel) {
     // Convert to Luxon Duration for calculations
     const cpuTotal = luxon.Duration.fromMillis(parseInt(executionValues.cpu))
         .plus(luxon.Duration.fromMillis(parseInt(compileValues.cpu)))
@@ -425,7 +306,7 @@ function outputTimeTableTotals(executionValues, compileValues, langCompileTitle,
     return result;
 }
 
- function outputIOTable(statInfo, statTotal, tableNumber, langObj) {
+function outputIOTable(statInfo, statTotal, tableNumber, langObj) {
     var result = '<table id="resultTable' + tableNumber +'" class="table table-striped table-hover table-condensed" style="table-layout:fixed">';
     result += '<thead><tr>';
     result += '<th class="th-column column-small">' + langObj.headerrownum + '</th>';
@@ -499,12 +380,81 @@ function getSubStr(str, delim) {
     return str.substr(a + 1, b - a - 1);
 }
 
-function clearResult(lang) {
+function determineRowType(strRow, langText) {
+    var rowType = rowEnum.None;
+
+    if (strRow.substring(0, 7) === langText.table) {
+        rowType = rowEnum.IO;
+    } else if (strRow.trim() === langText.executiontime) {
+        rowType = rowEnum.ExectuionTime;
+    } else if (strRow.trim() === langText.compiletime) {
+        rowType = rowEnum.CompileTime;
+    } else if (strRow.indexOf(langText.rowsaffected) > -1) {
+        rowType = rowEnum.RowsAffected;
+    } else if (strRow.substring(0,3) === langText.errormsg) {
+        rowType = rowEnum.Error;
+    }
+
+    return rowType;
+}
+
+function formatms(milliseconds) {
+    try {
+        return luxon.Duration.fromMillis(milliseconds)
+            .toFormat("hh:mm:ss.SSS");
+    } catch (error) {
+        console.error('Error formatting duration:', error);
+        return '00:00:00.000';
+    }
+}
+function processTimeRegEx(preText, postText) {
+    var re = new RegExp("(.*" + preText + "+)(.*?)(\\s+" + postText + ".*)");
+
+    return re
+}
+
+function processTime(line, cputime, elapsedtime, milliseconds) {
+    var section = line.split(',');
+
+    var re = processTimeRegEx(cputime, milliseconds);
+    var re2 = processTimeRegEx(elapsedtime, milliseconds);
+
+    return new statsTimeInfo(section[0].replace(re, "$2"), section[1].replace(re2, "$2"))
+}
+
+function processIOTableRow(line, tableResult, langText) {
+    var section = line.split('\.');
+    var tableName = getSubStr(section[0], '\'')
+    var tableData = section[1];
+
+    // If not a statistics IO statement then end table (if necessary) and write line ending in <br />
+    // If prev line was not a statistics IO statement then start a table. 
+    if (tableData != undefined) {
+        if (tableData == '') {
+            var statLineInfo = new statsIOInfo(tableResult.length + 1, langText, line);
+            statLineInfo.nostats = true;
+            tableResult.push(statLineInfo);
+        }
+        var stat = tableData.split(/[,]+/);
+        var statInfo = new statsIOInfo(tableResult.length + 1, langText, tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
+        tableResult.push(statInfo);
+    } else {
+        if (line.length > 0) {
+            var statLineInfo = new statsIOInfo(tableResult.length + 1, langText, line);
+            statLineInfo.nostats = true;
+            tableResult.push(statLineInfo);
+        }
+    }
+}
+
+// End of parse output functions
+
+export function clearResult(lang) {
     if (document.getElementById("result").innerHTML != '') {
         document.getElementById("result").innerHTML = '';
         document.getElementById("resultControls").style.display = 'none';
     } else {
-        document.getElementById("statiotext").value = '';
+       document.getElementById("statiotext").value = '';
     }
 
     if(lang.buttonclear) {
@@ -512,32 +462,22 @@ function clearResult(lang) {
     }
 }
 
-function versionNumber() {
+export function versionNumber() {
     document.getElementById("versionNumber").innerHTML = '0.5.0';
 }
 
-function formatNumber(value, langvalue = 'en') {
-    return new Intl.NumberFormat(langvalue).format(value);
-}
-
-// Add these helper functions to make time operations more readable
-function addDurations(duration1, duration2) {
-    return luxon.Duration.fromMillis(duration1)
-        .plus(luxon.Duration.fromMillis(duration2))
-        .toMillis();
-}
-
-function formatDuration(milliseconds) {
-    return luxon.Duration.fromMillis(milliseconds)
-        .toFormat("hh:mm:ss.SSS");
-}
-
-function getLanguageText(languageType = 'en', urlStatsOutput) {
+export function getLanguageText(languageType = 'en', urlStatsOutput) {
     const filename = determineLangFilename(languageType);
 
     // Return a Promise that resolves with the language text
-    return new Promise((resolve) => {
-        $.getJSON(filename, function (data) {
+    return fetch(filename)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
             let langText = data;
             
             // Update UI elements
@@ -571,9 +511,49 @@ function getLanguageText(languageType = 'en', urlStatsOutput) {
             url.searchParams.set('lang', languageType);
             window.history.pushState({}, '', url);
             
-            // Resolve the promise with the language text
-            resolve(langText);
+            return langText;
+        })
+        .catch(error => {
+            console.error('Error loading language file:', error);
+            // Fallback to English if there's an error
+            return getLanguageText('en');
         });
-    });
 }
 
+export function toggleCheckmark(checkmarkSpan, storageKey) {
+    if(localStorage.getItem(storageKey) === 'true') {
+        localStorage.setItem(storageKey, 'false');
+        checkmarkSpan.style.display = 'none';
+    } else {
+        localStorage.setItem(storageKey, 'true');
+        checkmarkSpan.style.display = '';
+    }
+}
+
+export function includeExample(value, lang) {
+    var txt = document.getElementById("statiotext");
+    if (value == true) {
+        txt.value = lang.sampleoutput;
+    } else {
+        txt.value = "";
+    }
+}
+
+function determineLangFilename (langType) {
+    var filename;
+    switch(langType) {
+        case 'en': // English
+            filename = 'assets/data/languagetext-en.json'
+            break;
+        case 'es': // Spanish
+            filename = 'assets/data/languagetext-es.json'
+            break;
+        case 'it': // Italian
+            filename = 'assets/data/languagetext-it.json'
+            break;
+        default :
+            filename = 'assets/data/languagetext-en.json'
+            break;
+    }
+    return filename;
+}
