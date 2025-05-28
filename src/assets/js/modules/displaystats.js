@@ -1,8 +1,7 @@
 // Import dependencies
 import { DateTime, Duration } from 'luxon';
 import DataTable from 'datatables.net-dt';
-import { parseData, rowEnum } from './modules/parser.js';
-
+import { parseData, rowEnum } from './parser.js';
 
 // Display functionality
 function formatNumber(value, langvalue = 'en') {
@@ -47,7 +46,7 @@ function formatExtendedTimestamp(text, locale = 'en') {
     }
 }
 
-function createDataTable(tableid, data, columns) {
+function createDataTable(tableid, data, columns, showScrollbar = false) {
     return new DataTable(`#${tableid}`, {
         data: data,
         columns: columns,
@@ -55,8 +54,8 @@ function createDataTable(tableid, data, columns) {
         ordering: true,
         searching: false,
         paging: false,
-        scrollY: localStorage.getItem("tableScrollbar") === 'true' ? '200px' : false,
-        scrollCollapse: false,
+        scrollY: showScrollbar ? '200px' : false,
+        scrollCollapse: showScrollbar ? true : false,
         order: [[0, 'asc']] // Default sort by row number
     });
 }
@@ -515,7 +514,7 @@ function displayTimeTotalTable(executiondata, compiledata, lang) {
     return table;
 }
 
-function displayParsedData(parsedData, lang) {
+export function displayParsedData(parsedData, showScrollbar, lang) {
     let outputElement = document.getElementById('result');
     let columns = displayIOTableColumns(lang);
 
@@ -526,7 +525,7 @@ function displayParsedData(parsedData, lang) {
             case rowEnum.IO:
                 let table = displayIOTable(rowData, columns, lang);
                 outputElement.appendChild(table);
-                createDataTable(rowData.tableid, rowData.data, columns);
+                createDataTable(rowData.tableid, rowData.data, columns, showScrollbar);
                 break;
             case rowEnum.ExecutionTime:
                 outputElement.appendChild(displayTimeTable(rowData, lang));
@@ -556,16 +555,7 @@ function displayParsedData(parsedData, lang) {
         let totalsColumns = displayIOTotalTableColumns(lang);
         outputElement.appendChild(displayIOTotalTable(parsedData.total.iototal, totalsColumns, lang));
         outputElement.appendChild(document.createElement('br'));
-        createDataTable(parsedData.total.iototal.tableid, parsedData.total.iototal.data, totalsColumns);
+        createDataTable(parsedData.total.iototal.tableid, parsedData.total.iototal.data, totalsColumns, showScrollbar);
     }
     outputElement.appendChild(displayTimeTotalTable(parsedData.total.executiontotal, parsedData.total.compiletotal, lang));
-}
-
-export function parseText(lang) {
-    const text = document.getElementById("statiotext").value;
-    const parsedData = parseData(text, lang);
-    
-    displayParsedData(parsedData, lang);
-    
-    return parsedData;
-}
+} 

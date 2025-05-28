@@ -32,6 +32,7 @@
         "headerrowaffected" : " riga interessata",
         "errormsg" : "Mes",
         "completiontimelabel" : "Completion time: ",
+        "tableshavescrollbars" : "Le tabelle hanno le barre di scorrimento",
         "showexample": "Mostra esempio statistiche IO Output",
         "buttonparse": "Analizzare",
         "buttonclear": "Pulisci Tabella",

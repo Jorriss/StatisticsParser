@@ -7,9 +7,9 @@
  */
 function determineLangFilename(langType) {
     const languageFiles = {
-        'en': 'assets/data/languagetext-en.json',
-        'es': 'assets/data/languagetext-es.json',
-        'it': 'assets/data/languagetext-it.json'
+        'en': './data/languagetext-en.json',
+        'es': './data/languagetext-es.json',
+        'it': './data/languagetext-it.json'
     };
     
     return languageFiles[langType] || languageFiles['en'];
@@ -40,7 +40,11 @@ export async function getLanguageText(languageType = 'en') {
     } catch (error) {
         console.error('Error loading language file:', error);
         // Fallback to English if there's an error
-        return getLanguageText('en');
+        if (languageType != 'en') {
+            return getLanguageText('en');
+        } else {
+            throw new Error('Error loading language file: ' + error);
+        }
     }
 }
 
@@ -52,6 +56,10 @@ export function updateUIElements(langText) {
     // Update text elements
     if (langText.showexample) {
         document.getElementById("exampleText").innerHTML = langText.showexample;
+    }
+
+    if (langText.tableshavescrollbars) {
+        document.getElementById("scrollbarOptionText").innerHTML = langText.tableshavescrollbars;
     }
     
     // Update button texts
@@ -80,8 +88,8 @@ export function updateUIElements(langText) {
  * @param {string} [urlStatsOutput] - Optional stats output from URL
  * @returns {Promise<Object>} Promise resolving to the language text object
  */
-export async function initializeLanguage(initialLang = 'en', urlStatsOutput) {
-    const langText = await getLanguageText(initialLang, urlStatsOutput);
+export async function initializeLanguage(initialLang = 'en',) {
+    const langText = await getLanguageText(initialLang);
     updateUIElements(langText);
     return langText;
 } 

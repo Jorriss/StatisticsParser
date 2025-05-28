@@ -112,14 +112,6 @@ export function toggleResultControls(hasData) {
 }
 
 /**
- * Updates the version number display
- * @param {string} version - The version number to display
- */
-export function displayVersionNumber(version) {
-    document.getElementById("versionNumber").innerHTML = version;
-}
-
-/**
  * Initializes all UI components
  * @param {Object} lang - Language object for text
  */

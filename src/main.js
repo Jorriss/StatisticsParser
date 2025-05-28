@@ -1,6 +1,6 @@
 // Import CSS
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/styles.scss'
+import './styles/styles.scss'
 
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
@@ -9,19 +9,16 @@ import 'datatables.net-bs5';
 import ClipboardJS from 'clipboard';
 
 // Import our modules
-import { parseText } from './statisticsparser.js';
-import { initializeLanguage } from './modules/language.js';
+import { displayParsedData } from './assets/js/modules/displaystats.js';
+import { parseData } from './assets/js/modules/parser.js';
+import { initializeLanguage } from './assets/js/modules/language.js';
 import {
     initializeUI,
-    displayVersionNumber,
     clearResult,
     clearResultElement,
     includeExample,
     toggleCheckmark
-} from './modules/ui.js';
-
-// Initialize version number
-displayVersionNumber();
+} from './assets/js/modules/ui.js';
 
 // Initialize on document ready using native JavaScript
 document.addEventListener('DOMContentLoaded', async function() {
@@ -30,7 +27,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     const urlStatsOutput = urlParams.get('data');
     
     // Initialize language
-    window.langText = await initializeLanguage(languageType, urlStatsOutput);
+    window.langText = await initializeLanguage(languageType);
+
+    // If there is a data in the URL parameter, parse the text
+    if(urlStatsOutput != undefined && urlStatsOutput != '') {
+        document.getElementById("statiotext").value = urlStatsOutput;
+        document.getElementById("parseButton").click();
+    }
     
     // Initialize UI
     initializeUI(window.langText);
@@ -85,9 +88,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Button handlers
     document.getElementById('parseButton').onclick = function() {
         let lang = window.langText;
+        let iotext = document.getElementById("statiotext").value;
+        let showScrollbar = localStorage.getItem("tableScrollbar") === 'true' ? true : false;
         
+        // Clear the result element
         clearResultElement(document.getElementById("result"), lang);
-        let parsedData = parseText(lang);
+
+        // Parse the io text and put it into a data structure
+        let parsedData = parseData(iotext, lang);
+
+        // Format and display the parsed data
+        displayParsedData(parsedData, showScrollbar, lang);
           
         if (lang.buttonclearresult) {
             document.getElementById("clearButton").innerHTML = lang.buttonclearresult;

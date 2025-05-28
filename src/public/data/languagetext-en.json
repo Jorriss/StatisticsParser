@@ -32,6 +32,7 @@
         "headerrowaffected" : " row affected",
         "errormsg" : "Msg",
         "completiontimelabel" : "Completion time: ",
+        "tableshavescrollbars" : "Tables have scrollbars",
         "showexample": "Show Example Statistics IO Output",
         "buttonparse": "Parse",
         "buttonclear": "Clear Text",

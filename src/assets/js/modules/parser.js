@@ -369,13 +369,3 @@ export function parseData(text, lang) {
 
     return parsedData;
 }
-
-/**
- * Main parsing function that processes input and returns structured data
- * @param {Object} lang - Language object for text
- * @returns {Object} Parsed data object
- */
-export function parseText(lang) {
-    const text = document.getElementById("statiotext").value;
-    return parseData(text, lang);
-} 

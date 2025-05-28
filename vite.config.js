@@ -1,16 +1,18 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
+import packagejson from './package.json';
+const versionnumber = packagejson.version;
+
 export default defineConfig({
   root: 'src',
-  publicDir: 'assets',
   build: {
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
         main: 'src/index.html',
-        about: 'src/about.html'
+        about: 'src/about.html' 
       }
     }
   },
@@ -35,5 +37,18 @@ export default defineConfig({
       'luxon',
       'clipboard'
     ]
-  }
+  },
+  plugins: [
+    {
+      name: 'html-transform',
+      transformIndexHtml(html) {
+        return html.replace(/__VERSIONNUMBER__/g, versionnumber);
+      },
+      transform(html, id) {
+        if (id.endsWith('about.html')) {
+          return html.replace(/__VERSIONNUMBER__/g, versionnumber);
+        }
+      }
+    }
+  ],
 });
