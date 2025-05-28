@@ -1,0 +1,37 @@
+{
+  "name": "statisticsparser",
+  "version": "1.0.0",
+  "description": "Sometimes reading SQL Server output from Statistics IO and Statistics Time can be a total drag. This page will help with that. Just paste in the output of Statistics IO and/or Statistics Time and press Parse. Your output will be formatted and totaled. Enjoy.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jorriss/StatisticsParser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Jorriss/StatisticsParser/issues"
+  },
+  "homepage": "https://github.com/Jorriss/StatisticsParser#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.6",
+    "bootstrap-icons": "^1.13.1",
+    "clipboard": "^2.0.11",
+    "datatables.net": "^2.3.0",
+    "datatables.net-bs5": "^2.3.1",
+    "datatables.net-dt": "^2.3.0",
+    "jquery": "^3.7.1",
+    "luxon": "^3.6.1"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.89.0",
+    "vite": "^6.3.5"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

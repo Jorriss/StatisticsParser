@@ -110,3 +110,4 @@ src/sql/Dashboard Query Scratch.sql
 # Node Modules
 node_modules/
 dist/
+.DS_Store
