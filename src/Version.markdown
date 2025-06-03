@@ -4,7 +4,9 @@
 June 1, 2025
 
 - Refactored the application to separate the parsing of the data and the displaying of the parsed data.
+- Output with columns "page server reads", "page server read-ahead reads", "lob page server reads", "lob page server read-ahead reads" are now being parsed and totaled.
 - Added a "Copy Results" button to copy the parsed output.
+- Now formatting the "Completion Time" timestamp.
 - Removed the "Change Page Title" functionality. This will be reimplemented in the future.
 - Moved the "Show Example" checkbox to under the options dropdown.
 - Implemented Vite for bundling the application.

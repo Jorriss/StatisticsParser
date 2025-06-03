@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Parse the io text and put it into a data structure
         let parsedData = parseData(iotext, lang);
-
+        
         // Format and display the parsed data
         displayParsedData(parsedData, showScrollbar, lang);
           

@@ -15,20 +15,42 @@ export const rowEnum = {
     CompletionTime: 10
 };
 
+export const columnIOEnum = {
+    NotFound: 0,
+    Table: 1,
+    Scan: 2,
+    Logical: 3,
+    Physical: 4,
+    PageServer: 5,
+    ReadAhead: 6,
+    PageServerReadAhead: 7,
+    LobLogical: 8,
+    LobPhysical: 9,
+    LobPageServer: 10,
+    LobReadAhead: 11,
+    LobPageServerReadAhead: 12,
+    PercentRead: 13
+}
+
 // Classes
 class StatsIOInfo {
-    constructor(rownumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead) {
+    constructor(rownumber, linenumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead, pageserver, pageserverreadahead, lobpageserver, lobpageserverreadahead) {
         this.rowtype = rowEnum.IO;
         this.rownumber = rownumber;
+        this.linenumber = linenumber;
         this.table = table;
         this.nostats = false;
         this.scan = infoReplace(scan, langText.scan, '');
         this.logical = infoReplace(logical, langText.logical, '');
         this.physical = infoReplace(physical, langText.physical, '');
+        this.pageserver = infoReplace(pageserver, langText.pageserver, '');
         this.readahead = infoReplace(readahead, langText.readahead, '');
+        this.pageserverreadahead = infoReplace(pageserverreadahead, langText.pageserverreadahead, '');
         this.loblogical = infoReplace(loblogical, langText.loblogical, '');
         this.lobphysical = infoReplace(lobphysical, langText.lobphysical, '');
+        this.lobpageserver = infoReplace(lobpageserver, langText.lobpageserver, '');
         this.lobreadahead = infoReplace(lobreadahead, langText.lobreadahead, '');
+        this.lobpageserverreadahead = infoReplace(lobpageserverreadahead, langText.lobpageserverreadahead, '');
         this.percentread = 0.0;
     }
 }
@@ -41,17 +63,23 @@ class StatsIOInfoTotal {
         this.scan = 0;
         this.logical = 0;
         this.physical = 0;
+        this.pageserver = 0;
         this.readahead = 0;
+        this.pageserverreadahead = 0;
         this.loblogical = 0;
         this.lobphysical = 0;
+        this.lobpageserver = 0;
         this.lobreadahead = 0;
+        this.lobpageserverreadahead = 0;
         this.percentread = 0.0;
     }
 }
 
 class StatsTimeInfo {
-    constructor(cpu, elapsed, rowtype) {
+    constructor(linenumber, cpu, elapsed, rowtype) {
         this.rowtype = rowtype;
+        this.linenumber = linenumber;
+        this.summary = false;
         this.cpu = parseInt(cpu);
         this.elapsed = parseInt(elapsed);
     }
@@ -66,30 +94,34 @@ class StatsTimeInfoTotal {
 }
 
 class RowsAffectedInfo {
-    constructor(rowsaffected, label) {
+    constructor(linenumber, rowsaffected, label) {
         this.rowtype = rowEnum.RowsAffected;
+        this.linenumber = linenumber;
         this.rowsaffected = rowsaffected;
         this.label = label;
     }
 }
 
 class ErrorInfo {
-    constructor(text) {
+    constructor(linenumber, text) {
         this.rowtype = rowEnum.Error;
+        this.linenumber = linenumber;
         this.text = text;
     }
 }
 
 class TextInfo {
-    constructor(text) {
+    constructor(linenumber, text) {
         this.rowtype = rowEnum.Info;
+        this.linenumber = linenumber;
         this.text = text;
     }
 }
 
 class CompletionTimeInfo {
-    constructor(label, completiontime) {
+    constructor(linenumber, label, completiontime) {
         this.rowtype = rowEnum.CompletionTime;
+        this.linenumber = linenumber;
         this.label = label;
         this.completiontime = completiontime;
     }
@@ -122,30 +154,172 @@ function getSubStr(str, delim) {
 }
 
 // Data processing functions
-function getIOTableData(line, lang) {
-    const section = line.split('.');
-    const tableName = getSubStr(section[0], '\'');
-    const tableData = section[1];
-    
-    if (tableData == undefined) return null;
-    
-    const stat = tableData.split(/[,]+/);
-    return new StatsIOInfo(0, lang, tableName, stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6]);
+
+function getIOColumnEnum(columnname, lang) {
+    const columnName = columnname.trim();
+
+    switch (columnName) {
+        case lang.table:
+            return columnIOEnum.Table;
+        case lang.scan:
+            return columnIOEnum.Scan;
+        case lang.logical:
+            return columnIOEnum.Logical;
+        case lang.physical:
+            return columnIOEnum.Physical;
+        case lang.readahead:
+            return columnIOEnum.ReadAhead;
+        case lang.pageserver:
+            return columnIOEnum.PageServer;
+        case lang.pageserverreadahead:
+            return columnIOEnum.PageServerReadAhead;
+        case lang.loblogical:
+            return columnIOEnum.LobLogical;
+        case lang.lobphysical:
+            return columnIOEnum.LobPhysical;
+        case lang.lobreadahead:
+            return columnIOEnum.LobReadAhead;
+        case lang.lobpageserver:
+            return columnIOEnum.LobPageServer;
+        case lang.lobpageserverreadahead:
+            return columnIOEnum.LobPageServerReadAhead;
+        default:
+            return columnIOEnum.NotFound;
+    }
 }
 
-function getTimeData(line, cputime, elapsedtime, milliseconds, rowtype) {
+function parseIOStatLine(line, lang) {
+    // Match pattern: Table 'TableName'. Rest of stats...
+    const tableMatch = line.match(new RegExp(`${lang.table}\\s+'([^']+)'`));
+    const tableName = tableMatch ? tableMatch[1] : '';
+    const statsText = line.substring(line.indexOf('.') + 1).trim();
+    
+    return {
+        table: tableName,
+        statstext: statsText
+    }
+}
+
+function determineIOColumns(line, lang) {
+    const statLine = parseIOStatLine(line, lang);
+
+    const result = statLine.statstext
+    .replace(/\.$/, '') // Remove trailing period
+    .split(', ')
+    .map(segment => {
+      const match = segment.match(/(.+?) (\d+)$/);
+      if (match) {
+        return {
+          column: getIOColumnEnum(match[1], lang),
+          value: parseInt(match[2], 10)
+        };
+      }
+      return {
+        column: columnIOEnum.NotFound,
+        value: 0
+      };
+    });
+
+    return {
+        columns: [columnIOEnum.Table, ...result.map(r => r.column), columnIOEnum.PercentRead],
+        values: [statLine.table, ...result.map(r => r.value), 0.0]
+    };
+}
+
+function deterineIOValues(line, lang) {
+    const statLine = parseIOStatLine(line, lang);
+
+    const result = statLine.statstext
+    .replace(/\.$/, '') // Remove trailing period
+    .split(', ')
+    .map(segment => {
+      const match = segment.match(/(.+?) (\d+)$/);
+      if (match) {
+        return {
+            value: parseInt(match[2], 10)
+        };
+      }
+      return {
+        value: 0
+      };
+    });
+
+    return [statLine.table, ...result.map(r => r.value), 0]
+}
+
+function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
+    const stat = new StatsIOInfo(null, null, lang);
+    stat.rownumber = rownumber;
+    stat.linenumber = linenumber;
+
+    for (let i = 0; i < columns.length; i++) {
+        const column = columns[i];
+        const value = values[i];
+        switch (column) {
+            case columnIOEnum.Table:
+                stat.table = value;
+                break;
+            case columnIOEnum.Scan:
+                stat.scan = value;
+                break;
+            case columnIOEnum.Logical:
+                stat.logical = value;
+                break;
+            case columnIOEnum.Physical:
+                stat.physical = value;
+                break;
+            case columnIOEnum.PageServer:
+                stat.pageserver = value;
+                break;
+            case columnIOEnum.ReadAhead:
+                stat.readahead = value;
+                break;
+            case columnIOEnum.PageServerReadAhead:
+                stat.pageserverreadahead = value;
+                break;
+            case columnIOEnum.LobLogical:
+                stat.loblogical = value;
+                break;
+            case columnIOEnum.LobPhysical:
+                stat.lobphysical = value;
+                break;
+            case columnIOEnum.LobReadAhead:
+                stat.lobreadahead = value;
+                break;
+            case columnIOEnum.LobPageServer:
+                stat.lobpageserver = value;
+                break;
+            case columnIOEnum.LobPageServerReadAhead:
+                stat.lobpageserverreadahead = value;
+                break;
+            case columnIOEnum.PercentRead:
+                stat.percentread = value;
+                break;
+        }
+    }
+
+    return stat;
+}
+
+function getStatsIOInfo(linenumber, rownumber, line, columns, lang) {
+    const values = deterineIOValues(line, lang);
+    return loadStatsIOInfo(linenumber, rownumber, columns, values, lang);
+}
+
+function getTimeData(linenumber, line, cputime, elapsedtime, milliseconds, rowtype) {
     const section = line.split(',');
     const re = processTimeRegEx(cputime, milliseconds);
     const re2 = processTimeRegEx(elapsedtime, milliseconds);
     
     return new StatsTimeInfo(
+        linenumber,
         section[0].replace(re, "$2"),
         section[1].replace(re2, "$2"),
         rowtype
     );
 }
 
-function getRowsAffectedData(line, lang) {
+function getRowsAffectedData(linenumber, line, lang) {
     const re = new RegExp("\\d+");
     let affectedText = lang.headerrowsaffected;
     const numRows = re.exec(line);
@@ -155,21 +329,21 @@ function getRowsAffectedData(line, lang) {
     if (numRows[0] === '1') {
         affectedText = lang.headerrowaffected;
     }
-    return new RowsAffectedInfo(numRows[0], affectedText);
+    return new RowsAffectedInfo(linenumber, numRows[0], affectedText);
 }
 
-function getErrorData(line) {
-    return new ErrorInfo(line);
+function getErrorData(linenumber, line) {
+    return new ErrorInfo(linenumber, line);
 }
 
-function getTextInfo(line) {
-    return new TextInfo(line);
+function getTextInfo(linenumber, line) {
+    return new TextInfo(linenumber, line);
 }
 
-function getCompletionTimeData(line, lang) {
+function getCompletionTimeData(linenumber, line, lang) {
     const label = lang.completiontimelabel;
     const completiontime = line.substring(label.length, line.length);
-    return new CompletionTimeInfo(label, completiontime);
+    return new CompletionTimeInfo(linenumber, label, completiontime);
 }
 
 // Computation functions
@@ -179,10 +353,14 @@ function statsIOComputeTotal(statInfos) {
         scan: total.scan + stat.scan,
         logical: total.logical + stat.logical,
         physical: total.physical + stat.physical,
+        pageserver: total.pageserver + stat.pageserver,
         readahead: total.readahead + stat.readahead,
+        pageserverreadahead: total.pageserverreadahead + stat.pageserverreadahead,
         loblogical: total.loblogical + stat.loblogical,
         lobphysical: total.lobphysical + stat.lobphysical,
+        lobpageserver: total.lobpageserver + stat.lobpageserver,
         lobreadahead: total.lobreadahead + stat.lobreadahead,
+        lobpageserverreadahead: total.lobpageserverreadahead + stat.lobpageserverreadahead,
     }), initial);
 }
 
@@ -206,6 +384,27 @@ function statsIOGrandTotalComputePercentLogicalRead(statInfos, statTotal) {
         }));
 }
 
+function determineSummaryRow(timedata, executionTotal, compileTotal) {
+
+    if (timedata.cpu === 0 && timedata.elapsed === 0) {
+        return false;
+    }
+
+    const cpuTotal = executionTotal.cpu + compileTotal.cpu;
+    const elapsedTotal = executionTotal.elapsed + compileTotal.elapsed;
+
+    const elapsedmin = Math.max(0, elapsedTotal - 5);
+
+    if (timedata.elapsed >= elapsedmin && timedata.elapsed <= elapsedTotal + 5) {
+        if (cpuTotal == timedata.cpu) {
+            return true;
+        } 
+    }
+    return false;
+}
+
+
+// TODO: Original function
 function determineRowType(strRow, lang) {
     if (strRow.substring(0, lang.table.length) === lang.table) {
         return rowEnum.IO;
@@ -242,10 +441,14 @@ function statsIOComputeGrandTotal(statTotal, statInfo) {
         scan: statTotal.scan + statInfo.scan,
         logical: statTotal.logical + statInfo.logical,
         physical: statTotal.physical + statInfo.physical,
+        pageserver: statTotal.pageserver + statInfo.pageserver,
         readahead: statTotal.readahead + statInfo.readahead,
+        pageserverreadahead: statTotal.pageserverreadahead + statInfo.pageserverreadahead,
         loblogical: statTotal.loblogical + statInfo.loblogical,
         lobphysical: statTotal.lobphysical + statInfo.lobphysical,
+        lobpageserver: statTotal.lobpageserver + statInfo.lobpageserver,
         lobreadahead: statTotal.lobreadahead + statInfo.lobreadahead,
+        lobpageserverreadahead: statTotal.lobpageserverreadahead + statInfo.lobpageserverreadahead,
     };
 }
 
@@ -266,6 +469,7 @@ export function parseData(text, lang) {
     let currentGroupObj = null;
     let rowNumber = 0;
     let rowData = null;
+    let ioColumns = [];
     
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -280,37 +484,54 @@ export function parseData(text, lang) {
 
         switch (rowType) {
             case rowEnum.IO:
-                rowData = getIOTableData(line, lang);
+                let values = null;
                 if (prevRowType !== rowEnum.IO) {
                     tableCount += 1;
                     rowNumber = 0;
+
+                    const firstLineData = determineIOColumns(line, lang);
+                    ioColumns = firstLineData.columns;
+                    values = firstLineData.values;
+                    
                     currentGroupObj = {
                         rowtype: rowEnum.IO,
                         tableid: `resultTable_${tableCount}`,
+                        columns: ioColumns,
                         data: [],
                         total: []
                     };
                     parsedData.data.push(currentGroupObj);
                 }
                 rowNumber += 1;
-                rowData.rownumber = rowNumber;
+                if (values) { // get the values from the first line
+                    rowData = loadStatsIOInfo(i, rowNumber, ioColumns, values, lang);
+                } else { 
+                    rowData = getStatsIOInfo(i, rowNumber, line, ioColumns, lang);
+                }
+
                 currentGroupObj.data.push(rowData);
                 tableIOGrandTotal = statsIOProcessGrandTotal(tableIOGrandTotal, rowData);
+
                 break;
 
             case rowEnum.ExecutionTime:
                 i += 1;
-                rowData = getTimeData(lines[i], lang.cputime, lang.elapsedtime, lang.milliseconds, rowEnum.ExecutionTime);
+                rowData = getTimeData(i, lines[i], lang.cputime, lang.elapsedtime, lang.milliseconds, rowEnum.ExecutionTime);
                 if (rowData !== null) {
+                    const isSummary = determineSummaryRow(rowData, executionTotal, compileTotal);
+                    rowData.summary = isSummary;
+
+                    if (!isSummary) {
+                        executionTotal.cpu += rowData.cpu;
+                        executionTotal.elapsed += rowData.elapsed;
+                    }
                     parsedData.data.push(rowData);
-                    executionTotal.cpu += rowData.cpu;
-                    executionTotal.elapsed += rowData.elapsed;
                 }
                 break;
 
             case rowEnum.CompileTime:
                 i += 1;
-                rowData = getTimeData(lines[i], lang.cputime, lang.elapsedtime, lang.milliseconds, rowEnum.CompileTime);
+                rowData = getTimeData(i, lines[i], lang.cputime, lang.elapsedtime, lang.milliseconds, rowEnum.CompileTime);
                 if (rowData !== null) {
                     parsedData.data.push(rowData);
                     compileTotal.cpu += rowData.cpu;
@@ -319,27 +540,27 @@ export function parseData(text, lang) {
                 break;
 
             case rowEnum.RowsAffected:
-                rowData = getRowsAffectedData(line, lang);
+                rowData = getRowsAffectedData(i, line, lang);
                 if (rowData !== null) {
                     parsedData.data.push(rowData);
                 }
                 break;
 
             case rowEnum.Error:
-                rowData = getErrorData(line);
+                rowData = getErrorData(i, line);
                 parsedData.data.push(rowData);
                 i += 1;
-                rowData = getErrorData(lines[i]);
+                rowData = getErrorData(i, lines[i]);
                 parsedData.data.push(rowData);
                 break;
 
             case rowEnum.CompletionTime:
-                rowData = getCompletionTimeData(line, lang);
+                rowData = getCompletionTimeData(i, line, lang);
                 parsedData.data.push(rowData);
                 break;
 
             default:
-                rowData = getTextInfo(line);
+                rowData = getTextInfo(i, line);
                 parsedData.data.push(rowData);
         }
         
@@ -361,6 +582,7 @@ export function parseData(text, lang) {
         executiontotal: executionTotal,
         compiletotal: compileTotal,
         iototal: {
+            columns: ioColumns,
             data: tableIOGrandTotal,
             total: tableIOGrandTotalTotalLine,
             tableid: 'resultTableTotal'

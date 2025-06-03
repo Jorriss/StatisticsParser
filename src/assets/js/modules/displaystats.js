@@ -1,7 +1,7 @@
 // Import dependencies
 import { DateTime, Duration } from 'luxon';
 import DataTable from 'datatables.net-dt';
-import { parseData, rowEnum } from './parser.js';
+import { rowEnum, columnIOEnum } from './parser.js';
 
 // Display functionality
 function formatNumber(value, langvalue = 'en') {
@@ -67,77 +67,227 @@ function displayInfo(text) {
     return lineOutput;
 }
 
-function displayIOTableColumns(lang) {
-    return [
-        { 
-            data: 'rownumber',
-            title: lang.headerrownum,
-            className: 'th-column column-small',
-            orderable: true
-        },
-        { 
-            data: 'table',
-            title: lang.headertable,
-            className: 'th-column',
-            orderable: true
-        },
-        { 
-            data: 'scan',
-            title: lang.headerscan,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'logical',
-            title: lang.headerlogical,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'physical',
-            title: lang.headerphysical,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'readahead',
-            title: lang.headerreadahead,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'loblogical',
-            title: lang.headerloblogical,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'lobphysical',
-            title: lang.headerlobphysical,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'lobreadahead',
-            title: lang.headerlobreadahead,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue),
-            orderable: true
-        },
-        { 
-            data: 'percentread',
-            title: lang.headerperlogicalread,
-            className: 'th-column column-xlarge td-column-right',
-            render: (data) => data + '%',
-            orderable: true
+function displayIOTableColumns(columns, showRowNumber, lang) {
+    let displayColumns = [];
+
+    if (showRowNumber) {
+        displayColumns.push(
+            { 
+                data: 'rownumber',
+                title: lang.headerrownumber,
+                className: 'th-column column-small',
+                orderable: true
+            }
+        );
+    }
+
+    for (let i = 0; i < columns.length; i++) {
+        switch (columns[i]) {
+            case columnIOEnum.Table:
+                displayColumns.push(
+                    { 
+                        data: 'table',
+                        title: lang.headertable,
+                        className: 'th-column',
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.Scan:
+                displayColumns.push(
+                    { 
+                        data: 'scan',
+                        title: lang.headerscan,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.Logical:
+                displayColumns.push(
+                    { 
+                        data: 'logical',
+                        title: lang.headerlogical,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.Physical:
+                displayColumns.push(        
+                    { 
+                        data: 'physical',
+                        title: lang.headerphysical,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.PageServer:
+                displayColumns.push(
+                    { 
+                        data: 'pageserver',
+                        title: lang.headerpageserver,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.ReadAhead:
+                displayColumns.push(
+                    { 
+                        data: 'readahead',
+                        title: lang.headerreadahead,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.PageServerReadAhead:
+                displayColumns.push(
+                    { 
+                        data: 'pageserverreadahead',
+                        title: lang.headerpageserverreadahead,
+                        className: 'th-column column-large td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.LobLogical:
+                displayColumns.push(
+                    { 
+                        data: 'loblogical',
+                        title: lang.headerloblogical,
+                        className: 'th-column column-medium td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break; 
+            case columnIOEnum.LobPhysical:
+                displayColumns.push(     
+                    { 
+                        data: 'lobphysical',
+                        title: lang.headerlobphysical,
+                        className: 'th-column column-medium td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.LobPageServer:
+                displayColumns.push(     
+                    { 
+                        data: 'lobpageserver',
+                        title: lang.headerlobpageserver,
+                        className: 'th-column column-medium td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.LobReadAhead:
+                displayColumns.push(
+                    { 
+                        data: 'lobreadahead',
+                        title: lang.headerlobreadahead,
+                        className: 'th-column column-medium td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.LobPageServerReadAhead:
+                displayColumns.push(
+                    { 
+                        data: 'lobpageserverreadahead',
+                        title: lang.headerlobpageserverreadahead,
+                        className: 'th-column column-medium td-column-right',
+                        render: (data) => formatNumber(data, lang.langvalue),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.PercentRead:
+                displayColumns.push(
+                    { 
+                        data: 'percentread',
+                        title: lang.headerperlogicalread,
+                        className: 'th-column column-xlarge td-column-right',
+                        render: (data) => data + '%',
+                        orderable: true
+                    }            
+                );
+                break;
+            default:
+                break;
         }
-    ];
+    }
+    
+    return displayColumns;
+}
+
+function displayIOTableFooter(total, columns, showRowNumber, lang) {
+    const footerData = [];
+
+    if (showRowNumber) {
+        footerData.push({ text: '', className: 'footer-column column-small' });
+    }
+
+    for (let i = 0; i < columns.length; i++) {
+        switch (columns[i]) {
+            case columnIOEnum.Table:
+                footerData.push({ text: 'Total', className: 'footer-column' });
+                break;
+            case columnIOEnum.Scan:
+                footerData.push({ text: formatNumber(total.scan, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.Logical:
+                footerData.push({ text: formatNumber(total.logical, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.Physical:
+                footerData.push({ text: formatNumber(total.physical, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.PageServer:
+                footerData.push({ text: formatNumber(total.pageserver, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.ReadAhead:
+                footerData.push({ text: formatNumber(total.readahead, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.PageServerReadAhead:
+                footerData.push({ text: formatNumber(total.pageserverreadahead, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                break;
+            case columnIOEnum.LobLogical:
+                footerData.push({ text: formatNumber(total.loblogical, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                break;
+            case columnIOEnum.LobPhysical:
+                footerData.push({ text: formatNumber(total.lobphysical, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                break;
+            case columnIOEnum.LobReadAhead:
+                footerData.push({ text: formatNumber(total.lobreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                break;
+            case columnIOEnum.LobPageServer:
+                footerData.push({ text: formatNumber(total.lobpageserver, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                break;
+            case columnIOEnum.LobPageServerReadAhead:
+                footerData.push({ text: formatNumber(total.lobpageserverreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                break;
+            case columnIOEnum.PercentRead:
+                footerData.push({ text: '\u00A0', className: 'footer-column column-xlarge' });
+                break;
+            default:
+                footerData.push({ text: '', className: 'footer-column column-small' });
+                break;
+        }
+    }
+
+    return footerData;
 }
 
 function displayIOTable(rowdata, columns, lang) {
@@ -146,7 +296,7 @@ function displayIOTable(rowdata, columns, lang) {
     let tableId = rowdata.tableid;
 
     if (columns === undefined) {
-        columns = displayIOTableColumns(lang);
+        columns = displayIOTableColumns(rowdata.columns, true, lang);
     }
     
     // Create table element with header
@@ -178,18 +328,7 @@ function displayIOTable(rowdata, columns, lang) {
     const footerRow = document.createElement('tr');
     
     // Create and append footer cells
-    const footerCells = [
-        { text: '', className: 'footer-column column-small' },
-        { text: 'Total', className: 'footer-column' },
-        { text: formatNumber(total.scan, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.logical, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.physical, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.readahead, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.loblogical, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: formatNumber(total.lobphysical, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: formatNumber(total.lobreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: '\u00A0', className: 'footer-column column-xlarge' }
-    ];
+    const footerCells = displayIOTableFooter(total, rowdata.columns, true, lang);
 
     footerCells.forEach(cell => {
         const td = document.createElement('td');
@@ -259,6 +398,20 @@ function displayTimeTable(data, lang) {
     tbody.appendChild(bodyRow);
     table.appendChild(tbody);
     
+    if (data.summary) {
+        const tfoot = document.createElement('tfoot');
+        const footerRow = document.createElement('tr');
+    
+        const td = document.createElement('td');
+        td.className = 'footer-column';
+        td.colSpan = 3;  // or 3 for time tables
+        td.textContent = 'Summary row detectd. Row not added to total.';
+        footerRow.appendChild(td);
+    
+        tfoot.appendChild(footerRow);
+        table.appendChild(tfoot);    
+    }
+    
     return table;
 }
 
@@ -289,71 +442,12 @@ function displayCompletionTime(data, lang) {
     return output;
 }
 
-function displayIOTotalTableColumns(lang) {
-    return [
-        { 
-            data: 'table',
-            title: lang.headertable,
-            className: 'th-column'
-        },
-        { 
-            data: 'scan',
-            title: lang.headerscan,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'logical',
-            title: lang.headerlogical,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'physical',
-            title: lang.headerphysical,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'readahead',
-            title: lang.headerreadahead,
-            className: 'th-column column-large td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'loblogical',
-            title: lang.headerloblogical,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'lobphysical',
-            title: lang.headerlobphysical,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'lobreadahead',
-            title: lang.headerlobreadahead,
-            className: 'th-column column-medium td-column-right',
-            render: (data) => formatNumber(data, lang.langvalue)
-        },
-        { 
-            data: 'percentread',
-            title: lang.headerperlogicalread,
-            className: 'th-column column-xlarge td-column-right',
-            render: (data) => data + '%'
-        }
-    ];
-}
-
 function displayIOTotalTable(rowdata, columns, lang) {
-    let data = rowdata.data;
     let total = rowdata.total;
     let tableId = rowdata.tableid;
 
     if (columns === undefined) {
-        columns = displayIOTableColumns(lang);
+        columns = displayIOTableColumns(rowdata.columns, false, lang);
     }
     
     // Create table element with header
@@ -385,17 +479,7 @@ function displayIOTotalTable(rowdata, columns, lang) {
     const footerRow = document.createElement('tr');
     
     // Create and append footer cells
-    const footerCells = [
-        { text: 'Total', className: 'footer-column' },
-        { text: formatNumber(total.scan, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.logical, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.physical, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.readahead, lang.langvalue), className: 'footer-column column-large td-column-right' },
-        { text: formatNumber(total.loblogical, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: formatNumber(total.lobphysical, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: formatNumber(total.lobreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' },
-        { text: '\u00A0', className: 'footer-column column-xlarge' }
-    ];
+    const footerCells = displayIOTableFooter(total, rowdata.columns, false, lang);
 
     footerCells.forEach(cell => {
         const td = document.createElement('td');
@@ -516,13 +600,13 @@ function displayTimeTotalTable(executiondata, compiledata, lang) {
 
 export function displayParsedData(parsedData, showScrollbar, lang) {
     let outputElement = document.getElementById('result');
-    let columns = displayIOTableColumns(lang);
 
     for (let i = 0; i < parsedData.data.length; i++) {
         let rowData = parsedData.data[i];
 
         switch (rowData.rowtype) {
             case rowEnum.IO:
+                let columns = displayIOTableColumns(rowData.columns, true, lang);
                 let table = displayIOTable(rowData, columns, lang);
                 outputElement.appendChild(table);
                 createDataTable(rowData.tableid, rowData.data, columns, showScrollbar);
@@ -549,10 +633,12 @@ export function displayParsedData(parsedData, showScrollbar, lang) {
         }
     }
 
+    const tablebr = document.createElement('br');
+    outputElement.appendChild(tablebr);
     outputElement.appendChild(displayTotalsHeader(lang));
 
     if (parsedData.tablecount > 0) { 
-        let totalsColumns = displayIOTotalTableColumns(lang);
+        let totalsColumns = displayIOTableColumns(parsedData.total.iototal.columns, false, lang);
         outputElement.appendChild(displayIOTotalTable(parsedData.total.iototal, totalsColumns, lang));
         outputElement.appendChild(document.createElement('br'));
         createDataTable(parsedData.total.iototal.tableid, parsedData.total.iototal.data, totalsColumns, showScrollbar);
