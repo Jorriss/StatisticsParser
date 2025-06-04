@@ -111,3 +111,7 @@ src/sql/Dashboard Query Scratch.sql
 node_modules/
 dist/
 .DS_Store
+
+# Environment Variables
+.env
+.env.json
