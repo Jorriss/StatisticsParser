@@ -14,6 +14,7 @@ June 1, 2025
 - Added a scroll to top button at the bottom of the page.
 - Migrated css to scss.
 - Split JavaScript into modules.
+- Added unit test for modules.
 - Now using NPM for packages.
 - Package changes:
   - Bootstrap upgraded to v5.3.6 

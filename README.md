@@ -33,6 +33,7 @@ This will install all required packages including:
 - DataTables (table display)
 - Bootstrap (UI framework)
 - SASS (CSS preprocessing)
+- Vitest (test tool)
 
 ### Development
 
@@ -87,8 +88,7 @@ StatisticsParser/
 - `npm run dev` - Start development server
 - `npm run build` - Create production build
 - `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
+- `npm run test` - Start vitest test runner.
 
 ### Contributing
 
