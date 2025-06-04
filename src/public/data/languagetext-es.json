@@ -35,7 +35,7 @@
         "elapsedlabel" : "Transcurrido",
         "cpulabel" : "CPU",
         "milliseconds" : "ms",
-        "rowsaffected" : "filas afectadas" ,
+        "rowsaffected" : ["filas afectadas", "fila afectada"],
         "headerrowsaffected" : " filas afectadas",
         "headerrowaffected" : " filas afectadas",
         "errormsg" : "Msg",

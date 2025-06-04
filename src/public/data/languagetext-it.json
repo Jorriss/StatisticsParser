@@ -35,7 +35,7 @@
         "elapsedlabel" : "Tempo trascorso",
         "cpulabel" : "CPU",
         "milliseconds" : "ms",
-        "rowsaffected" : "righe interessate" ,
+        "rowsaffected" : ["righe interessate", "riga interessata"],
         "headerrowsaffected" : " righe interessate",
         "headerrowaffected" : " riga interessata",
         "errormsg" : "Mes",

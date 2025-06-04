@@ -35,7 +35,7 @@
         "elapsedlabel" : "Elapsed",
         "cpulabel" : "CPU",
         "milliseconds" : "ms",
-        "rowsaffected" : "row(s) affected",
+        "rowsaffected" : ["row(s) affected", "row affected", "rows affected"],
         "headerrowsaffected" : " rows affected",
         "headerrowaffected" : " row affected",
         "errormsg" : "Msg",

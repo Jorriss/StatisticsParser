@@ -403,6 +403,17 @@ function determineSummaryRow(timedata, executionTotal, compileTotal) {
     return false;
 }
 
+function determineRowsAffected(line, langrowsaffected) {
+    let returnvalue = false;
+    for (let i = 0; i < langrowsaffected.length; i++) {
+        if (line.indexOf(langrowsaffected[i]) > -1) {
+            returnvalue = true;
+            break;
+        }
+    }
+    return returnvalue;
+}
+
 function determineRowType(strRow, lang) {
     if (strRow.substring(0, lang.table.length) === lang.table) {
         return rowEnum.IO;
@@ -410,7 +421,7 @@ function determineRowType(strRow, lang) {
         return rowEnum.ExecutionTime;
     } else if (strRow.trim() === lang.compiletime) {
         return rowEnum.CompileTime;
-    } else if (strRow.indexOf(lang.rowsaffected) > -1) {
+    } else if (determineRowsAffected(strRow, lang.rowsaffected)) {
         return rowEnum.RowsAffected;
     } else if (strRow.substring(0, 3) === lang.errormsg) {
         return rowEnum.Error;
