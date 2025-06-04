@@ -67,8 +67,10 @@ export default defineConfig(({ command }) => ({
       },
       transform(html, id) {
         if (id.endsWith('about.html')) {
-          return html.replace(/__VERSIONNUMBER__/g, versionnumber);
-        }
+          return html
+            .replace(/__VERSIONNUMBER__/g, versionnumber)
+            .replace(/<!-- Google Analytics -->/g, (command === 'build') ? googleAnalytics : '<!-- Google Analytics -->');
+          }
       }
     }
   ],
