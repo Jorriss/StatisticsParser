@@ -34,23 +34,23 @@ const columnIOEnum = {
 
 // Classes
 class StatsIOInfo {
-    constructor(rownumber, linenumber, langText, table, scan, logical, physical, readahead, loblogical, lobphysical, lobreadahead, pageserver, pageserverreadahead, lobpageserver, lobpageserverreadahead) {
+    constructor(rownumber, linenumber) {
         this.rowtype = rowEnum.IO;
         this.rownumber = rownumber;
         this.linenumber = linenumber;
-        this.table = table;
+        this.table = '';
         this.nostats = false;
-        this.scan = infoReplace(scan, langText.scan, '');
-        this.logical = infoReplace(logical, langText.logical, '');
-        this.physical = infoReplace(physical, langText.physical, '');
-        this.pageserver = infoReplace(pageserver, langText.pageserver, '');
-        this.readahead = infoReplace(readahead, langText.readahead, '');
-        this.pageserverreadahead = infoReplace(pageserverreadahead, langText.pageserverreadahead, '');
-        this.loblogical = infoReplace(loblogical, langText.loblogical, '');
-        this.lobphysical = infoReplace(lobphysical, langText.lobphysical, '');
-        this.lobpageserver = infoReplace(lobpageserver, langText.lobpageserver, '');
-        this.lobreadahead = infoReplace(lobreadahead, langText.lobreadahead, '');
-        this.lobpageserverreadahead = infoReplace(lobpageserverreadahead, langText.lobpageserverreadahead, '');
+        this.scan = 0;
+        this.logical = 0;
+        this.physical = 0;
+        this.pageserver = 0;
+        this.readahead = 0;
+        this.pageserverreadahead = 0;
+        this.loblogical = 0;
+        this.lobphysical = 0;
+        this.lobpageserver = 0;
+        this.lobreadahead = 0;
+        this.lobpageserverreadahead = 0;
         this.percentread = 0.0;
     }
 }
@@ -248,13 +248,17 @@ function deterineIOValues(line, lang) {
 }
 
 function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
-    const stat = new StatsIOInfo(null, null, lang);
-    stat.rownumber = rownumber;
-    stat.linenumber = linenumber;
+    const stat = new StatsIOInfo(rownumber, linenumber);
 
     for (let i = 0; i < columns.length; i++) {
+        if (i < 0 || i >= values.length) {
+            // Index Out Of Range
+            return stat;
+        }
+
         const column = columns[i];
         const value = values[i];
+            
         switch (column) {
             case columnIOEnum.Table:
                 stat.table = value;
@@ -481,7 +485,7 @@ function parseData(text, lang) {
     let ioColumns = [];
     
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i].trim();
         const rowType = determineRowType(line, lang);
 
         if (prevRowType === rowEnum.IO && rowType !== rowEnum.IO) {
@@ -597,7 +601,7 @@ function parseData(text, lang) {
             tableid: 'resultTableTotal'
         }
     };
-
+    console.log(JSON.stringify(parsedData, null, 2));
     return parsedData;
 }
 
