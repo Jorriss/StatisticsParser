@@ -20,7 +20,7 @@ function determineLangFilename(langType) {
  * @param {string} languageType - The language code to load
  * @returns {Promise<Object>} Promise resolving to the language text object
  */
-export async function getLanguageText(languageType = 'en') {
+async function getLanguageText(languageType = 'en') {
     try {
         const filename = determineLangFilename(languageType);
         const response = await fetch(filename);
@@ -52,7 +52,7 @@ export async function getLanguageText(languageType = 'en') {
  * Updates UI elements with the current language text
  * @param {Object} langText - The language text object
  */
-export function updateUIElements(langText) {
+function updateUIElements(langText) {
     // Update text elements
     if (langText.showexample) {
         document.getElementById("exampleText").innerHTML = langText.showexample;
@@ -88,8 +88,17 @@ export function updateUIElements(langText) {
  * @param {string} [urlStatsOutput] - Optional stats output from URL
  * @returns {Promise<Object>} Promise resolving to the language text object
  */
-export async function initializeLanguage(initialLang = 'en',) {
+async function initializeLanguage(initialLang = 'en',) {
     const langText = await getLanguageText(initialLang);
     updateUIElements(langText);
     return langText;
 } 
+
+export { initializeLanguage }
+
+// Export internal functions for testing
+export const __test__ = {
+    determineLangFilename,
+    getLanguageText,
+    updateUIElements
+}

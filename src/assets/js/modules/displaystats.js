@@ -74,8 +74,8 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
         displayColumns.push(
             { 
                 data: 'rownumber',
-                title: lang.headerrownumber,
-                className: 'th-column column-small',
+                title: lang.headerrownum,
+                className: 'statsio-column statsio-column-small',
                 orderable: true
             }
         );
@@ -88,7 +88,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'table',
                         title: lang.headertable,
-                        className: 'th-column',
+                        className: 'statsio-column',
                         orderable: true
                     }
                 );
@@ -98,7 +98,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'scan',
                         title: lang.headerscan,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -109,7 +109,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'logical',
                         title: lang.headerlogical,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -120,7 +120,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'physical',
                         title: lang.headerphysical,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -131,7 +131,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'pageserver',
                         title: lang.headerpageserver,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -142,7 +142,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'readahead',
                         title: lang.headerreadahead,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -153,7 +153,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'pageserverreadahead',
                         title: lang.headerpageserverreadahead,
-                        className: 'th-column column-large td-column-right',
+                        className: 'statsio-column statsio-column-large statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -164,7 +164,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'loblogical',
                         title: lang.headerloblogical,
-                        className: 'th-column column-medium td-column-right',
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -175,7 +175,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'lobphysical',
                         title: lang.headerlobphysical,
-                        className: 'th-column column-medium td-column-right',
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -186,7 +186,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'lobpageserver',
                         title: lang.headerlobpageserver,
-                        className: 'th-column column-medium td-column-right',
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -197,7 +197,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'lobreadahead',
                         title: lang.headerlobreadahead,
-                        className: 'th-column column-medium td-column-right',
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -208,7 +208,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'lobpageserverreadahead',
                         title: lang.headerlobpageserverreadahead,
-                        className: 'th-column column-medium td-column-right',
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
                         render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
@@ -219,7 +219,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                     { 
                         data: 'percentread',
                         title: lang.headerperlogicalread,
-                        className: 'th-column column-xlarge td-column-right',
+                        className: 'statsio-column statsio-column-xlarge statsio-column-right',
                         render: (data) => data + '%',
                         orderable: true
                     }            
@@ -237,52 +237,52 @@ function displayIOTableFooter(total, columns, showRowNumber, lang) {
     const footerData = [];
 
     if (showRowNumber) {
-        footerData.push({ text: '', className: 'footer-column column-small' });
+        footerData.push({ text: '', className: 'statsio-footer-column statsio-column-small' });
     }
 
     for (let i = 0; i < columns.length; i++) {
         switch (columns[i]) {
             case columnIOEnum.Table:
-                footerData.push({ text: 'Total', className: 'footer-column' });
+                footerData.push({ text: 'Total', className: 'statsio-footer-column' });
                 break;
             case columnIOEnum.Scan:
-                footerData.push({ text: formatNumber(total.scan, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.scan, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.Logical:
-                footerData.push({ text: formatNumber(total.logical, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.logical, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.Physical:
-                footerData.push({ text: formatNumber(total.physical, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.physical, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.PageServer:
-                footerData.push({ text: formatNumber(total.pageserver, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.pageserver, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.ReadAhead:
-                footerData.push({ text: formatNumber(total.readahead, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.readahead, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.PageServerReadAhead:
-                footerData.push({ text: formatNumber(total.pageserverreadahead, lang.langvalue), className: 'footer-column column-large td-column-right' });
+                footerData.push({ text: formatNumber(total.pageserverreadahead, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
                 break;
             case columnIOEnum.LobLogical:
-                footerData.push({ text: formatNumber(total.loblogical, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                footerData.push({ text: formatNumber(total.loblogical, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.LobPhysical:
-                footerData.push({ text: formatNumber(total.lobphysical, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                footerData.push({ text: formatNumber(total.lobphysical, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.LobReadAhead:
-                footerData.push({ text: formatNumber(total.lobreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                footerData.push({ text: formatNumber(total.lobreadahead, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.LobPageServer:
-                footerData.push({ text: formatNumber(total.lobpageserver, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                footerData.push({ text: formatNumber(total.lobpageserver, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.LobPageServerReadAhead:
-                footerData.push({ text: formatNumber(total.lobpageserverreadahead, lang.langvalue), className: 'footer-column column-medium td-column-right' });
+                footerData.push({ text: formatNumber(total.lobpageserverreadahead, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.PercentRead:
-                footerData.push({ text: '\u00A0', className: 'footer-column column-xlarge' });
+                footerData.push({ text: '\u00A0', className: 'statsio-footer-column statsio-column-xlarge' });
                 break;
             default:
-                footerData.push({ text: '', className: 'footer-column column-small' });
+                footerData.push({ text: '', className: 'statsio-footer-column statsio-column-small' });
                 break;
         }
     }
@@ -348,20 +348,20 @@ function displayTimeTable(data, lang) {
         { 
             data: lang.executiontime,
             title: '',
-            headerClassName: 'th-column td-column-timetype',
-            className: 'td-column-timetype'
+            headerClassName: 'statsio-column statsio-column-timetype',
+            className: 'statsio-column-timetype'
         },
         { 
             data: formatMs(data.cpu),
             title: lang.cpulabel,
-            headerClassName: 'th-column td-column-right',
-            className: 'td-column-right'
+            headerClassName: 'statsio-column statsio-column-right',
+            className: 'statsio-column-right'
         },
         { 
             data: formatMs(data.elapsed),
             title: lang.elapsedlabel,
-            headerClassName: 'th-column td-column-right',
-            className: 'td-column-right'
+            headerClassName: 'statsio-column statsio-column-right',
+            className: 'statsio-column-right'
         }
     ];
     
@@ -403,7 +403,7 @@ function displayTimeTable(data, lang) {
         const footerRow = document.createElement('tr');
     
         const td = document.createElement('td');
-        td.className = 'footer-column';
+        td.className = 'statsio-footer-column';
         td.colSpan = 3;  // or 3 for time tables
         td.textContent = 'Summary row detectd. Row not added to total.';
         footerRow.appendChild(td);
@@ -496,6 +496,11 @@ function displayIOTotalTable(rowdata, columns, lang) {
 
 function displayTimeTotalTable(executiondata, compiledata, lang) {
     // Convert to Luxon Duration for calculations
+
+    if (executiondata === undefined || compiledata === undefined) {
+        return;
+    }
+
     const cpuTotal = Duration.fromMillis(parseInt(compiledata.cpu))
         .plus(Duration.fromMillis(parseInt(executiondata.cpu)))
         .toMillis();
@@ -508,20 +513,20 @@ function displayTimeTotalTable(executiondata, compiledata, lang) {
         { 
             data: 'type',
             title: '',
-            headerClassName: 'th-column td-column-timetype',
-            className: 'td-column-timetype'
+            headerClassName: 'statsio-column statsio-column-timetype',
+            className: 'statsio-column-timetype'
         },
         { 
             data: 'cpu',
             title: lang.cpulabel,
-            headerClassName: 'th-column td-column-right',
-            className: 'td-column-right'
+            headerClassName: 'statsio-column statsio-column-right',
+            className: 'statsio-column-right'
         },
         { 
             data: 'elapsed',
             title: lang.elapsedlabel,
-            headerClassName: 'th-column td-column-right',
-            className: 'td-column-right'
+            headerClassName: 'statsio-column statsio-column-right',
+            className: 'statsio-column-right'
         }
     ];
 
@@ -580,9 +585,9 @@ function displayTimeTotalTable(executiondata, compiledata, lang) {
     
     // Create and append footer cells
     const footerCells = [
-        { text: 'Total', className: 'td-total td-column-timetype' },
-        { text: formatMs(cpuTotal), className: 'td-total td-column-right' },
-        { text: formatMs(elapsedTotal), className: 'td-total td-column-right' }
+        { text: 'Total', className: 'statsio-total statsio-column-timetype' },
+        { text: formatMs(cpuTotal), className: 'statsio-total statsio-column-right' },
+        { text: formatMs(elapsedTotal), className: 'statsio-total statsio-column-right' }
     ];
 
     footerCells.forEach(cell => {

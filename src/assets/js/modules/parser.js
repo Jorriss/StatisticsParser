@@ -1,7 +1,7 @@
 // Parser module for handling statistics parsing and data processing
 
 // Constants
-export const rowEnum = {
+const rowEnum = {
     None: 0,
     IO: 1,
     ExecutionTime: 2,
@@ -15,7 +15,7 @@ export const rowEnum = {
     CompletionTime: 10
 };
 
-export const columnIOEnum = {
+const columnIOEnum = {
     NotFound: 0,
     Table: 1,
     Scan: 2,
@@ -403,8 +403,6 @@ function determineSummaryRow(timedata, executionTotal, compileTotal) {
     return false;
 }
 
-
-// TODO: Original function
 function determineRowType(strRow, lang) {
     if (strRow.substring(0, lang.table.length) === lang.table) {
         return rowEnum.IO;
@@ -458,7 +456,7 @@ function statsIOComputeGrandTotal(statTotal, statInfo) {
  * @param {Object} lang - Language object for text
  * @returns {Object} Parsed data object
  */
-export function parseData(text, lang) {
+function parseData(text, lang) {
     const lines = text.split('\n');
     let tableCount = 0;
     const executionTotal = new StatsTimeInfoTotal(rowEnum.ExecutionTimeTotal);
@@ -486,7 +484,6 @@ export function parseData(text, lang) {
             case rowEnum.IO:
                 let values = null;
                 if (prevRowType !== rowEnum.IO) {
-                    tableCount += 1;
                     rowNumber = 0;
 
                     const firstLineData = determineIOColumns(line, lang);
@@ -502,6 +499,7 @@ export function parseData(text, lang) {
                     };
                     parsedData.data.push(currentGroupObj);
                 }
+                tableCount += 1;
                 rowNumber += 1;
                 if (values) { // get the values from the first line
                     rowData = loadStatsIOInfo(i, rowNumber, ioColumns, values, lang);
@@ -590,4 +588,10 @@ export function parseData(text, lang) {
     };
 
     return parsedData;
+}
+
+export {
+    parseData,
+    rowEnum,
+    columnIOEnum
 }
