@@ -22,6 +22,11 @@ import {
 
 // Initialize on document ready using native JavaScript
 document.addEventListener('DOMContentLoaded', async function() {
+    await initalizeDocument();
+});
+
+async function initalizeDocument() {
+
     const urlParams = new URLSearchParams(window.location.search);
     const languageType = urlParams.get('lang') || 'en';
     const urlStatsOutput = urlParams.get('data');
@@ -70,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Show/hide button based on scroll position
     window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) { // Show button after scrolling 100px
+        if (window.scrollY > 100) { // Show button after scrolling 100px
             scrollToTopButton.classList.add('visible');
         } else {
             scrollToTopButton.classList.remove('visible');
@@ -133,4 +138,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             window.langText = await initializeLanguage(this.dataset.lang);
         };
     });
-});
+}
+
+export { initalizeDocument };
