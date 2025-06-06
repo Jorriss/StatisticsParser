@@ -29,7 +29,9 @@ const columnIOEnum = {
     LobPageServer: 10,
     LobReadAhead: 11,
     LobPageServerReadAhead: 12,
-    PercentRead: 13
+    PercentRead: 13,
+    SegmentReads: 14,
+    SegmentSkipped: 15
 }
 
 // Classes
@@ -51,6 +53,8 @@ class StatsIOInfo {
         this.lobpageserver = 0;
         this.lobreadahead = 0;
         this.lobpageserverreadahead = 0;
+        this.segmentreads = 0;
+        this.segmentskipped = 0;
         this.percentread = 0.0;
     }
 }
@@ -71,6 +75,8 @@ class StatsIOInfoTotal {
         this.lobpageserver = 0;
         this.lobreadahead = 0;
         this.lobpageserverreadahead = 0;
+        this.segmentreads = 0;
+        this.segmentskipped = 0;
         this.percentread = 0.0;
     }
 }
@@ -156,48 +162,89 @@ function getSubStr(str, delim) {
 // Data processing functions
 
 function getIOColumnEnum(columnname, lang) {
-    const columnName = columnname.trim();
+    const columnName = columnname.trim().toLowerCase();
 
-    switch (columnName) {
-        case lang.table:
-            return columnIOEnum.Table;
-        case lang.scan:
-            return columnIOEnum.Scan;
-        case lang.logical:
-            return columnIOEnum.Logical;
-        case lang.physical:
-            return columnIOEnum.Physical;
-        case lang.readahead:
-            return columnIOEnum.ReadAhead;
-        case lang.pageserver:
-            return columnIOEnum.PageServer;
-        case lang.pageserverreadahead:
-            return columnIOEnum.PageServerReadAhead;
-        case lang.loblogical:
-            return columnIOEnum.LobLogical;
-        case lang.lobphysical:
-            return columnIOEnum.LobPhysical;
-        case lang.lobreadahead:
-            return columnIOEnum.LobReadAhead;
-        case lang.lobpageserver:
-            return columnIOEnum.LobPageServer;
-        case lang.lobpageserverreadahead:
-            return columnIOEnum.LobPageServerReadAhead;
-        default:
-            return columnIOEnum.NotFound;
+    if (lang.table.includes(columnName)) {
+        return columnIOEnum.Table;
     }
+
+    if (lang.scan.includes(columnName)) {
+        return columnIOEnum.Scan;
+    }
+
+    if (lang.logical.includes(columnName)) {
+        return columnIOEnum.Logical;
+    }
+
+    if (lang.physical.includes(columnName)) {
+        return columnIOEnum.Physical;
+    }
+
+    if (lang.readahead.includes(columnName)) {
+        return columnIOEnum.ReadAhead;
+    }
+
+    if (lang.pageserver.includes(columnName)) {
+        return columnIOEnum.PageServer;
+    }
+
+    if (lang.pageserverreadahead.includes(columnName)) {
+        return columnIOEnum.PageServerReadAhead;
+    }
+
+    if (lang.loblogical.includes(columnName)) {
+        return columnIOEnum.LobLogical;
+    }
+
+    if (lang.lobphysical.includes(columnName)) {
+        return columnIOEnum.LobPhysical;
+    }
+
+    if (lang.lobreadahead.includes(columnName)) {
+        return columnIOEnum.LobReadAhead;
+    }
+
+    if (lang.lobpageserver.includes(columnName)) {
+        return columnIOEnum.LobPageServer;
+    }
+
+    if (lang.lobpageserverreadahead.includes(columnName)) {
+        return columnIOEnum.LobPageServerReadAhead;
+    }
+
+    if (lang.segmentreads.includes(columnName)) {
+        return columnIOEnum.SegmentReads;
+    }
+
+    if (lang.segmentskipped.includes(columnName)) {
+        return columnIOEnum.SegmentSkipped;
+    }
+
+    return columnIOEnum.NotFound;
 }
 
 function parseIOStatLine(line, lang) {
     // Match pattern: Table 'TableName'. Rest of stats...
-    const tableMatch = line.match(new RegExp(`${lang.table}\\s+'([^']+)'`));
+    const tableMatch = line.match(new RegExp(`${lang.table}\\s+['"]([^']+)['"]`));
     const tableName = tableMatch ? tableMatch[1] : '';
     const statsText = line.substring(line.indexOf('.') + 1).trim();
-    
+
     return {
         table: tableName,
         statstext: statsText
     }
+}
+
+function mergeIOColumns(tablecolumns, linecolumns) {
+    // Create a new array with the values from tablecolumns
+    const mergedColumns = [...tablecolumns];
+    // Add items from linecolumns that are not already in tablecolumns
+    for (const col of linecolumns) {
+        if (!mergedColumns.includes(col)) {
+            mergedColumns.push(col);
+        }
+    }
+    return mergedColumns;
 }
 
 function determineIOColumns(line, lang) {
@@ -221,8 +268,8 @@ function determineIOColumns(line, lang) {
     });
 
     return {
-        columns: [columnIOEnum.Table, ...result.map(r => r.column), columnIOEnum.PercentRead],
-        values: [statLine.table, ...result.map(r => r.value), 0.0]
+        columns: [columnIOEnum.Table, ...result.map(r => r.column)],
+        values: [statLine.table, ...result.map(r => r.value)]
     };
 }
 
@@ -299,6 +346,12 @@ function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
             case columnIOEnum.PercentRead:
                 stat.percentread = value;
                 break;
+            case columnIOEnum.SegmentReads:
+                stat.segmentreads = value;
+                break;
+            case columnIOEnum.SegmentSkipped:
+                stat.segmentskipped = value;
+                break;
         }
     }
 
@@ -365,6 +418,8 @@ function statsIOComputeTotal(statInfos) {
         lobpageserver: total.lobpageserver + stat.lobpageserver,
         lobreadahead: total.lobreadahead + stat.lobreadahead,
         lobpageserverreadahead: total.lobpageserverreadahead + stat.lobpageserverreadahead,
+        segmentreads: total.segmentreads + stat.segmentreads,
+        segmentskipped: total.segmentskipped + stat.segmentskipped,
     }), initial);
 }
 
@@ -419,7 +474,7 @@ function determineRowsAffected(line, langrowsaffected) {
 }
 
 function determineRowType(strRow, lang) {
-    if (strRow.substring(0, lang.table.length) === lang.table) {
+    if (strRow.trim().substring(0, lang.table.length) === lang.table) {
         return rowEnum.IO;
     } else if (strRow.trim() === lang.executiontime) {
         return rowEnum.ExecutionTime;
@@ -462,6 +517,8 @@ function statsIOComputeGrandTotal(statTotal, statInfo) {
         lobpageserver: statTotal.lobpageserver + statInfo.lobpageserver,
         lobreadahead: statTotal.lobreadahead + statInfo.lobreadahead,
         lobpageserverreadahead: statTotal.lobpageserverreadahead + statInfo.lobpageserverreadahead,
+        segmentreads: statTotal.segmentreads + statInfo.segmentreads,
+        segmentskipped: statTotal.segmentskipped + statInfo.segmentskipped,
     };
 }
 
@@ -472,7 +529,7 @@ function statsIOComputeGrandTotal(statTotal, statInfo) {
  * @returns {Object} Parsed data object
  */
 function parseData(text, lang) {
-    const lines = text.split('\n');
+    const lines = text.split('\n').map(line => line.replace(/\r$/, ''));
     let tableCount = 0;
     const executionTotal = new StatsTimeInfoTotal(rowEnum.ExecutionTimeTotal);
     const compileTotal = new StatsTimeInfoTotal(rowEnum.CompileTimeTotal);
@@ -483,6 +540,7 @@ function parseData(text, lang) {
     let rowNumber = 0;
     let rowData = null;
     let ioColumns = [];
+    let ioTotalColumns = [];
     
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
@@ -493,36 +551,49 @@ function parseData(text, lang) {
             const tablePercent = statsIOComputePercentLogicalRead(currentGroupObj.data, tableTotal);
             currentGroupObj.total = tableTotal;
             currentGroupObj.data = tablePercent;
+
+            ioColumns = [...ioColumns, columnIOEnum.PercentRead];
+            currentGroupObj.columns = ioColumns;
+            ioTotalColumns = mergeIOColumns(ioTotalColumns, ioColumns);
         }
 
         switch (rowType) {
             case rowEnum.IO:
                 let values = null;
+                
                 if (prevRowType !== rowEnum.IO) {
                     rowNumber = 0;
-
-                    const firstLineData = determineIOColumns(line, lang);
-                    ioColumns = firstLineData.columns;
-                    values = firstLineData.values;
+                    ioColumns = [];
                     
                     currentGroupObj = {
                         rowtype: rowEnum.IO,
                         tableid: `resultTable_${tableCount}`,
-                        columns: ioColumns,
+                        columns: [],
                         data: [],
                         total: []
                     };
                     parsedData.data.push(currentGroupObj);
                 }
+
+                const lineData = determineIOColumns(line, lang);
+                ioColumns = mergeIOColumns(ioColumns, lineData.columns);
+                values = lineData.values;
+
                 tableCount += 1;
                 rowNumber += 1;
-                if (values) { // get the values from the first line
-                    rowData = loadStatsIOInfo(i, rowNumber, ioColumns, values, lang);
-                } else { 
-                    rowData = getStatsIOInfo(i, rowNumber, line, ioColumns, lang);
+                rowData = loadStatsIOInfo(i, rowNumber, lineData.columns, values, lang);
+
+                console.log(i);
+                console.log(rowData)
+
+                // If the row has segment reads or skipped, add the values to the last row in the current group
+                if (rowData.segmentreads > 0 || rowData.segmentskipped > 0) {
+                    currentGroupObj.data[currentGroupObj.data.length - 1].segmentreads = rowData.segmentreads;
+                    currentGroupObj.data[currentGroupObj.data.length - 1].segmentskipped = rowData.segmentskipped;
+                } else {
+                    currentGroupObj.data.push(rowData);
                 }
 
-                currentGroupObj.data.push(rowData);
                 tableIOGrandTotal = statsIOProcessGrandTotal(tableIOGrandTotal, rowData);
 
                 break;
@@ -584,6 +655,10 @@ function parseData(text, lang) {
             const tablePercent = statsIOComputePercentLogicalRead(currentGroupObj.data, tableTotal);
             currentGroupObj.total = tableTotal;
             currentGroupObj.data = tablePercent;
+
+            ioColumns = [...ioColumns, columnIOEnum.PercentRead];
+            currentGroupObj.columns = ioColumns;
+            ioTotalColumns = mergeIOColumns(ioTotalColumns, ioColumns);
         }
     }
 
@@ -595,7 +670,7 @@ function parseData(text, lang) {
         executiontotal: executionTotal,
         compiletotal: compileTotal,
         iototal: {
-            columns: ioColumns,
+            columns: ioTotalColumns,
             data: tableIOGrandTotal,
             total: tableIOGrandTotalTotalLine,
             tableid: 'resultTableTotal'

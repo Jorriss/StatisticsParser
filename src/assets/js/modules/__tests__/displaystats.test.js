@@ -5,10 +5,21 @@ import DataTable from 'datatables.net-dt';
 
 // Mock DataTable
 vi.mock('datatables.net-dt', () => {
+    const mockDataTable = vi.fn().mockImplementation(() => ({
+        destroy: vi.fn()
+    }));
+
+    mockDataTable.render = {
+        number: vi.fn().mockImplementation((thousand, decimal) => {
+            return (data) => {
+                if (data === null || data === undefined) return '';
+                return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+            };
+        })
+    };
+
     return {
-        default: vi.fn().mockImplementation(() => ({
-            destroy: vi.fn()
-        }))
+        default: mockDataTable
     };
 });
 
@@ -39,7 +50,11 @@ describe('displayParsedData', () => {
             executiontime: 'Execution Time',
             cpulabel: 'CPU',
             elapsedlabel: 'Elapsed',
-            compiletime: 'Compile Time'
+            compiletime: 'Compile Time',
+            numberformat: {
+                thousand: ',',
+                decimal: '.'
+            }
         };
 
         // Create mock elements

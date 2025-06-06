@@ -99,7 +99,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'scan',
                         title: lang.headerscan,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -110,7 +110,8 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'logical',
                         title: lang.headerlogical,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
+                        // render: (data) => formatNumber(data, lang.langvalue),
                         orderable: true
                     }
                 );
@@ -121,7 +122,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'physical',
                         title: lang.headerphysical,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -132,7 +133,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'pageserver',
                         title: lang.headerpageserver,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -143,7 +144,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'readahead',
                         title: lang.headerreadahead,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -154,7 +155,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'pageserverreadahead',
                         title: lang.headerpageserverreadahead,
                         className: 'statsio-column statsio-column-large statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -165,7 +166,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'loblogical',
                         title: lang.headerloblogical,
                         className: 'statsio-column statsio-column-medium statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -176,7 +177,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'lobphysical',
                         title: lang.headerlobphysical,
                         className: 'statsio-column statsio-column-medium statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -187,7 +188,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'lobpageserver',
                         title: lang.headerlobpageserver,
                         className: 'statsio-column statsio-column-medium statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -198,7 +199,7 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'lobreadahead',
                         title: lang.headerlobreadahead,
                         className: 'statsio-column statsio-column-medium statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -209,7 +210,29 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'lobpageserverreadahead',
                         title: lang.headerlobpageserverreadahead,
                         className: 'statsio-column statsio-column-medium statsio-column-right',
-                        render: (data) => formatNumber(data, lang.langvalue),
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.SegmentReads:
+                displayColumns.push(
+                    { 
+                        data: 'segmentreads',
+                        title: lang.headersegmentreads,
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
+                        orderable: true
+                    }
+                );
+                break;
+            case columnIOEnum.SegmentSkipped:   
+                displayColumns.push(
+                    { 
+                        data: 'segmentskipped',
+                        title: lang.headersegmentskipped,
+                        className: 'statsio-column statsio-column-medium statsio-column-right',
+                        render: DataTable.render.number( lang.numberformat.thousand, lang.numberformat.decimal ),
                         orderable: true
                     }
                 );
@@ -277,6 +300,12 @@ function displayIOTableFooter(total, columns, showRowNumber, lang) {
                 break;
             case columnIOEnum.LobPageServerReadAhead:
                 footerData.push({ text: formatNumber(total.lobpageserverreadahead, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
+                break;
+            case columnIOEnum.SegmentReads:
+                footerData.push({ text: formatNumber(total.segmentreads, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
+                break;
+            case columnIOEnum.SegmentSkipped:
+                footerData.push({ text: formatNumber(total.segmentskipped, lang.langvalue), className: 'statsio-footer-column statsio-column-medium statsio-column-right' });
                 break;
             case columnIOEnum.PercentRead:
                 footerData.push({ text: '\u00A0', className: 'statsio-footer-column statsio-column-xlarge' });

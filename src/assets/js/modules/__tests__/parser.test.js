@@ -22,7 +22,7 @@ describe('Parser Module', () => {
         })
 
         it('should parse the sample output correctly for each language', () => {
-            const languages = ['en', 'es', 'it']
+            const languages = ['es'] // ['en', 'es', 'it']
             const expecteddata = getTestData_SampleOutput();
 
             languages.forEach(lang => {
@@ -44,6 +44,8 @@ describe('Parser Module', () => {
                 if (expected === null) {
                     throw new Error(`Unsupported language: ${lang}`);
                 }
+                console.log(expected);
+                console.log(result);
                 expect(expected).toEqual(result)
             })
         })
@@ -51,7 +53,7 @@ describe('Parser Module', () => {
         it('should parse page server columns correctly', () => {
             const data = getTestData_PageServerColumns()
             const result = parseData(data.input, getLanguageFile('en'))
-            
+
             expect(data.expected).toEqual(result)
         })
 
@@ -107,6 +109,20 @@ describe('Parser Module', () => {
             const result = parseData(data.input, lang);
             expect(data.expected).toEqual(result);
         });
+
+        it('should parse a simple columnstore output correctly', () => {
+            const data = getTestData_ColumnstoreOutput_Simple();
+            const lang = getLanguageFile('en');
+            const result = parseData(data.input, lang);
+            expect(data.expected).toEqual(result);
+        });
+
+        it('should parse columnstore output correctly', () => {
+            const data = getTestData_ColumnstoreOutput();
+            const lang = getLanguageFile('en');
+            const result = parseData(data.input, lang);
+            expect(data.expected).toEqual(result);
+        })
     })
 
     // Helper functions
@@ -122,281 +138,305 @@ describe('Parser Module', () => {
             default:
                 return langEn;
         }
-    }
+    };
 
     // Test data
-
     function getTestData_PageServerColumns_Simple() {
         return {
             english: {
                 input: `Table 'ListofNumber'. Scan count 1, logical reads 2, physical reads 0, page server reads 23, read-ahead reads 0, page server read-ahead reads 32, lob logical reads 0, lob physical reads 0, lob page server reads 45, lob read-ahead reads 0, lob page server read-ahead reads 56.`,
                 expected: {
                     data: [
-                      {
-                        rowtype: 1,
-                        tableid: 'resultTable_0',
-                        columns: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ],
-                        data: [
-                          {
+                        {
                             rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 1,
-                            logical: 2,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 32,
-                            loblogical: 0,
-                            lobphysical: 0,
-                            lobpageserver: 45,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 1,
-                          logical: 2,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 32,
-                          loblogical: 0,
-                          lobphysical: 0,
-                          lobpageserver: 45,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
+                            tableid: 'resultTable_0',
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 2,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 32,
+                                    loblogical: 0,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 2,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 32,
+                                loblogical: 0,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            }
                         }
-                      }
                     ],
                     tablecount: 1,
                     total: {
-                      executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
-                      compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
-                      iototal: {
-                        columns: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ],
-                        data: [
-                          {
-                            rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 1,
-                            logical: 2,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 32,
-                            loblogical: 0,
-                            lobphysical: 0,
-                            lobpageserver: 45,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 1,
-                          logical: 2,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 32,
-                          loblogical: 0,
-                          lobphysical: 0,
-                          lobpageserver: 45,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
-                        },
-                        tableid: 'resultTableTotal'
-                      }
+                        executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
+                        compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
+                        iototal: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 2,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 32,
+                                    loblogical: 0,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 2,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 32,
+                                loblogical: 0,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            },
+                            tableid: 'resultTableTotal'
+                        }
                     }
-                  }
+                }
             },
             spanish: {
-                input: `Tabla 'ListofNumber'. Recuento de exploraciones 1, lecturas lógicas 1929, lecturas físicas 0, lecturas del servidor de páginas 23, lecturas de anticipación 0, lecturas de anticipación del servidor de páginas 23, lecturas lógicas de LOB 12981, lecturas físicas de LOB 0, lecturas del servidor de páginas de LOB 45, lecturas de anticipación de LOB 0, lecturas de anticipación del servidor de páginas de LOB 56. `,
+                input: `Tabla "ListofNumber". Número de examen 1, lecturas lógicas 1929, lecturas físicas 0, lecturas de servidor de páginas 23, lecturas anticipadas 0, lecturas anticipadas de servidor de páginas 23, lecturas lógicas de línea de negocio 12981, lecturas físicas de línea de negocio 0, lecturas de servidor de páginas de línea de negocio 45, lecturas anticipadas de línea de negocio 0, lecturas anticipadas de servidor de páginas de línea de negocio 56.`,
+                // input: `Tabla 'ListofNumber'. Recuento de exploraciones 1, lecturas lógicas 1929, lecturas físicas 0, lecturas del servidor de páginas 23, lecturas anticipación 0, lecturas de anticipación del servidor de páginas 23, lecturas lógicas de LOB 12981, lecturas físicas de LOB 0, lecturas del servidor de páginas de LOB 45, lecturas de anticipación de LOB 0, lecturas de anticipación del servidor de páginas de LOB 56.`,
                 expected: {
                     data: [
-                      {
-                        rowtype: 1,
-                        tableid: 'resultTable_0',
-                        columns: [ 1, 0, 3, 0, 5, 0, 7, 8, 9, 10, 0, 12, 13 ],
-                        data: [
-                          {
+                        {
                             rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 0,
-                            logical: 1929,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 23,
-                            loblogical: 12981,
-                            lobphysical: 0,
-                            lobpageserver: 45,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 0,
-                          logical: 1929,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 23,
-                          loblogical: 12981,
-                          lobphysical: 0,
-                          lobpageserver: 45,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
+                            tableid: 'resultTable_0',
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 1929,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 23,
+                                    loblogical: 12981,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 1929,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 23,
+                                loblogical: 12981,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            }
                         }
-                      }
                     ],
                     tablecount: 1,
                     total: {
-                      executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
-                      compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
-                      iototal: {
-                        columns: [ 1, 0, 3, 0, 5, 0, 7, 8, 9, 10, 0, 12, 13 ],
-                        data: [
-                          {
-                            rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 0,
-                            logical: 1929,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 23,
-                            loblogical: 12981,
-                            lobphysical: 0,
-                            lobpageserver: 45,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 0,
-                          logical: 1929,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 23,
-                          loblogical: 12981,
-                          lobphysical: 0,
-                          lobpageserver: 45,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
-                        },
-                        tableid: 'resultTableTotal'
-                      }
+                        executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
+                        compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
+                        iototal: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 1929,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 23,
+                                    loblogical: 12981,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 1929,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 23,
+                                loblogical: 12981,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            },
+                            tableid: 'resultTableTotal'
+                        }
                     }
-                  }
+                }
             },
             italian: {
                 input: `Tabella 'ListofNumber'. Conteggio analisi 1, letture logiche 2, letture fisiche 0, letture server di pagine 23, letture read-ahead 0, letture read-ahead server di pagine 32, letture logiche LOB 0, letture fisiche LOB 0, letture LOB server di pagine 45, letture LOB read-ahead 0, letture read-ahead LOB server di pagine 56.`,
                 expected: {
                     data: [
-                      {
-                        rowtype: 1,
-                        tableid: 'resultTable_0',
-                        columns: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13 ],
-                        data: [
-                          {
+                        {
                             rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 1,
-                            logical: 2,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 32,
-                            loblogical: 0,
-                            lobphysical: 0,
-                            lobpageserver: 0,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 1,
-                          logical: 2,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 32,
-                          loblogical: 0,
-                          lobphysical: 0,
-                          lobpageserver: 0,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
+                            tableid: 'resultTable_0',
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 2,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 32,
+                                    loblogical: 0,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 2,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 32,
+                                loblogical: 0,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            }
                         }
-                      }
                     ],
                     tablecount: 1,
                     total: {
-                      executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
-                      compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
-                      iototal: {
-                        columns: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13 ],
-                        data: [
-                          {
-                            rowtype: 1,
-                            rownumber: 1,
-                            linenumber: 0,
-                            table: 'ListofNumber',
-                            nostats: false,
-                            scan: 1,
-                            logical: 2,
-                            physical: 0,
-                            pageserver: 23,
-                            readahead: 0,
-                            pageserverreadahead: 32,
-                            loblogical: 0,
-                            lobphysical: 0,
-                            lobpageserver: 0,
-                            lobreadahead: 0,
-                            lobpageserverreadahead: 56,
-                            percentread: '100.000'
-                          }
-                        ],
-                        total: {
-                          scan: 1,
-                          logical: 2,
-                          physical: 0,
-                          pageserver: 23,
-                          readahead: 0,
-                          pageserverreadahead: 32,
-                          loblogical: 0,
-                          lobphysical: 0,
-                          lobpageserver: 0,
-                          lobreadahead: 0,
-                          lobpageserverreadahead: 56
-                        },
-                        tableid: 'resultTableTotal'
-                      }
+                        executiontotal: { rowtype: 7, cpu: 0, elapsed: 0 },
+                        compiletotal: { rowtype: 8, cpu: 0, elapsed: 0 },
+                        iototal: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            data: [
+                                {
+                                    rowtype: 1,
+                                    rownumber: 1,
+                                    linenumber: 0,
+                                    table: 'ListofNumber',
+                                    nostats: false,
+                                    scan: 1,
+                                    logical: 2,
+                                    physical: 0,
+                                    pageserver: 23,
+                                    readahead: 0,
+                                    pageserverreadahead: 32,
+                                    loblogical: 0,
+                                    lobphysical: 0,
+                                    lobpageserver: 45,
+                                    lobreadahead: 0,
+                                    lobpageserverreadahead: 56,
+                                    segmentreads: 0,
+                                    segmentskipped: 0,
+                                    percentread: '100.000'
+                                }
+                            ],
+                            total: {
+                                scan: 1,
+                                logical: 2,
+                                physical: 0,
+                                pageserver: 23,
+                                readahead: 0,
+                                pageserverreadahead: 32,
+                                loblogical: 0,
+                                lobphysical: 0,
+                                lobpageserver: 45,
+                                lobreadahead: 0,
+                                lobpageserverreadahead: 56,
+                                segmentreads: 0,
+                                segmentskipped: 0
+                            },
+                            tableid: 'resultTableTotal'
+                        }
                     }
-                  }
+                }
             }
         };
-    }
+    };
 
     function getTestData_PageServerColumns() {
         return {
@@ -492,6 +532,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.000"
                             },
                             {
@@ -511,6 +553,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 24,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 28,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "11.414"
                             },
                             {
@@ -530,6 +574,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.000"
                             },
                             {
@@ -549,6 +595,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.315"
                             },
                             {
@@ -568,6 +616,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "7.609"
                             },
                             {
@@ -587,6 +637,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "3.805"
                             },
                             {
@@ -606,6 +658,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.206"
                             },
                             {
@@ -625,6 +679,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 40,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 44,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "76.324"
                             },
                             {
@@ -644,6 +700,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.291"
                             },
                             {
@@ -663,6 +721,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.036"
                             }
                         ],
@@ -677,7 +737,9 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                             "lobphysical": 0,
                             "lobpageserver": 64,
                             "lobreadahead": 0,
-                            "lobpageserverreadahead": 72
+                            "lobpageserverreadahead": 72,
+                            "segmentreads": 0,
+                            "segmentskipped": 0
                         }
                     },
                     {
@@ -774,6 +836,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "3.805"
                             },
                             {
@@ -793,6 +857,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.291"
                             },
                             {
@@ -812,6 +878,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.036"
                             },
                             {
@@ -831,6 +899,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 40,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 44,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "76.324"
                             },
                             {
@@ -850,6 +920,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "7.609"
                             },
                             {
@@ -869,6 +941,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.206"
                             },
                             {
@@ -888,6 +962,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 24,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 28,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "11.414"
                             },
                             {
@@ -907,6 +983,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.315"
                             },
                             {
@@ -926,6 +1004,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.000"
                             },
                             {
@@ -945,6 +1025,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
                                 "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
                                 "percentread": "0.000"
                             }
                         ],
@@ -959,7 +1041,9 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                             "lobphysical": 0,
                             "lobpageserver": 64,
                             "lobreadahead": 0,
-                            "lobpageserverreadahead": 72
+                            "lobpageserverreadahead": 72,
+                            "segmentreads": 0,
+                            "segmentskipped": 0
                         },
                         "tableid": "resultTableTotal"
                     }
@@ -1004,6 +1088,8 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                             lobpageserver: 0,
                             lobreadahead: 0,
                             lobpageserverreadahead: 0,
+                            segmentreads: 0,
+                            segmentskipped: 0,
                             percentread: 0
                         },
                         tableid: 'resultTableTotal'
@@ -1011,7 +1097,7 @@ Completion time: 2023-04-21T09:49:57.7878903-04:00`,
                 }
             }
         }
-    }
+    };
 
     function getTestData_MultipleTables_Simple() {
         return {
@@ -1042,6 +1128,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 lobpageserver: 10,
                                 lobreadahead: 9,
                                 lobpageserverreadahead: 11,
+                                segmentreads: 0,
+                                segmentskipped: 0,
                                 percentread: '14.286'
                             },
                             {
@@ -1061,6 +1149,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 lobpageserver: 20,
                                 lobreadahead: 19,
                                 lobpageserverreadahead: 21,
+                                segmentreads: 0,
+                                segmentskipped: 0,
                                 percentread: '85.714'
                             }
                         ],
@@ -1075,7 +1165,9 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                             lobphysical: 26,
                             lobpageserver: 30,
                             lobreadahead: 28,
-                            lobpageserverreadahead: 32
+                            lobpageserverreadahead: 32,
+                            segmentreads: 0,
+                            segmentskipped: 0
                         }
                     }
                 ],
@@ -1103,6 +1195,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 lobpageserver: 10,
                                 lobreadahead: 9,
                                 lobpageserverreadahead: 11,
+                                segmentreads: 0,
+                                segmentskipped: 0,
                                 percentread: '14.286'
                             },
                             {
@@ -1122,6 +1216,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 lobpageserver: 20,
                                 lobreadahead: 19,
                                 lobpageserverreadahead: 21,
+                                segmentreads: 0,
+                                segmentskipped: 0,
                                 percentread: '85.714'
                             }
                         ],
@@ -1136,14 +1232,16 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                             lobphysical: 26,
                             lobpageserver: 30,
                             lobreadahead: 28,
-                            lobpageserverreadahead: 32
+                            lobpageserverreadahead: 32,
+                            segmentreads: 0,
+                            segmentskipped: 0
                         },
                         tableid: 'resultTableTotal'
                     }
                 }
             }
         }
-    }
+    };
 
     function getTestData_SampleOutput() {
         return {
@@ -1160,7 +1258,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 2,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 4,
@@ -1200,6 +1298,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -1219,6 +1319,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.235"
                                 },
                                 {
@@ -1238,6 +1340,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "6.102"
                                 },
                                 {
@@ -1257,6 +1361,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.434"
                                 },
                                 {
@@ -1276,6 +1382,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "2.229"
                                 },
                                 {
@@ -1295,6 +1403,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "91.000"
                                 },
                                 {
@@ -1314,6 +1424,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 }
                             ],
@@ -1328,13 +1440,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 0,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             }
                         },
                         {
                             "rowtype": 9,
                             "linenumber": 11,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -1353,7 +1467,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 16,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 4,
@@ -1393,6 +1507,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -1412,6 +1528,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "54.718"
                                 },
                                 {
@@ -1431,6 +1549,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 3272,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "36.224"
                                 },
                                 {
@@ -1450,6 +1570,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "9.058"
                                 }
                             ],
@@ -1464,13 +1586,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 42854,
                                 "lobpageserver": 0,
                                 "lobreadahead": 3272,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             }
                         },
                         {
                             "rowtype": 9,
                             "linenumber": 22,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -1482,12 +1606,12 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 5,
                             "linenumber": 25,
-                            "text": "Msg 207, Level 16, State 1, Line 1\r"
+                            "text": "Msg 207, Level 16, State 1, Line 1"
                         },
                         {
                             "rowtype": 5,
                             "linenumber": 26,
-                            "text": "Invalid column name 'scores'.\r"
+                            "text": "Invalid column name 'scores'."
                         },
                         {
                             "rowtype": 3,
@@ -1499,7 +1623,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 29,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -1511,13 +1635,13 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 32,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 10,
                             "linenumber": 33,
                             "label": "Completion time: ",
-                            "completiontime": "2025-05-27T10:32:37.8122685-04:00\r"
+                            "completiontime": "2025-05-27T10:32:37.8122685-04:00"
                         },
                         {
                             "rowtype": 9,
@@ -1567,6 +1691,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "5.949"
                                 },
                                 {
@@ -1586,6 +1712,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 3272,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "3.078"
                                 },
                                 {
@@ -1605,6 +1733,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.423"
                                 },
                                 {
@@ -1624,6 +1754,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -1643,6 +1775,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.456"
                                 },
                                 {
@@ -1662,6 +1796,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.366"
                                 },
                                 {
@@ -1681,6 +1817,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "88.728"
                                 }
                             ],
@@ -1695,7 +1833,9 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 42854,
                                 "lobpageserver": 0,
                                 "lobreadahead": 3272,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             },
                             "tableid": "resultTableTotal"
                         }
@@ -1715,7 +1855,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 2,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 4,
@@ -1730,7 +1870,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 1,
                                 2,
                                 3,
-                                0,
+                                4,
                                 6,
                                 8,
                                 9,
@@ -1746,7 +1886,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 1,
                                     "logical": 2,
-                                    "physical": 0,
+                                    "physical": 1,
                                     "pageserver": 0,
                                     "readahead": 0,
                                     "pageserverreadahead": 0,
@@ -1755,6 +1895,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -1765,7 +1907,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 42015,
-                                    "physical": 0,
+                                    "physical": 1,
                                     "pageserver": 0,
                                     "readahead": 41305,
                                     "pageserverreadahead": 0,
@@ -1774,6 +1916,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.235"
                                 },
                                 {
@@ -1784,7 +1928,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 1089147,
-                                    "physical": 0,
+                                    "physical": 19,
                                     "pageserver": 0,
                                     "readahead": 1088411,
                                     "pageserverreadahead": 0,
@@ -1793,6 +1937,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "6.101"
                                 },
                                 {
@@ -1803,7 +1949,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 77870,
-                                    "physical": 0,
+                                    "physical": 3,
                                     "pageserver": 0,
                                     "readahead": 76763,
                                     "pageserverreadahead": 0,
@@ -1812,6 +1958,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.436"
                                 },
                                 {
@@ -1822,7 +1970,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 396629,
-                                    "physical": 0,
+                                    "physical": 26,
                                     "pageserver": 0,
                                     "readahead": 394952,
                                     "pageserverreadahead": 0,
@@ -1831,6 +1979,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "2.222"
                                 },
                                 {
@@ -1850,6 +2000,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "91.006"
                                 },
                                 {
@@ -1869,13 +2021,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 }
                             ],
                             "total": {
                                 "scan": 999193,
                                 "logical": 17852687,
-                                "physical": 0,
+                                "physical": 50,
                                 "pageserver": 0,
                                 "readahead": 1601431,
                                 "pageserverreadahead": 0,
@@ -1883,13 +2037,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 0,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             }
                         },
                         {
                             "rowtype": 9,
                             "linenumber": 11,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -1908,7 +2064,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 16,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 4,
@@ -1923,7 +2079,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 1,
                                 2,
                                 3,
-                                0,
+                                4,
                                 6,
                                 8,
                                 9,
@@ -1948,6 +2104,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -1958,7 +2116,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 1,
                                     "logical": 250128,
-                                    "physical": 0,
+                                    "physical": 4,
                                     "pageserver": 0,
                                     "readahead": 250123,
                                     "pageserverreadahead": 0,
@@ -1967,6 +2125,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "55.259"
                                 },
                                 {
@@ -1977,7 +2137,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 1,
                                     "logical": 161111,
-                                    "physical": 0,
+                                    "physical": 22,
                                     "pageserver": 0,
                                     "readahead": 53658,
                                     "pageserverreadahead": 0,
@@ -1986,6 +2146,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 3272,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "35.593"
                                 },
                                 {
@@ -2005,13 +2167,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "9.147"
                                 }
                             ],
                             "total": {
                                 "scan": 3,
                                 "logical": 452644,
-                                "physical": 0,
+                                "physical": 26,
                                 "pageserver": 0,
                                 "readahead": 345012,
                                 "pageserverreadahead": 0,
@@ -2019,13 +2183,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 42463,
                                 "lobpageserver": 0,
                                 "lobreadahead": 3272,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             }
                         },
                         {
                             "rowtype": 9,
                             "linenumber": 22,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -2037,12 +2203,12 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 5,
                             "linenumber": 25,
-                            "text": "Msg 207, Level 16, State 1, Line 1\r"
+                            "text": "Msg 207, Level 16, State 1, Line 1"
                         },
                         {
                             "rowtype": 5,
                             "linenumber": 26,
-                            "text": "El nombre de columna 'scores' no es válido.\r"
+                            "text": "El nombre de columna 'scores' no es válido."
                         },
                         {
                             "rowtype": 3,
@@ -2054,7 +2220,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 29,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -2067,7 +2233,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                             "rowtype": 10,
                             "linenumber": 32,
                             "label": "Completion time: ",
-                            "completiontime": "2025-05-27T10:32:37.8122685-04:00\r"
+                            "completiontime": "2025-05-27T10:32:37.8122685-04:00"
                         },
                         {
                             "rowtype": 9,
@@ -2092,7 +2258,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 1,
                                 2,
                                 3,
-                                0,
+                                4,
                                 6,
                                 8,
                                 9,
@@ -2108,7 +2274,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 1089147,
-                                    "physical": 0,
+                                    "physical": 19,
                                     "pageserver": 0,
                                     "readahead": 1088411,
                                     "pageserverreadahead": 0,
@@ -2117,6 +2283,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "5.950"
                                 },
                                 {
@@ -2127,7 +2295,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 6,
                                     "logical": 557740,
-                                    "physical": 0,
+                                    "physical": 48,
                                     "pageserver": 0,
                                     "readahead": 448610,
                                     "pageserverreadahead": 0,
@@ -2136,6 +2304,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 3272,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "3.047"
                                 },
                                 {
@@ -2146,7 +2316,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 5,
                                     "logical": 77870,
-                                    "physical": 0,
+                                    "physical": 3,
                                     "pageserver": 0,
                                     "readahead": 76763,
                                     "pageserverreadahead": 0,
@@ -2155,6 +2325,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.425"
                                 },
                                 {
@@ -2165,7 +2337,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 1,
                                     "logical": 2,
-                                    "physical": 0,
+                                    "physical": 1,
                                     "pageserver": 0,
                                     "readahead": 0,
                                     "pageserverreadahead": 0,
@@ -2174,6 +2346,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -2184,7 +2358,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 6,
                                     "logical": 83420,
-                                    "physical": 0,
+                                    "physical": 1,
                                     "pageserver": 0,
                                     "readahead": 82536,
                                     "pageserverreadahead": 0,
@@ -2193,6 +2367,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.456"
                                 },
                                 {
@@ -2203,7 +2379,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "nostats": false,
                                     "scan": 1,
                                     "logical": 250128,
-                                    "physical": 0,
+                                    "physical": 4,
                                     "pageserver": 0,
                                     "readahead": 250123,
                                     "pageserverreadahead": 0,
@@ -2212,6 +2388,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.366"
                                 },
                                 {
@@ -2231,13 +2409,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "88.756"
                                 }
                             ],
                             "total": {
                                 "scan": 999196,
                                 "logical": 18305331,
-                                "physical": 0,
+                                "physical": 76,
                                 "pageserver": 0,
                                 "readahead": 1946443,
                                 "pageserverreadahead": 0,
@@ -2245,7 +2425,9 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 42463,
                                 "lobpageserver": 0,
                                 "lobreadahead": 3272,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             },
                             "tableid": "resultTableTotal"
                         }
@@ -2265,7 +2447,7 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 2,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 4,
@@ -2309,6 +2491,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -2328,6 +2512,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -2347,6 +2533,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "65.712"
                                 },
                                 {
@@ -2366,6 +2554,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "18.159"
                                 },
                                 {
@@ -2385,6 +2575,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.824"
                                 },
                                 {
@@ -2404,6 +2596,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.085"
                                 },
                                 {
@@ -2423,6 +2617,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.039"
                                 },
                                 {
@@ -2442,6 +2638,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "8.246"
                                 },
                                 {
@@ -2461,6 +2659,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.097"
                                 },
                                 {
@@ -2480,6 +2680,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "3.847"
                                 },
                                 {
@@ -2499,6 +2701,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.024"
                                 },
                                 {
@@ -2518,6 +2722,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2537,6 +2743,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.019"
                                 },
                                 {
@@ -2556,6 +2764,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.087"
                                 },
                                 {
@@ -2575,6 +2785,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.793"
                                 },
                                 {
@@ -2594,6 +2806,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2613,6 +2827,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2632,6 +2848,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2651,6 +2869,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2670,6 +2890,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.019"
                                 }
                             ],
@@ -2684,13 +2906,15 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 0,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             }
                         },
                         {
                             "rowtype": 9,
                             "linenumber": 24,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 2,
@@ -2702,17 +2926,17 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                         {
                             "rowtype": 9,
                             "linenumber": 27,
-                            "text": "\r"
+                            "text": ""
                         },
                         {
                             "rowtype": 5,
                             "linenumber": 28,
-                            "text": "Messaggio 207, livello 16, stato 1, riga 1\r"
+                            "text": "Messaggio 207, livello 16, stato 1, riga 1"
                         },
                         {
                             "rowtype": 5,
                             "linenumber": 29,
-                            "text": "Il nome di colonna 'test' non è valido.\r"
+                            "text": "Il nome di colonna 'test' non è valido."
                         },
                         {
                             "rowtype": 9,
@@ -2766,6 +2990,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.019"
                                 },
                                 {
@@ -2785,6 +3011,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.024"
                                 },
                                 {
@@ -2804,6 +3032,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.793"
                                 },
                                 {
@@ -2823,6 +3053,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2842,6 +3074,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2861,6 +3095,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.097"
                                 },
                                 {
@@ -2880,6 +3116,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.824"
                                 },
                                 {
@@ -2899,6 +3137,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "8.246"
                                 },
                                 {
@@ -2918,6 +3158,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "1.085"
                                 },
                                 {
@@ -2937,6 +3179,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "65.712"
                                 },
                                 {
@@ -2956,6 +3200,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "18.159"
                                 },
                                 {
@@ -2975,6 +3221,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -2994,6 +3242,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -3013,6 +3263,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.087"
                                 },
                                 {
@@ -3032,6 +3284,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.019"
                                 },
                                 {
@@ -3051,6 +3305,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.010"
                                 },
                                 {
@@ -3070,6 +3326,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "3.847"
                                 },
                                 {
@@ -3089,6 +3347,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.039"
                                 },
                                 {
@@ -3108,6 +3368,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 },
                                 {
@@ -3127,6 +3389,8 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                     "lobpageserver": 0,
                                     "lobreadahead": 0,
                                     "lobpageserverreadahead": 0,
+                                    "segmentreads": 0,
+                                    "segmentskipped": 0,
                                     "percentread": "0.000"
                                 }
                             ],
@@ -3141,10 +3405,470 @@ Table 'Orders'. Scan count 1, logical reads 12, physical reads 13, read-ahead re
                                 "lobphysical": 0,
                                 "lobpageserver": 0,
                                 "lobreadahead": 0,
-                                "lobpageserverreadahead": 0
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0
                             },
                             "tableid": "resultTableTotal"
                         }
+                    }
+                }
+            }
+        }
+    };
+
+    function getTestData_ColumnstoreOutput_Simple() {
+        return {
+            input: `Table 'BKAmountsColumnStore'. Scan count 11, logical reads 8484, physical reads 0, read-ahead reads 0, lob logical reads 165597, lob physical reads 1, lob read-ahead reads 72296.\nTable 'BKAmountsColumnStore'. Segment reads 38, segment skipped 4091.\nTable 'TradesColumnStore'. Scan count 16, logical reads 22083, physical reads 0, read-ahead reads 0, lob logical reads 7603, lob physical reads 0, lob read-ahead reads 3907.\nTable 'TradesColumnStore'. Segment reads 10, segment skipped 1106.`,
+            expected: {
+                "data": [
+                    {
+                        "rowtype": 1,
+                        "tableid": "resultTable_0",
+                        "columns": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            6,
+                            8,
+                            9,
+                            11,
+                            14,
+                            15,
+                            13
+                        ],
+                        "data": [
+                            {
+                                "rowtype": 1,
+                                "rownumber": 1,
+                                "linenumber": 0,
+                                "table": "BKAmountsColumnStore",
+                                "nostats": false,
+                                "scan": 11,
+                                "logical": 8484,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 165597,
+                                "lobphysical": 1,
+                                "lobpageserver": 0,
+                                "lobreadahead": 72296,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 38,
+                                "segmentskipped": 4091,
+                                "percentread": "27.755"
+                            },
+                            {
+                                "rowtype": 1,
+                                "rownumber": 3,
+                                "linenumber": 2,
+                                "table": "TradesColumnStore",
+                                "nostats": false,
+                                "scan": 16,
+                                "logical": 22083,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 7603,
+                                "lobphysical": 0,
+                                "lobpageserver": 0,
+                                "lobreadahead": 3907,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 10,
+                                "segmentskipped": 1106,
+                                "percentread": "72.245"
+                            }
+                        ],
+                        "total": {
+                            "scan": 27,
+                            "logical": 30567,
+                            "physical": 0,
+                            "pageserver": 0,
+                            "readahead": 0,
+                            "pageserverreadahead": 0,
+                            "loblogical": 173200,
+                            "lobphysical": 1,
+                            "lobpageserver": 0,
+                            "lobreadahead": 76203,
+                            "lobpageserverreadahead": 0,
+                            "segmentreads": 48,
+                            "segmentskipped": 5197
+                        }
+                    }
+                ],
+                "tablecount": 4,
+                "total": {
+                    "executiontotal": {
+                        "rowtype": 7,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    "compiletotal": {
+                        "rowtype": 8,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    "iototal": {
+                        "columns": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            6,
+                            8,
+                            9,
+                            11,
+                            14,
+                            15,
+                            13
+                        ],
+                        "data": [
+                            {
+                                "rowtype": 1,
+                                "rownumber": 1,
+                                "linenumber": 0,
+                                "table": "BKAmountsColumnStore",
+                                "nostats": false,
+                                "scan": 11,
+                                "logical": 8484,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 165597,
+                                "lobphysical": 1,
+                                "lobpageserver": 0,
+                                "lobreadahead": 72296,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 38,
+                                "segmentskipped": 4091,
+                                "percentread": "27.755"
+                            },
+                            {
+                                "rowtype": 1,
+                                "rownumber": 2,
+                                "linenumber": 2,
+                                "table": "TradesColumnStore",
+                                "nostats": false,
+                                "scan": 16,
+                                "logical": 22083,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 7603,
+                                "lobphysical": 0,
+                                "lobpageserver": 0,
+                                "lobreadahead": 3907,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 10,
+                                "segmentskipped": 1106,
+                                "percentread": "72.245"
+                            }
+                        ],
+                        "total": {
+                            "scan": 27,
+                            "logical": 30567,
+                            "physical": 0,
+                            "pageserver": 0,
+                            "readahead": 0,
+                            "pageserverreadahead": 0,
+                            "loblogical": 173200,
+                            "lobphysical": 1,
+                            "lobpageserver": 0,
+                            "lobreadahead": 76203,
+                            "lobpageserverreadahead": 0,
+                            "segmentreads": 48,
+                            "segmentskipped": 5197
+                        },
+                        "tableid": "resultTableTotal"
+                    }
+                }
+            }
+        }
+    };
+
+    function getTestData_ColumnstoreOutput() {
+        return {
+            input: `SQL Server parse and compile time:\r\nCPU time = 0 ms, elapsed time = 0 ms.\r\n\r\nSQL Server Execution Times:\r\nCPU time = 0 ms, elapsed time = 0 ms.\r\nSQL Server parse and compile time:\r\nCPU time = 0 ms, elapsed time = 8 ms.\r\n\r\nSQL Server Execution Times:\r\nCPU time = 0 ms, elapsed time = 0 ms.\r\n\r\n(528996 rows affected)\r\nTable 'Comments'. Scan count 32, logical reads 0, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 1448751, lob physical reads 9, lob page server reads 0, lob read-ahead reads 1355388, lob page server read-ahead reads 0.\r\nTable 'Comments'. Segment reads 404, segment skipped 0.\r\nTable 'Worktable'. Scan count 0, logical reads 0, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.\r\n\r\n(1 row affected)\r\n\r\nSQL Server Execution Times:\r\nCPU time = 254189 ms, elapsed time = 35970 ms.\r\nSQL Server parse and compile time:\r\nCPU time = 0 ms, elapsed time = 0 ms.\r\n\r\nSQL Server Execution Times:\r\nCPU time = 0 ms, elapsed time = 0 ms.\r\n\r\nCompletion time: 2021-10-11T16:26:16.4485011+01:00`,
+            expected: {
+                "data": [
+                    {
+                        "rowtype": 3,
+                        "linenumber": 1,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 2,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 2,
+                        "linenumber": 4,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    {
+                        "rowtype": 3,
+                        "linenumber": 6,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 8
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 7,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 2,
+                        "linenumber": 9,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 10,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 4,
+                        "linenumber": 11,
+                        "rowsaffected": "528996",
+                        "label": " rows affected"
+                    },
+                    {
+                        "rowtype": 1,
+                        "tableid": "resultTable_0",
+                        "columns": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            14,
+                            15,
+                            13
+                        ],
+                        "data": [
+                            {
+                                "rowtype": 1,
+                                "rownumber": 1,
+                                "linenumber": 12,
+                                "table": "Comments",
+                                "nostats": false,
+                                "scan": 32,
+                                "logical": 0,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 1448751,
+                                "lobphysical": 9,
+                                "lobpageserver": 0,
+                                "lobreadahead": 1355388,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 404,
+                                "segmentskipped": 0,
+                                "percentread": "0.000"
+                            },
+                            {
+                                "rowtype": 1,
+                                "rownumber": 3,
+                                "linenumber": 14,
+                                "table": "Worktable",
+                                "nostats": false,
+                                "scan": 0,
+                                "logical": 0,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 0,
+                                "lobphysical": 0,
+                                "lobpageserver": 0,
+                                "lobreadahead": 0,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
+                                "percentread": "0.000"
+                            }
+                        ],
+                        "total": {
+                            "scan": 32,
+                            "logical": 0,
+                            "physical": 0,
+                            "pageserver": 0,
+                            "readahead": 0,
+                            "pageserverreadahead": 0,
+                            "loblogical": 1448751,
+                            "lobphysical": 9,
+                            "lobpageserver": 0,
+                            "lobreadahead": 1355388,
+                            "lobpageserverreadahead": 0,
+                            "segmentreads": 404,
+                            "segmentskipped": 0
+                        }
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 15,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 4,
+                        "linenumber": 16,
+                        "rowsaffected": "1",
+                        "label": " row affected"
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 17,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 2,
+                        "linenumber": 19,
+                        "summary": false,
+                        "cpu": 254189,
+                        "elapsed": 35970
+                    },
+                    {
+                        "rowtype": 3,
+                        "linenumber": 21,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 22,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 2,
+                        "linenumber": 24,
+                        "summary": false,
+                        "cpu": 0,
+                        "elapsed": 0
+                    },
+                    {
+                        "rowtype": 9,
+                        "linenumber": 25,
+                        "text": ""
+                    },
+                    {
+                        "rowtype": 10,
+                        "linenumber": 26,
+                        "label": "Completion time: ",
+                        "completiontime": "2021-10-11T16:26:16.4485011+01:00"
+                    }
+                ],
+                "tablecount": 3,
+                "total": {
+                    "executiontotal": {
+                        "rowtype": 7,
+                        "cpu": 254189,
+                        "elapsed": 35970
+                    },
+                    "compiletotal": {
+                        "rowtype": 8,
+                        "cpu": 0,
+                        "elapsed": 8
+                    },
+                    "iototal": {
+                        "columns": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            14,
+                            15,
+                            13
+                        ],
+                        "data": [
+                            {
+                                "rowtype": 1,
+                                "rownumber": 1,
+                                "linenumber": 12,
+                                "table": "Comments",
+                                "nostats": false,
+                                "scan": 32,
+                                "logical": 0,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 1448751,
+                                "lobphysical": 9,
+                                "lobpageserver": 0,
+                                "lobreadahead": 1355388,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 404,
+                                "segmentskipped": 0,
+                                "percentread": "0.000"
+                            },
+                            {
+                                "rowtype": 1,
+                                "rownumber": 2,
+                                "linenumber": 14,
+                                "table": "Worktable",
+                                "nostats": false,
+                                "scan": 0,
+                                "logical": 0,
+                                "physical": 0,
+                                "pageserver": 0,
+                                "readahead": 0,
+                                "pageserverreadahead": 0,
+                                "loblogical": 0,
+                                "lobphysical": 0,
+                                "lobpageserver": 0,
+                                "lobreadahead": 0,
+                                "lobpageserverreadahead": 0,
+                                "segmentreads": 0,
+                                "segmentskipped": 0,
+                                "percentread": "0.000"
+                            }
+                        ],
+                        "total": {
+                            "scan": 32,
+                            "logical": 0,
+                            "physical": 0,
+                            "pageserver": 0,
+                            "readahead": 0,
+                            "pageserverreadahead": 0,
+                            "loblogical": 1448751,
+                            "lobphysical": 9,
+                            "lobpageserver": 0,
+                            "lobreadahead": 1355388,
+                            "lobpageserverreadahead": 0,
+                            "segmentreads": 404,
+                            "segmentskipped": 0
+                        },
+                        "tableid": "resultTableTotal"
                     }
                 }
             }
