@@ -8,160 +8,126 @@
 
     <!-- Le styles -->
     <link href="favicon.png" rel="icon" type="image/png" />
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/DT_bootstrap.css" rel="stylesheet">
+
     <style>
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
         }
     </style>
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
-
 </head>
 
 <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapseDiv">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Statistics Parser</a>
-            </div>
+            <a class="navbar-brand" href="#">Statistics Parser</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapseDiv">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarCollapseDiv">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="https://github.com/Jorriss/StatisticsParser">GitHub Source</a></li>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/Jorriss/StatisticsParser">GitHub Source</a>
+                    </li>
                 </ul>
-                <ul class="nav pull-right navbar-nav">
-                    <!--li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="languageDropdownText">Language</span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="?lang=en">English</a></li>
-                            <li><a href="?lang=es">Español</a></li>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Language
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#" data-lang="en">English</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="es">Spanish</a></li>
+                            <li><a class="dropdown-item" href="#" data-lang="it">Italian</a></li>
                         </ul>
-                    </li -->
+                    </li>
                 </ul>
             </div>
-            <!--/.nav-collapse -->
         </div>
-    </div>
+    </nav>
 
     <div class="container"> 
-        <div class="alert alert-warning"  id="alertDiv">StatisticsIOParser.com is now StatisticsParser.com! New name, same great taste! <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></div>
+        <!-- div class="alert alert-warning alert-dismissible fade show" id="alertDiv">
+            StatisticsIOParser.com is now StatisticsParser.com! New name, same great taste!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> -->
 
         <h1>Statistics Parser</h1>
-        <div style="width:520px" id="introText">
-            Sometimes reading SQL Server output from Statistics IO and Statistics Time can be 
-            a total drag. This page will help with that. Just paste in the output of Statistics 
-            IO and/or Statistics Time and press Parse. Your output will be formatted and totaled. Enjoy.
+        <div class="d-flex align-items-center justify-content-between">
+            <div style="width:520px" id="introText">
+                Sometimes reading SQL Server output from Statistics IO and Statistics Time can be 
+                a total drag. This page will help with that. Just paste in the output of Statistics 
+                IO and/or Statistics Time and press Parse. Your output will be formatted and totaled. Enjoy.
+            </div>
+            <div>
+                <img src="/img/statsparser_light_max.png" alt="Statistics Parser Logo" style="max-width: 100px;">
+            </div>
         </div>
 
         <form>
-            <p>
-                </p><div>
-                    <div class="checkbox"><label class="pull-right">
-                        <input type="checkbox" id="exampleCheck" value="" onclick="includeExample(exampleCheck.checked, langText)">
-                        Show Example Statistics IO Output
-                    </label></div>
-                </div>
-                <textarea id="statiotext" rows="10" autofocus></textarea>
+            <p></p>
+            <div></div>
+            <textarea id="statiotext" rows="10" autofocus></textarea>
             <p></p>
             <div class="button-padding">
                 <div style="float: left">
-                    <button id="parseButton" type="button" onclick="parseText(langText);" class="btn btn-primary">Parse</button>
+                    <button id="parseButton" type="button" class="btn btn-primary">Parse</button>
                 </div>
-
                 <div class="btn-group button-inner-margin" style="float: right">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-cog"> </span>
-                        <span class="caret"> </span>
+                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <span class="bi bi-gear"></span>
+                        <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li role="menu"><a href="#" onclick="toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');"> <span id="scrollbarOptionCheck" style="display:none" class="glyphicon glyphicon-ok"></span> Tables have scrollbars</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toggleCheckmark(scrollbarOptionCheck, 'tableScrollbar');">
+                            <span id="scrollbarOptionCheck" style="display:none" class="bi bi-check"></span>
+                            <span id="scrollbarOptionText">Tables have scrollbars</span>
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="includeExample(true, window.langText);">
+                            <span id="exampleOptionCheck" style="display:none" class="bi bi-check"></span>
+                            <span id="exampleText">Show Example Statistics IO Output</span>
+                        </a></li>
                     </ul>
                 </div>
                 <div style="float: right">
-                    <button id="clearButton" type="button" onclick="clearResult();" class="btn btn-default">Clear Text</button>
+                    <button id="clearButton" type="button" class="btn btn-light">Clear Text</button>
                 </div>
             </div>
         </form>
-
+        
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <div id="resultTotal"></div>
+        <div id="resultControls" class="w-100 mb-3 text-end" style="display: none;">
+            <button id="copyResultButton" type="button" class="btn btn-primary" data-clipboard-target="#result">
+                Copy Result
+            </button>
+        </div>
         <div id="result"></div>
+        <div id="result2"></div>
     </div>
 
-
-    <!-- /container -->
     <footer class="footer">
         <div class="container">
-            <p>Built and maintained by Richie Rump (<a href="http://www.jorriss.net">blog</a> | <a href="http://twitter.com/jorriss">twitter</a>) and the fine folks at Jorriss LLC.</p>
-            <p>version <span id="versionNumber"></span></p>
+            <p>Built and maintained by Richie Rump (<a href="https://bsky.app/profile/jorriss.bsky.social">BlueSky - @jorriss.bsky.social</a>) and the fine folks at Brent Ozar Unlimited.</p>
+            <p>version __VERSIONNUMBER__</p>
         </div>
     </footer>
+    
+    <!-- Scripts -->
+    <script type="module" src="./main.js"></script>
 
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/jquery.dataTables.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/DT_bootstrap.js"></script>
-    <script src="assets/js/jquery.cookies.2.2.0.min.js"></script>
-    <script src="assets/js/numeral/numeral.min.js"></script>   
-    <script src="assets/js/moment.min.js"></script>
-    <script src="assets/js/purl.js"></script>
-    <script src="assets/js/statsioparser.js"></script>
- 
-    <script type="text/javascript">
-        versionNumber();
- 
-        $(document).ready(function () {
-            var languageType = purl().param('lang');
-            var filename = determineLangFilename(languageType);
-            var urlStatsOutput = purl().param('data');
-            $.getJSON(filename, function (data) {
-                langText = data;
-                if(urlStatsOutput != undefined ) {
-                    document.getElementById("statiotext").value = urlStatsOutput;
-                    document.getElementById("parseButton").click();
-                }
-            });
-            if($.cookies.get("tableScrollbar") == true) {
-                //$("#checkmarkSpan").hide();
-                scrollbarOptionCheck.style.display = ''
-            }
+    <!-- Google Analytics -->
 
-            $(function(){
-                $(".dropdown-menu li a").click(function(){
-                    $.getJSON(filename, function (data) {
-                        langText = data;
-                        $("#languageDropdownText").text(langText.langname);
-                    });
-                });
-            });
-            
-         
-        });
-    </script>    
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-41024652-1', 'statisticsparser.com');
-  ga('send', 'pageview');
-
-</script>
+    <!-- Add this before </body> -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
 </body>
 </html>

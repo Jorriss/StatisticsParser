@@ -1,5 +1,32 @@
 # StatisticsIOParser Version History #
 
+## Version 0.5.0 ##
+June 1, 2025
+
+- Refactored the application to separate the parsing of the data and the displaying of the parsed data.
+- Output with columns "page server reads", "page server read-ahead reads", "lob page server reads", "lob page server read-ahead reads" are now being parsed and totaled.
+- Added a "Copy Results" button to copy the parsed output.
+- Now formatting the "Completion Time" timestamp.
+- Removed the "Change Page Title" functionality. This will be reimplemented in the future.
+- Moved the "Show Example" checkbox to under the options dropdown.
+- Implemented Vite for bundling the application.
+- Added a language dropdown.
+- Added a scroll to top button at the bottom of the page.
+- Migrated css to scss.
+- Split JavaScript into modules.
+- Added unit test for modules.
+- Now using NPM for packages.
+- Package changes:
+  - Bootstrap upgraded to v5.3.6 
+  - jQuery updated to v3.7.1
+  - DataTables updated to v2.3.0 
+  - jQuery cookies removed. Functionality moved to local storage.
+  - Moment replaced with Luxon as Moment has reached end of development
+  - Purl removed in favor of a pure JavaScripe solution
+  - Numeral removed in favor of a pure JavaScripe solution
+  - Bootstrap Glyphicon removed in favor of Bootstrap-icon
+  - Clipboard added to project
+
 ## Version 0.4.4 ##
 July 13, 2014
 
