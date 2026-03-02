@@ -11,11 +11,12 @@ import {
 } from '../ui.js';
 import ClipboardJS from 'clipboard';
 
-// Mock ClipboardJS
+// Mock ClipboardJS - must use function (not arrow) for constructor
+const mockClipboardOn = vi.fn();
 vi.mock('clipboard', () => ({
-    default: vi.fn().mockImplementation(() => ({
-        on: vi.fn()
-    }))
+    default: vi.fn(function() {
+        return { on: mockClipboardOn };
+    })
 }));
 
 // Mock storage module
@@ -212,26 +213,12 @@ describe('UI Module', () => {
     });
 
     describe('initializeClipboard', () => {
-        let clipboardInstance;
-        let successHandler;
-        let errorHandler;
-
         beforeEach(() => {
-            // Enable fake timers
             vi.useFakeTimers();
-            
-            // Mock ClipboardJS instance
-            clipboardInstance = {
-                on: vi.fn((event, handler) => {
-                    if (event === 'success') successHandler = handler;
-                    if (event === 'error') errorHandler = handler;
-                })
-            };
-            ClipboardJS.mockReturnValue(clipboardInstance);
+            mockClipboardOn.mockClear();
         });
 
         afterEach(() => {
-            // Restore real timers
             vi.useRealTimers();
         });
 
@@ -241,8 +228,8 @@ describe('UI Module', () => {
             });
 
             expect(ClipboardJS).toHaveBeenCalledWith('#copyResultButton');
-            expect(clipboardInstance.on).toHaveBeenCalledWith('success', expect.any(Function));
-            expect(clipboardInstance.on).toHaveBeenCalledWith('error', expect.any(Function));
+            expect(mockClipboardOn).toHaveBeenCalledWith('success', expect.any(Function));
+            expect(mockClipboardOn).toHaveBeenCalledWith('error', expect.any(Function));
         });
 
         it('should handle successful copy', () => {
@@ -250,6 +237,7 @@ describe('UI Module', () => {
                 buttoncopyresultmessage: 'Copied!'
             });
 
+            const successHandler = mockClipboardOn.mock.calls.find(c => c[0] === 'success')[1];
             const mockEvent = {
                 trigger: {
                     innerHTML: 'Original Text'
@@ -257,37 +245,32 @@ describe('UI Module', () => {
                 clearSelection: vi.fn()
             };
 
-            // Trigger success handler
             successHandler(mockEvent);
 
-            // Verify button text was updated
             expect(mockEvent.trigger.innerHTML).toBe('Copied!');
 
-            // Fast-forward timers
             vi.advanceTimersByTime(2000);
 
-            // Verify button text was restored
             expect(mockEvent.trigger.innerHTML).toBe('Original Text');
             expect(mockEvent.clearSelection).toHaveBeenCalled();
         });
 
         it('should handle copy error', () => {
             const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-            
+
             initializeClipboard({
                 buttoncopyresultmessage: 'Copied!'
             });
 
+            const errorHandler = mockClipboardOn.mock.calls.find(c => c[0] === 'error')[1];
             const mockEvent = {
                 action: 'copy'
             };
 
-            // Trigger error handler
             errorHandler(mockEvent);
 
-            // Verify error was logged
             expect(consoleSpy).toHaveBeenCalledWith('Failed to copy text: ', 'copy');
-            
+
             consoleSpy.mockRestore();
         });
     });
