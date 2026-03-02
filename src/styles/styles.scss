@@ -1,9 +1,16 @@
+
 @import "~bootstrap/scss/bootstrap";
 // @import 'datatables.net-dt/css/dataTables.dataTables.css';
 @import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 $bootstrap-icons-font-dir: '/node_modules/bootstrap-icons/font/fonts';
 @import 'bootstrap-icons';
+
+@media (min-width: 1200px) {
+    .container {
+      max-width: 85%; /* Replace with your desired width */
+    }
+  }
 
 textarea {
     border: 1px solid #999999;
@@ -140,37 +147,3 @@ td {
 .scroll-to-top.visible {
     display: flex;
 }
-/*
-// DataTables sort button positioning
-table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc,
-table.dataTable thead .sorting_desc {
-    position: relative;
-    padding-right: 20px !important;
-    
-    &:before,
-    &:after {
-        right: 0 !important;
-        left: auto !important;
-    }
-}
-
-table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
-    cursor: pointer;
-    *cursor: hand;
-    background-repeat: no-repeat;
-    background-position: center right;
-  
-}
-
-table.dataTable th.statsio-column {
-    position: relative;
-    text-align: left;
-    padding-right: 20px; 
-}
-
-table.dataTable th.statsio-column:after {
-    right: 8px;
-    left: auto;
-}
-*/

@@ -134,29 +134,9 @@ class CompletionTimeInfo {
 }
 
 // Utility functions
-function infoReplace(strValue, searchValue, newValue) {
-    let returnValue = 0;
-    if (strValue != undefined) {
-        returnValue = parseInt(strValue.replace(searchValue, newValue));
-        if (isNaN(returnValue)) {
-            returnValue = 0;
-        }
-    }
-    return returnValue;
-}
 
 function processTimeRegEx(preText, postText) {
     return new RegExp("(.*" + preText + "+)(.*?)(\\s+" + postText + ".*)");
-}
-
-function getSubStr(str, delim) {
-    const a = str.indexOf(delim);
-    if (a == -1) return '';
-
-    const b = str.indexOf(delim, a + 1);
-    if (b == -1) return '';
-
-    return str.substr(a + 1, b - a - 1);
 }
 
 // Data processing functions
@@ -251,47 +231,26 @@ function determineIOColumns(line, lang) {
     const statLine = parseIOStatLine(line, lang);
 
     const result = statLine.statstext
-    .replace(/\.$/, '') // Remove trailing period
-    .split(', ')
-    .map(segment => {
-      const match = segment.match(/(.+?) (\d+)$/);
-      if (match) {
-        return {
-          column: getIOColumnEnum(match[1], lang),
-          value: parseInt(match[2], 10)
-        };
-      }
-      return {
-        column: columnIOEnum.NotFound,
-        value: 0
-      };
-    });
+        .replace(/\.$/, '') // Remove trailing period
+        .split(', ')
+        .map(segment => {
+            const match = segment.match(/(.+?) (\d+)$/);
+            if (match) {
+                return {
+                    column: getIOColumnEnum(match[1], lang),
+                    value: parseInt(match[2], 10)
+                };
+            }
+            return {
+                column: columnIOEnum.NotFound,
+                value: 0
+            };
+        });
 
     return {
         columns: [columnIOEnum.Table, ...result.map(r => r.column)],
         values: [statLine.table, ...result.map(r => r.value)]
     };
-}
-
-function deterineIOValues(line, lang) {
-    const statLine = parseIOStatLine(line, lang);
-
-    const result = statLine.statstext
-    .replace(/\.$/, '') // Remove trailing period
-    .split(', ')
-    .map(segment => {
-      const match = segment.match(/(.+?) (\d+)$/);
-      if (match) {
-        return {
-            value: parseInt(match[2], 10)
-        };
-      }
-      return {
-        value: 0
-      };
-    });
-
-    return [statLine.table, ...result.map(r => r.value), 0]
 }
 
 function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
@@ -305,7 +264,7 @@ function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
 
         const column = columns[i];
         const value = values[i];
-            
+
         switch (column) {
             case columnIOEnum.Table:
                 stat.table = value;
@@ -358,16 +317,12 @@ function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
     return stat;
 }
 
-function getStatsIOInfo(linenumber, rownumber, line, columns, lang) {
-    const values = deterineIOValues(line, lang);
-    return loadStatsIOInfo(linenumber, rownumber, columns, values, lang);
-}
 
 function getTimeData(linenumber, line, cputime, elapsedtime, milliseconds, rowtype) {
     const section = line.split(',');
     const re = processTimeRegEx(cputime, milliseconds);
     const re2 = processTimeRegEx(elapsedtime, milliseconds);
-    
+
     return new StatsTimeInfo(
         linenumber,
         section[0].replace(re, "$2"),
@@ -380,9 +335,9 @@ function getRowsAffectedData(linenumber, line, lang) {
     const re = new RegExp("\\d+");
     let affectedText = lang.headerrowsaffected;
     const numRows = re.exec(line);
-    
+
     if (numRows === null) return null;
-    
+
     if (numRows[0] === '1') {
         affectedText = lang.headerrowaffected;
     }
@@ -457,7 +412,7 @@ function determineSummaryRow(timedata, executionTotal, compileTotal) {
     if (timedata.elapsed >= elapsedmin && timedata.elapsed <= elapsedTotal + 5) {
         if (cpuTotal == timedata.cpu) {
             return true;
-        } 
+        }
     }
     return false;
 }
@@ -541,7 +496,7 @@ function parseData(text, lang) {
     let rowData = null;
     let ioColumns = [];
     let ioTotalColumns = [];
-    
+
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         const rowType = determineRowType(line, lang);
@@ -560,11 +515,11 @@ function parseData(text, lang) {
         switch (rowType) {
             case rowEnum.IO:
                 let values = null;
-                
+
                 if (prevRowType !== rowEnum.IO) {
                     rowNumber = 0;
                     ioColumns = [];
-                    
+
                     currentGroupObj = {
                         rowtype: rowEnum.IO,
                         tableid: `resultTable_${tableCount}`,
@@ -647,7 +602,7 @@ function parseData(text, lang) {
                 rowData = getTextInfo(i, line);
                 parsedData.data.push(rowData);
         }
-        
+
         prevRowType = rowType;
 
         if (i === lines.length - 1 && rowType === rowEnum.IO) {
@@ -676,8 +631,9 @@ function parseData(text, lang) {
             tableid: 'resultTableTotal'
         }
     };
-    console.log(JSON.stringify(parsedData, null, 2));
+    // console.log(JSON.stringify(parsedData, null, 2));
     return parsedData;
+
 }
 
 export {

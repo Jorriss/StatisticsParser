@@ -3,11 +3,12 @@ import { displayParsedData } from '../displaystats.js';
 import { rowEnum, columnIOEnum } from '../parser.js';
 import DataTable from 'datatables.net-dt';
 
-// Mock DataTable
+// Mock DataTable - must use function (not arrow) for constructor
 vi.mock('datatables.net-dt', () => {
-    const mockDataTable = vi.fn().mockImplementation(() => ({
-        destroy: vi.fn()
-    }));
+    const mockDestroy = vi.fn();
+    const mockDataTable = vi.fn().mockImplementation(function() {
+        return { destroy: mockDestroy };
+    });
 
     mockDataTable.render = {
         number: vi.fn().mockImplementation((thousand, decimal) => {
