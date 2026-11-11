@@ -207,7 +207,12 @@ function parseIOStatLine(line, lang) {
     // Match pattern: Table 'TableName'. Rest of stats...
     const tableMatch = line.match(new RegExp(`${lang.table}\\s+['"]([^']+)['"]`));
     const tableName = tableMatch ? tableMatch[1] : '';
-    const statsText = line.substring(line.indexOf('.') + 1).trim();
+
+    // The stats start after the period that follows the quoted table name.
+    // Searching from the end of the table name keeps periods inside
+    // schema-qualified names (e.g. '[Graph].[PartitionLoad]') out of the stats text.
+    const tableNameEnd = tableMatch ? tableMatch.index + tableMatch[0].length : 0;
+    const statsText = line.substring(line.indexOf('.', tableNameEnd) + 1).trim();
 
     return {
         table: tableName,
