@@ -123,6 +123,33 @@ describe('Parser Module', () => {
             const result = parseData(data.input, lang);
             expect(data.expected).toEqual(result);
         })
+
+        it('should parse schema-qualified table names correctly', () => {
+            const input = [
+                `Table 'Worktable'. Scan count 0, logical reads 0, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.`,
+                `Table '[Graph].[PartitionLoad]'. Scan count 1, logical reads 71114, physical reads 3, page server reads 0, read-ahead reads 71134, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.`,
+                `Table 'Audit.PipelineLoad'. Scan count 2, logical reads 5138, physical reads 1, page server reads 0, read-ahead reads 4807, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.`
+            ].join('\n');
+
+            const result = parseData(input, getLanguageFile('en'));
+            const ioTable = result.data[0];
+
+            // No unknown (NotFound = 0) columns should be produced by the table name
+            expect(ioTable.columns).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+            expect(result.total.iototal.columns).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+
+            expect(ioTable.data.map(row => row.table)).toEqual([
+                'Worktable',
+                '[Graph].[PartitionLoad]',
+                'Audit.PipelineLoad'
+            ]);
+            expect(ioTable.data.map(row => row.scan)).toEqual([0, 1, 2]);
+            expect(ioTable.data.map(row => row.logical)).toEqual([0, 71114, 5138]);
+            expect(ioTable.data.map(row => row.readahead)).toEqual([0, 71134, 4807]);
+
+            expect(ioTable.total.scan).toBe(3);
+            expect(ioTable.total.logical).toBe(76252);
+        })
     })
 
     // Helper functions
