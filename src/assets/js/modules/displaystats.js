@@ -46,6 +46,20 @@ function formatExtendedTimestamp(text, locale = 'en') {
     }
 }
 
+// SQL Server pads local temp table names with underscores and adds a
+// 12 character hex suffix, e.g. '#Dealers_____..._____0000000E8D92'.
+// Collapse the padding so the name fits in the table.
+const tempTablePaddingRegex = /^(#.+?)_{10,}([0-9A-Fa-f]{12})$/;
+
+function shortenTableName(name) {
+    if (typeof name !== 'string') {
+        return name;
+    }
+
+    const match = name.match(tempTablePaddingRegex);
+    return match ? `${match[1]}___...___${match[2]}` : name;
+}
+
 function createDataTable(tableid, data, columns, showScrollbar = false) {
     return new DataTable(`#${tableid}`, {
         data: data,
@@ -89,6 +103,13 @@ function displayIOTableColumns(columns, showRowNumber, lang) {
                         data: 'table',
                         title: lang.headertable,
                         className: 'statsio-column',
+                        // Shorten only what is shown; sorting uses the full name
+                        render: (data, type) => type === 'display' ? shortenTableName(data) : data,
+                        createdCell: (td, cellData) => {
+                            if (shortenTableName(cellData) !== cellData) {
+                                td.title = cellData;
+                            }
+                        },
                         orderable: true
                     }
                 );
@@ -678,4 +699,10 @@ export function displayParsedData(parsedData, showScrollbar, lang) {
         createDataTable(parsedData.total.iototal.tableid, parsedData.total.iototal.data, totalsColumns, showScrollbar);
     }
     outputElement.appendChild(displayTimeTotalTable(parsedData.total.executiontotal, parsedData.total.compiletotal, lang));
-} 
+}
+
+// Export internal functions for testing
+export const __test__ = {
+    shortenTableName,
+    displayIOTableColumns
+}; 

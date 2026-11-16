@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { displayParsedData } from '../displaystats.js';
+import { displayParsedData, __test__ } from '../displaystats.js';
 import { rowEnum, columnIOEnum } from '../parser.js';
 import DataTable from 'datatables.net-dt';
 
@@ -449,3 +449,40 @@ describe('displayParsedData', () => {
         }
     }
 }) 
+
+describe('shortenTableName', () => {
+    const { shortenTableName, displayIOTableColumns } = __test__;
+    const padding = '_'.repeat(108);
+
+    it('should collapse the padding in temp table names', () => {
+        expect(shortenTableName(`#Dealers${padding}0000000E8D92`))
+            .toBe('#Dealers___...___0000000E8D92');
+        expect(shortenTableName(`#DealerCampaigns${padding}0000000E8D98`))
+            .toBe('#DealerCampaigns___...___0000000E8D98');
+    });
+
+    it('should leave other table names unchanged', () => {
+        expect(shortenTableName('Worktable')).toBe('Worktable');
+        expect(shortenTableName('dbo.Sales_Order')).toBe('dbo.Sales_Order');
+        expect(shortenTableName('#Temp')).toBe('#Temp');
+        expect(shortenTableName('#Temp_1')).toBe('#Temp_1');
+        expect(shortenTableName(undefined)).toBe(undefined);
+    });
+
+    it('should shorten the table column only for display', () => {
+        const columns = displayIOTableColumns([columnIOEnum.Table], false, { headertable: 'Table' });
+        const tableColumn = columns.find(c => c.data === 'table');
+        const longName = `#Dealers${padding}0000000E8D92`;
+
+        expect(tableColumn.render(longName, 'display')).toBe('#Dealers___...___0000000E8D92');
+        expect(tableColumn.render(longName, 'sort')).toBe(longName);
+
+        const td = {};
+        tableColumn.createdCell(td, longName);
+        expect(td.title).toBe(longName);
+
+        const shortTd = {};
+        tableColumn.createdCell(shortTd, 'Worktable');
+        expect(shortTd.title).toBeUndefined();
+    });
+});
