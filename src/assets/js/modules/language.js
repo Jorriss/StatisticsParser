@@ -2,14 +2,15 @@
 
 /**
  * Determines the filename for the language file based on the language type
- * @param {string} langType - The language code (e.g., 'en', 'es', 'it')
+ * @param {string} langType - The language code (e.g., 'en', 'es', 'it', 'pt-br')
  * @returns {string} The path to the language file
  */
 function determineLangFilename(langType) {
     const languageFiles = {
         'en': './data/languagetext-en.json',
         'es': './data/languagetext-es.json',
-        'it': './data/languagetext-it.json'
+        'it': './data/languagetext-it.json',
+        'pt-br': './data/languagetext-pt-br.json'
     };
     
     return languageFiles[langType] || languageFiles['en'];

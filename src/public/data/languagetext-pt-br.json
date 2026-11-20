@@ -1,0 +1,119 @@
+{
+    "langvalue": "pt-br",
+    "langname": "Português (Brasil)",
+    "table": "Tabela",
+    "scan": [
+        "contagem de verificações",
+        "número de verificações",
+        "contagem de varredura",
+        "contagem de varreduras",
+        "contagem de exames"
+    ],
+    "logical": [
+        "leituras lógicas"
+    ],
+    "physical": [
+        "leituras físicas"
+    ],
+    "pageserver": [
+        "leituras de servidor de páginas",
+        "leituras do servidor de páginas"
+    ],
+    "readahead": [
+        "leituras antecipadas",
+        "leituras read-ahead"
+    ],
+    "pageserverreadahead": [
+        "leituras antecipadas de servidor de páginas",
+        "leituras antecipadas do servidor de páginas",
+        "leituras read-ahead de servidor de páginas",
+        "leituras read-ahead do servidor de páginas"
+    ],
+    "loblogical": [
+        "leituras lógicas de lob",
+        "leituras lógicas lob",
+        "lob leituras lógicas"
+    ],
+    "lobphysical": [
+        "leituras físicas de lob",
+        "leituras físicas lob",
+        "lob leituras físicas"
+    ],
+    "lobpageserver": [
+        "leituras de servidor de páginas lob",
+        "leituras de servidor de páginas de lob",
+        "leituras do servidor de páginas de lob"
+    ],
+    "lobreadahead": [
+        "leituras antecipadas de lob",
+        "leituras antecipadas lob",
+        "leituras lob antecipadas",
+        "lob leituras antecipadas",
+        "leituras read-ahead de lob",
+        "leituras read-ahead lob"
+    ],
+    "lobpageserverreadahead": [
+        "leituras antecipadas do servidor de páginas lob",
+        "leituras antecipadas de servidor de páginas de lob",
+        "leituras antecipadas do servidor de páginas de lob",
+        "leituras antecipadas de servidor de páginas lob"
+    ],
+    "segmentreads": [
+        "leituras de segmento",
+        "segmentos lidos"
+    ],
+    "segmentskipped": [
+        "segmentos ignorados",
+        "segmento ignorado",
+        "segmentos pulados",
+        "segmento pulado"
+    ],
+    "headerrownum": "Nº da Linha",
+    "headertable": "Tabela",
+    "headerscan": "Contagem de Verificações",
+    "headerlogical": "Leituras Lógicas",
+    "headerphysical": "Leituras Físicas",
+    "headerpageserver": "Leituras de Servidor de Páginas",
+    "headerreadahead": "Leituras Antecipadas",
+    "headerpageserverreadahead": "Leituras Antecipadas de Servidor de Páginas",
+    "headerloblogical": "Leituras Lógicas de LOB",
+    "headerlobphysical": "Leituras Físicas de LOB",
+    "headerlobpageserver": "Leituras de Servidor de Páginas de LOB",
+    "headerlobreadahead": "Leituras Antecipadas de LOB",
+    "headerlobpageserverreadahead": "Leituras Antecipadas de Servidor de Páginas de LOB",
+    "headerperlogicalread": "% de Leituras Lógicas do Total",
+    "headersegmentreads": "Leituras de Segmento",
+    "headersegmentskipped": "Segmentos Ignorados",
+    "totals": "Totais:",
+    "executiontime": "Tempos de Execução do SQL Server:",
+    "compiletime": "Tempo de análise e compilação do SQL Server:",
+    "cputime": "Tempo de CPU = ",
+    "elapsedtime": "tempo decorrido = ",
+    "elapsedlabel": "Decorrido",
+    "cpulabel": "CPU",
+    "milliseconds": "ms",
+    "rowsaffected": [
+        "linha(s) afetada(s)",
+        "linhas afetadas",
+        "linha afetada",
+        "row(s) affected",
+        "rows affected",
+        "row affected"
+    ],
+    "headerrowsaffected": " linhas afetadas",
+    "headerrowaffected": " linha afetada",
+    "errormsg": "Msg",
+    "completiontimelabel": "Completion time: ",
+    "tableshavescrollbars": "Tabelas com barras de rolagem",
+    "showexample": "Mostrar exemplo de saída do Statistics IO",
+    "buttonparse": "Analisar",
+    "buttonclear": "Limpar Texto",
+    "buttonclearresult": "Limpar Resultado",
+    "buttoncopyresult": "Copiar Resultado",
+    "buttoncopyresultmessage": "Copiado!",
+    "sampleoutput": "Tempo de análise e compilação do SQL Server: \r\n   Tempo de CPU = 108 ms, tempo decorrido = 108 ms.\r\n\r\n(13431682 rows affected)\r\nTabela 'PostTypes'. Contagem de verificações 1, leituras lógicas 2, leituras físicas 1, leituras de servidor de páginas 0, leituras antecipadas 0, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Users'. Contagem de verificações 5, leituras lógicas 42015, leituras físicas 1, leituras de servidor de páginas 0, leituras antecipadas 41306, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Comments'. Contagem de verificações 5, leituras lógicas 1089402, leituras físicas 248, leituras de servidor de páginas 0, leituras antecipadas 1108174, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Posts'. Contagem de verificações 5, leituras lógicas 397944, leituras físicas 9338, leituras de servidor de páginas 0, leituras antecipadas 402977, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Worktable'. Contagem de verificações 999172, leituras lógicas 16247024, leituras físicas 0, leituras de servidor de páginas 0, leituras antecipadas 0, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\n\r\n Tempos de Execução do SQL Server:\r\n   Tempo de CPU = 156527 ms,  tempo decorrido = 284906 ms.\r\nTempo de análise e compilação do SQL Server: \r\n   Tempo de CPU = 16 ms, tempo decorrido = 19 ms.\r\n\r\n(233033 rows affected)\r\nTabela 'Votes'. Contagem de verificações 1, leituras lógicas 250128, leituras físicas 10, leituras de servidor de páginas 0, leituras antecipadas 250104, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Posts'. Contagem de verificações 1, leituras lógicas 165586, leituras físicas 18, leituras de servidor de páginas 0, leituras antecipadas 49191, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 823463, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\nTabela 'Users'. Contagem de verificações 1, leituras lógicas 41405, leituras físicas 3, leituras de servidor de páginas 0, leituras antecipadas 41401, leituras antecipadas de servidor de páginas 0, leituras lógicas de LOB 0, leituras físicas de LOB 0, leituras de servidor de páginas LOB 0, leituras antecipadas de LOB 0, leituras antecipadas do servidor de páginas LOB 0.\r\n\r\n Tempos de Execução do SQL Server:\r\n   Tempo de CPU = 17207 ms,  tempo decorrido = 38163 ms.\r\nMsg 207, Nível 16, Estado 1, Linha 1\r\nNome de coluna 'scores' inválido.\r\n\r\nCompletion time: 2025-05-27T10:32:37.8122685-03:00\r\n",
+    "numberformat": {
+        "thousand": ".",
+        "decimal": ","
+    }
+}
