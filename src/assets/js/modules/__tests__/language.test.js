@@ -38,6 +38,11 @@ describe('Language Module', () => {
             expect(result).toBe('./data/languagetext-it.json');
         });
 
+        it('should return Portuguese (Brazil) file path for "pt-br"', () => {
+            const result = determineLangFilename('pt-br');
+            expect(result).toBe('./data/languagetext-pt-br.json');
+        });
+
         it('should default to English for unknown language', () => {
             const result = determineLangFilename('fr');
             expect(result).toBe('./data/languagetext-en.json');
