@@ -32,6 +32,8 @@
     "headersegmentreads" : "Letture segmento",
     "headersegmentskipped" : "Segmento saltato",
     "totals" : "Totali:",
+    "total" : "Totale",
+    "summaryrownotadded" : "Riga di riepilogo rilevata. La riga non è stata aggiunta al totale.",
     "executiontime" : "Tempo di esecuzione SQL Server:",
     "compiletime" : "Tempo di analisi e compilazione SQL Server:",
     "cputime" : "tempo di CPU = ",

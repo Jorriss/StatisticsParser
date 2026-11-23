@@ -32,6 +32,8 @@
     "headersegmentreads" : "Lecturas de segmento",
     "headersegmentskipped" : "Segmento saltado",
     "totals" : "Totales:",
+    "total" : "Total",
+    "summaryrownotadded" : "Fila de resumen detectada. La fila no se agregó al total.",
     "executiontime" : "Tiempos de ejecución de SQL Server:",
     "compiletime" : "Tiempo de análisis y compilación de SQL Server:",
     "cputime" : "Tiempo de CPU = ",
