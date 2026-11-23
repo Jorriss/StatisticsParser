@@ -32,6 +32,8 @@
     "headersegmentreads" : "Segment Reads",
     "headersegmentskipped" : "Segment Skipped",
     "totals" : "Totals:",
+    "total" : "Total",
+    "summaryrownotadded" : "Summary row detected. Row not added to total.",
     "executiontime" : "SQL Server Execution Times:",
     "compiletime" : "SQL Server parse and compile time:",
     "cputime" : "CPU time = ",

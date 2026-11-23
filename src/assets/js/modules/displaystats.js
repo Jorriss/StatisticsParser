@@ -3,6 +3,16 @@ import { DateTime, Duration } from 'luxon';
 import DataTable from 'datatables.net-dt';
 import { rowEnum, columnIOEnum } from './parser.js';
 
+// English text used when a language file does not have the key yet
+const defaultLangText = {
+    total: 'Total',
+    summaryrownotadded: 'Summary row detected. Row not added to total.'
+};
+
+function getLangText(lang, key) {
+    return (lang && lang[key]) || defaultLangText[key];
+}
+
 // Display functionality
 function formatNumber(value, langvalue = 'en') {
     return new Intl.NumberFormat(langvalue).format(value);
@@ -266,7 +276,7 @@ function displayIOTableFooter(total, columns, showRowNumber, lang) {
     for (let i = 0; i < columns.length; i++) {
         switch (columns[i]) {
             case columnIOEnum.Table:
-                footerData.push({ text: 'Total', className: 'statsio-footer-column' });
+                footerData.push({ text: getLangText(lang, 'total'), className: 'statsio-footer-column' });
                 break;
             case columnIOEnum.Scan:
                 footerData.push({ text: formatNumber(total.scan, lang.langvalue), className: 'statsio-footer-column statsio-column-large statsio-column-right' });
@@ -434,7 +444,7 @@ function displayTimeTable(data, lang) {
         const td = document.createElement('td');
         td.className = 'statsio-footer-column';
         td.colSpan = 3;  // or 3 for time tables
-        td.textContent = 'Summary row detectd. Row not added to total.';
+        td.textContent = getLangText(lang, 'summaryrownotadded');
         footerRow.appendChild(td);
     
         tfoot.appendChild(footerRow);
@@ -614,7 +624,7 @@ function displayTimeTotalTable(executiondata, compiledata, lang) {
     
     // Create and append footer cells
     const footerCells = [
-        { text: 'Total', className: 'statsio-total statsio-column-timetype' },
+        { text: getLangText(lang, 'total'), className: 'statsio-total statsio-column-timetype' },
         { text: formatMs(cpuTotal), className: 'statsio-total statsio-column-right' },
         { text: formatMs(elapsedTotal), className: 'statsio-total statsio-column-right' }
     ];
